@@ -1,11 +1,18 @@
 """Options of tripaulx-sdk (see each SDK app's ``conf.py`` for defaults)."""
 
-from .common import get_env, get_env_list
+from .common import get_env, get_env_bool, get_env_list
 
 TRIPAULX = {
+    "APP_NAME": get_env("APP_NAME", {{ project_name | tojson }}),
     # Workspaces are served at <slug>.<BASE_DOMAIN>.
     "BASE_DOMAIN": get_env("APP_BASE_DOMAIN", "{{ local_base_domain }}"),
     "PUBLIC_DOMAINS": tuple(get_env_list("APP_PUBLIC_DOMAINS")),
     "BOOTSTRAP_WORKSPACE": get_env("APP_BOOTSTRAP_WORKSPACE", "{{ initial_workspace }}"),
     "BOOTSTRAP_WORKSPACE_NAME": get_env("APP_BOOTSTRAP_WORKSPACE_NAME", ""),
+    # Fernet key of encrypted fields; prod.py refuses to start without it.
+    "FIELD_ENCRYPTION_KEY": get_env("APP_FIELD_ENCRYPTION_KEY", ""),
+    "EMAIL_LOGO_URL": get_env("APP_EMAIL_LOGO_URL", ""),
+    "SIGNUP_ENABLED": get_env_bool("APP_SIGNUP_ENABLED", default=True),
+    "WEBAUTHN_RP_ID": get_env("APP_WEBAUTHN_RP_ID", ""),
+    "WEBAUTHN_ORIGINS": tuple(get_env_list("APP_WEBAUTHN_ORIGINS")),
 }

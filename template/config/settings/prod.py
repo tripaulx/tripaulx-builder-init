@@ -1,5 +1,6 @@
 """Production settings (CapRover). Fails fast on unsafe configuration."""
 
+from tripaulx.core.crypto import validate_field_key
 from tripaulx.settings.security import allowed_hosts, https_origins
 
 from .base import *  # noqa: F401, F403
@@ -37,20 +38,31 @@ if REDIS_URL:
         }
     }
 
-# Never the console backend in production (the Mailgun backend arrives with
-# tripaulx.mail; until then SMTP is configured through MAIL_* variables).
+# Encrypted fields (Mailgun key, TOTP secrets) need a real key in production.
+validate_field_key(TRIPAULX["FIELD_ENCRYPTION_KEY"])
+
+# Never the console backend in production. Mailgun is configured in the public
+# admin; until it is ready, e-mail goes through SMTP (MAIL_* variables).
+_SMTP = "django.core.mail.backends.smtp.EmailBackend"
+_MAILGUN = "tripaulx.mail.backends.MailgunEmailBackend"
+_SMTP_OPTIONS = {
+    "host": get_env("MAIL_HOST", "localhost"),
+    "port": int(get_env("MAIL_PORT", "587")),
+    "username": get_env("MAIL_USER", ""),
+    "password": get_env("MAIL_PASSWORD", ""),
+    "use_tls": get_env_bool("MAIL_USE_TLS", default=True),
+}
+_MAIL_BACKEND = get_env("MAIL_BACKEND", _MAILGUN)
+if _MAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
+    _MAIL_BACKEND = _MAILGUN
 MAILERS = {
     "default": {
-        "BACKEND": get_env(
-            "MAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend"
+        "BACKEND": _MAIL_BACKEND,
+        "OPTIONS": (
+            {"fallback_backend": _SMTP, "fallback_options": _SMTP_OPTIONS}
+            if _MAIL_BACKEND == _MAILGUN
+            else _SMTP_OPTIONS
         ),
-        "OPTIONS": {
-            "host": get_env("MAIL_HOST", "localhost"),
-            "port": int(get_env("MAIL_PORT", "587")),
-            "username": get_env("MAIL_USER", ""),
-            "password": get_env("MAIL_PASSWORD", ""),
-            "use_tls": get_env_bool("MAIL_USE_TLS", default=True),
-        },
     },
 }
 

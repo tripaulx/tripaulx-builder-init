@@ -21,6 +21,10 @@ workspace, served at `<slug>.{{ base_domain }}`. Deploys go to CapRover.
 - Settings live in `config/settings/base_parts/` chunks. `base.py` only re-exports them.
 - New business apps go in `PROJECT_TENANT_APPS` (`base_parts/apps.py`).
 - Models inherit `tripaulx.core.models.BaseModel` (UUID, audit, soft delete).
+- API views use the SDK defaults (`base_parts/rest.py`): schema-bound JWT auth and `IsAuthenticated`.
+  - Workspace-admin endpoints use `tripaulx.accounts.api.permissions.IsWorkspaceAdmin` (owner/admin role), never `is_staff`.
+  - API tests use `tripaulx.core.testing.TenantAPITestCase` (`api_client(user)`, `anon_api_client()`).
+- Secrets stored in the database are encrypted with `tripaulx.core.crypto` (`APP_FIELD_ENCRYPTION_KEY`).
 
 ## Commands
 - Always use `uv run ...` with an explicit `DJANGO_SETTINGS_MODULE` (`config.settings.local`, `.prod` or `.test`).

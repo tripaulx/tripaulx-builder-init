@@ -16,6 +16,14 @@ Requirements: [uv](https://docs.astral.sh/uv/) and PostgreSQL 16 (Homebrew).
 - Public schema: http://{{ local_base_domain }}:8000/admin/
 - First workspace: http://{{ initial_workspace | replace('_', '-') }}.{{ local_base_domain }}:8000/admin/
 
+API (tripaulx-sdk accounts):
+
+- `POST /api/auth/signup/` on the apex domain creates a workspace and its owner.
+- `/api/auth/...` on each workspace: login with mandatory 2FA, TOTP, passkeys,
+  recovery codes, password reset; `/api/workspace/...`: members and invitations.
+- OpenAPI docs for admins: http://{{ local_base_domain }}:8000/api/docs/
+  (on workspaces only while `DEBUG` is on).
+
 Create an admin inside a workspace:
 
 ```bash
