@@ -1,0 +1,32 @@
+"""Legal documents (``tripaulx.legal``).
+
+Merged into ``TRIPAULX`` by the ``tripaulx`` chunk. Files in ``legal/`` win
+over the SDK templates (see ``legal/README.md``). ``LEGAL_CONTEXT`` fills the
+document placeholders; ``manage.py legal_check`` lists the empty ones.
+"""
+
+from .common import BASE_DIR, get_env, get_env_list
+
+LEGAL = {
+    "LEGAL_CONTENT_DIRS": (str(BASE_DIR / "legal"),),
+    "LEGAL_CONTEXT": {
+        "company": get_env("APP_LEGAL_COMPANY", {{ project_name | tojson }}),
+        "product": get_env("APP_LEGAL_PRODUCT", {{ project_name | tojson }}),
+        "company_id": get_env("APP_LEGAL_COMPANY_ID", ""),
+        "company_address": get_env("APP_LEGAL_COMPANY_ADDRESS", ""),
+        "contact_email": get_env("APP_LEGAL_CONTACT_EMAIL", ""),
+        "security_email": get_env("APP_LEGAL_SECURITY_EMAIL", ""),
+        "security_owner": get_env("APP_LEGAL_SECURITY_OWNER", ""),
+        "dpo_name": get_env("APP_LEGAL_DPO_NAME", ""),
+        "dpo_email": get_env("APP_LEGAL_DPO_EMAIL", ""),
+        "jurisdiction": get_env("APP_LEGAL_JURISDICTION", ""),
+        "data_location": get_env("APP_LEGAL_DATA_LOCATION", ""),
+        "effective_date": get_env("APP_LEGAL_EFFECTIVE_DATE", ""),
+    },
+    # Restricted (governance) documents: workspace admins, plus users of these
+    # exact e-mail domains, in these schemas (empty: every workspace).
+    "LEGAL_SCHEMAS": tuple(get_env_list("APP_LEGAL_SCHEMAS")),
+    "LEGAL_ALLOWED_EMAIL_DOMAINS": tuple(
+        get_env_list("APP_LEGAL_ALLOWED_EMAIL_DOMAINS")
+    ),
+}

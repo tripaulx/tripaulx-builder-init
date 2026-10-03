@@ -1,6 +1,7 @@
 """Options of tripaulx-sdk (see each SDK app's ``conf.py`` for defaults)."""
 
 from .common import get_env, get_env_bool, get_env_list
+from .legal import LEGAL
 from .object_storage import OBJECT_STORAGE
 
 TRIPAULX = {
@@ -18,4 +19,6 @@ TRIPAULX = {
     "WEBAUTHN_ORIGINS": tuple(get_env_list("APP_WEBAUTHN_ORIGINS")),
     # tripaulx.storage (APP_S3_* and APP_FILE_ENCRYPTION_KEY).
     **OBJECT_STORAGE,
+    # tripaulx.legal (APP_LEGAL_*).
+    **LEGAL,
 }
