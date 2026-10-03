@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 22:02-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apps.py:12
+msgid "Object storage"
+msgstr "Armazenamento de objetos"
+
+#: client.py:42
+msgid ""
+"Object storage is not configured: set S3_ENABLED, S3_ACCESS_KEY and "
+"S3_SECRET_KEY in TRIPAULX."
+msgstr ""
+"O armazenamento de objetos não está configurado: defina S3_ENABLED, "
+"S3_ACCESS_KEY e S3_SECRET_KEY em TRIPAULX."
+
+#: crypto/envelope.py:59 services/policy.py:50
+msgid "The file is empty."
+msgstr "O arquivo está vazio."
+
+#: crypto/envelope.py:82
+msgid "The file is not in the expected encrypted format."
+msgstr "O arquivo não está no formato cifrado esperado."
+
+#: crypto/envelope.py:92
+msgid "The file could not be decrypted (wrong master key?)."
+msgstr "Não foi possível decifrar o arquivo (chave mestra errada?)."
+
+#: crypto/envelope.py:102 crypto/envelope.py:132
+msgid "The encrypted file is truncated."
+msgstr "O arquivo cifrado está truncado."
+
+#: crypto/envelope.py:104 crypto/envelope.py:109
+msgid "The encrypted file is corrupted."
+msgstr "O arquivo cifrado está corrompido."
+
+#: crypto/envelope.py:117
+msgid "The file was tampered with or corrupted: integrity check failed."
+msgstr ""
+"O arquivo foi adulterado ou corrompido: a verificação de integridade falhou."
+
+#: crypto/keys.py:29
+msgid ""
+"File encryption has no key: set FILE_ENCRYPTION_KEY (32 bytes in base64; "
+"generate one with `manage.py generate_file_key`)."
+msgstr ""
+"A criptografia de arquivos está sem chave: defina FILE_ENCRYPTION_KEY (32 "
+"bytes em base64; gere uma com `manage.py generate_file_key`)."
+
+#: crypto/keys.py:36
+msgid "FILE_ENCRYPTION_KEY is not valid base64."
+msgstr "FILE_ENCRYPTION_KEY não é base64 válido."
+
+#: crypto/keys.py:39
+#, python-format
+msgid "FILE_ENCRYPTION_KEY must be 32 bytes long (it has %(size)d)."
+msgstr "FILE_ENCRYPTION_KEY deve ter 32 bytes (tem %(size)d)."
+
+#: services/access.py:42
+#, python-format
+msgid "Failed to read the file: %(error)s"
+msgstr "Falha ao ler o arquivo: %(error)s"
+
+#: services/access.py:81
+#, python-format
+msgid "Failed to create the file link: %(error)s"
+msgstr "Falha ao gerar o link do arquivo: %(error)s"
+
+#: services/access.py:94
+#, python-format
+msgid "Failed to delete the file: %(error)s"
+msgstr "Falha ao apagar o arquivo: %(error)s"
+
+#: services/keys.py:65
+msgid "The file is outside this tenant's scope."
+msgstr "O arquivo está fora do escopo deste workspace."
+
+#: services/policy.py:53
+#, python-format
+msgid "The file exceeds the %(limit)s limit."
+msgstr "O arquivo passa do limite de %(limit)s."
+
+#: services/policy.py:69
+#, python-format
+msgid "File type not accepted: %(type)s. Accepted types: %(accepted)s."
+msgstr "Tipo de arquivo não aceito: %(type)s. Tipos aceitos: %(accepted)s."
+
+#: services/policy.py:87
+#, python-format
+msgid "The file content does not match the type %(type)s."
+msgstr "O conteúdo do arquivo não confere com o tipo %(type)s."
+
+#: services/policy.py:110
+msgid "The uploaded image could not be read."
+msgstr "Não foi possível ler a imagem enviada."
+
+#: services/policy.py:116
+#, python-format
+msgid ""
+"The image is too large: %(width)dx%(height)d pixels. The limit is "
+"%(megapixels)s megapixels."
+msgstr ""
+"A imagem é grande demais: %(width)dx%(height)d pixels. O limite é de "
+"%(megapixels)s megapixels."
+
+#: services/upload.py:106
+#, python-format
+msgid "Failed to upload the file: %(error)s"
+msgstr "Falha ao enviar o arquivo: %(error)s"
