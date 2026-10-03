@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# =============================================================================
+# deploy - ship the project to CapRover (single environment: prod).
+#
+#   ./deploy prod            deploy the web app (default)
+#   ./deploy prod worker     deploy the worker app (APP_ROLE=worker)
+#   ./deploy prod all        both, in this order (web migrates first)
+#
+# Reads the CapRover app tokens from .env.deploy (never committed) and calls
+# scripts/caprover-deploy.sh, which packs the code and sends it to CapRover;
+# the server builds the image from captain-definition -> Dockerfile.
+# Runtime variables (SECRET_KEY, DB_*, ...) live in the CapRover apps.
+# Runs scripts/check.sh first; SKIP_CHECKS=1 skips it (at your own risk).
+# =============================================================================
+set -euo pipefail
+
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$BASE_DIR"
+
+usage() { echo "Usage: ./deploy prod [web|worker|all]" >&2; exit 2; }
+
+ENVIRONMENT="${1:-prod}"
+TARGET="${2:-web}"
+[ "$ENVIRONMENT" = "prod" ] || usage
+case "$TARGET" in
+    web|worker|all) ;;
+    *) usage ;;
+esac
+
+if [ ! -f .env.deploy ]; then
+    echo "ERROR: .env.deploy not found. Create it and fill in the app tokens:" >&2
+    echo "  cp .env.deploy.example .env.deploy" >&2
+    exit 1
+fi
+
+if [ "${SKIP_CHECKS:-0}" = "1" ]; then
+    echo "WARNING: SKIP_CHECKS=1, skipping the checks before deploying." >&2
+else
+    echo "Running checks (ruff + pytest)..."
+    bash scripts/check.sh
+fi
+
+# Load .env.deploy into the environment.
+set -a
+# shellcheck disable=SC1091
+. ./.env.deploy
+set +a
+
+: "${CAPROVER_SERVER:?set CAPROVER_SERVER in .env.deploy}"
+export CAPROVER_SERVER
+
+deploy_web() {
+    : "${CAPROVER_APP_TOKEN:?set CAPROVER_APP_TOKEN in .env.deploy}"
+    : "${CAPROVER_APP_NAME:?set CAPROVER_APP_NAME in .env.deploy}"
+    CAPROVER_APP_TOKEN="$CAPROVER_APP_TOKEN" \
+        sh scripts/caprover-deploy.sh "$CAPROVER_APP_NAME"
+}
+
+deploy_worker() {
+    : "${CAPROVER_WORKER_APP_TOKEN:?set CAPROVER_WORKER_APP_TOKEN in .env.deploy}"
+    : "${CAPROVER_WORKER_APP_NAME:?set CAPROVER_WORKER_APP_NAME in .env.deploy}"
+    CAPROVER_APP_TOKEN="$CAPROVER_WORKER_APP_TOKEN" \
+        sh scripts/caprover-deploy.sh "$CAPROVER_WORKER_APP_NAME"
+}
+
+case "$TARGET" in
+    web) deploy_web ;;
+    worker) deploy_worker ;;
+    all)
+        # Web first: it runs the migrations (including the task queue table).
+        deploy_web
+        wait_seconds="${DEPLOY_WORKER_DELAY:-60}"
+        echo "Waiting ${wait_seconds}s for the web app to migrate before the worker..."
+        sleep "$wait_seconds"
+        deploy_worker
+        ;;
+esac
