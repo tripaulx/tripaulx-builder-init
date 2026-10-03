@@ -11,14 +11,30 @@ Usage::
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError, CommandParser
 from django.utils import translation
 
-from ...services import DocumentUnavailable, list_documents, read_source, resolve
+from ...services import (
+    DocumentUnavailable,
+    list_documents,
+    package_content_root,
+    read_source,
+    resolve,
+)
 from ...services.placeholders import unfilled
+
+
+def _origin(path: Path | None) -> str:
+    """Say where a document comes from: the SDK template or a project file."""
+    if path is None:
+        return "-"
+    if path.is_relative_to(package_content_root().resolve()):
+        return f"SDK template {path.parent.name}/{path.name}"
+    return str(path)
 
 
 class Command(BaseCommand):
@@ -57,13 +73,13 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(f"  {document.slug}: unreadable"))
                 problems += 1
                 continue
-            path = resolve(document, language)
+            origin = _origin(resolve(document, language))
             if missing:
                 problems += 1
                 keys = ", ".join(missing)
                 self.stdout.write(
-                    self.style.WARNING(f"  {document.slug}: missing {keys} ({path})")
+                    self.style.WARNING(f"  {document.slug}: missing {keys} ({origin})")
                 )
             else:
-                self.stdout.write(f"  {document.slug}: ok ({path})")
+                self.stdout.write(f"  {document.slug}: ok ({origin})")
         return problems
