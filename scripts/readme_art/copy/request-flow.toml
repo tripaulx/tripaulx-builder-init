@@ -1,0 +1,35 @@
+# Copy of the request-flow diagram (en and pt-BR).
+
+[en]
+title = "How a request finds its workspace"
+head = ["02", "Request flow", "One host, one schema", "The subdomain picks the workspace. PostgreSQL search_path isolates its data."]
+steps = [
+  ["1", "Browser", "acme.example.com", "The workspace slug\nis the subdomain"],
+  ["2", "Cloudflare", "*.example.com", "Wildcard DNS,\nOrigin CA certificate"],
+  ["3", "CapRover", "nginx *.example.com", "TLS ends here,\nthen the container"],
+  ["4", "Middleware", "/healthz → 200", "Probes answer before\nany tenant lookup"],
+  ["5", "Domain lookup", "search_path = acme", "Unknown host → 404,\nnever the public site"],
+]
+db = "PostgreSQL · one database, one schema per workspace"
+schemas = [
+  ["public", "example.com", ["Workspaces and domains", "Platform admin", "Sign-up entry point"]],
+  ["acme", "acme.example.com", ["Users and roles", "Sessions and tokens", "Your app tables"]],
+  ["globex", "globex.example.com", ["Same tables, other data", "Never visible to acme", "Own users, own tokens"]],
+]
+
+[pt]
+title = "Como uma requisição encontra seu workspace"
+head = ["02", "Fluxo da requisição", "Um host, um schema", "O subdomínio escolhe o workspace. O search_path do PostgreSQL isola os dados."]
+steps = [
+  ["1", "Navegador", "acme.example.com", "O slug do workspace\né o subdomínio"],
+  ["2", "Cloudflare", "*.example.com", "DNS wildcard,\ncertificado Origin CA"],
+  ["3", "CapRover", "nginx *.example.com", "O TLS termina aqui,\ndepois o container"],
+  ["4", "Middleware", "/healthz → 200", "Probes respondem antes\nde buscar o tenant"],
+  ["5", "Domínio", "search_path = acme", "Host desconhecido → 404,\nnunca o site público"],
+]
+db = "PostgreSQL · um banco, um schema por workspace"
+schemas = [
+  ["public", "example.com", ["Workspaces e domínios", "Admin da plataforma", "Entrada do cadastro"]],
+  ["acme", "acme.example.com", ["Usuários e papéis", "Sessões e tokens", "Tabelas dos seus apps"]],
+  ["globex", "globex.example.com", ["Mesmas tabelas, outros dados", "Nunca visível para acme", "Usuários e tokens próprios"]],
+]

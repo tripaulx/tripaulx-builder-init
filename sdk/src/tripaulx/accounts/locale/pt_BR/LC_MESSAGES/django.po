@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 19:44-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: admin/user.py:22
+msgid "Personal info"
+msgstr "Informações pessoais"
+
+#: admin/user.py:23
+msgid "Workspace"
+msgstr "Workspace"
+
+#: admin/user.py:24
+msgid "Security"
+msgstr "Segurança"
+
+#: admin/user.py:26
+msgid "Permissions"
+msgstr "Permissões"
+
+#: admin/user.py:29
+msgid "Important dates"
+msgstr "Datas importantes"
+
+#: apps.py:12
+msgid "Accounts"
+msgstr "Contas"
+
+#: models/managers.py:21
+msgid "An e-mail address is required."
+msgstr "O e-mail é obrigatório."
+
+#: models/managers.py:43
+msgid "A superuser needs is_staff and is_superuser."
+msgstr "Um superusuário precisa de is_staff e is_superuser."
+
+#: models/roles.py:12
+msgid "Owner"
+msgstr "Proprietário"
+
+#: models/roles.py:13
+msgid "Admin"
+msgstr "Administrador"
+
+#: models/roles.py:14
+msgid "Member"
+msgstr "Membro"
+
+#: models/user.py:21
+msgid "e-mail address"
+msgstr "endereço de e-mail"
+
+#: models/user.py:23
+msgid "e-mail verified"
+msgstr "e-mail verificado"
+
+#: models/user.py:25
+msgid "Confirmed through a verification code."
+msgstr "Confirmado por um código de verificação."
+
+#: models/user.py:28
+msgid "passkey-only login"
+msgstr "entrar somente com passkey"
+
+#: models/user.py:31
+msgid ""
+"Disables e-mail and password login. Only applies while the user has at least "
+"one passkey."
+msgstr ""
+"Desativa o login por e-mail e senha. Só vale enquanto o usuário tiver ao "
+"menos uma passkey."
+
+#: models/user.py:36
+msgid "role"
+msgstr "papel"
+
+#: models/user.py:46
+msgid "user"
+msgstr "usuário"
+
+#: models/user.py:47
+msgid "users"
+msgstr "usuários"

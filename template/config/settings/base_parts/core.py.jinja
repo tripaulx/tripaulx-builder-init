@@ -1,0 +1,31 @@
+"""Core Django settings shared by every environment."""
+
+from .common import get_database_config, get_env
+
+SECRET_KEY = get_env("SECRET_KEY", "")
+DEBUG = False
+ALLOWED_HOSTS: list[str] = []
+
+# Concrete user model (inherits tripaulx.accounts.models.AbstractTripaulxUser).
+AUTH_USER_MODEL = "users.User"
+
+DATABASES = {"default": get_database_config("DB", default_name="{{ project_slug }}")}
+
+# URLconf per schema (django-tenants): public schema vs. each workspace.
+ROOT_URLCONF = "config.urls"
+PUBLIC_SCHEMA_URLCONF = "config.urls_public"
+WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
+ADMIN_URL_PREFIX = get_env("ADMIN_URL_PREFIX", "admin")
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Django 6.1 mailers (EMAIL_BACKEND is deprecated). Prod sets MAIL_BACKEND.
+MAILERS = {
+    "default": {
+        "BACKEND": get_env(
+            "MAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+        ),
+    },
+}
+DEFAULT_FROM_EMAIL = get_env("DEFAULT_FROM_EMAIL", "{{ default_from_email }}")

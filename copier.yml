@@ -1,0 +1,63 @@
+# Copier template of a tripaulx-builders project.
+# Usage: copier copy gh:tripaulx/tripaulx-builder-init my-project
+_subdirectory: template
+_templates_suffix: .jinja
+_min_copier_version: "9.4"
+_answers_file: .copier-answers.yml
+
+project_name:
+  type: str
+  help: Human-readable project name
+  default: My Project
+
+project_slug:
+  type: str
+  help: Python/database identifier (lowercase letters, digits, underscores)
+  default: "{{ project_name | lower | replace(' ', '_') | replace('-', '_') }}"
+  validator: >-
+    {% if not (project_slug | regex_search('^[a-z][a-z0-9_]{1,40}$')) %}
+    Use lowercase letters, digits and underscores, starting with a letter.
+    {% endif %}
+
+base_domain:
+  type: str
+  help: Production apex domain; workspaces are served at <slug>.<base_domain>
+  default: example.com
+
+local_base_domain:
+  type: str
+  help: Local development apex domain (*.localhost resolves to 127.0.0.1)
+  default: "{{ project_slug | replace('_', '-') }}.localhost"
+
+initial_workspace:
+  type: str
+  help: Slug of the first workspace created by bootstrap_workspace
+  default: main
+
+language_code:
+  type: str
+  help: Default language of the project
+  choices: [pt-br, en]
+  default: pt-br
+
+time_zone:
+  type: str
+  default: America/Sao_Paulo
+
+default_from_email:
+  type: str
+  default: "noreply@{{ base_domain }}"
+
+sdk_source:
+  type: str
+  help: Where tripaulx-sdk comes from
+  choices:
+    PyPI release: pypi
+    Local checkout (SDK development): path
+  default: pypi
+
+sdk_path:
+  type: str
+  help: Path to the sdk/ folder of a tripaulx-builder-init checkout
+  default: ../sdk
+  when: "{{ sdk_source == 'path' }}"

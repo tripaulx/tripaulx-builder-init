@@ -1,0 +1,23 @@
+# Copy of the architecture diagram (en and pt-BR).
+
+[en]
+title = "How it fits together"
+head = ["01", "How it fits together", "One repository, every project", "The SDK carries what every project shares. The template creates what each project owns."]
+cols = [
+  ["tripaulx-builder-init", [["sdk/ → tripaulx-sdk", "Django apps · on PyPI", "brand"], ["template/ → Copier", "Settings, users, scripts", "violet"], [".github/", "Lint, tests, gitleaks", "neutral"]]],
+  ["your project", [["config/", "Settings in small chunks", "neutral"], ["users/", "Your User model", "neutral"], ["your apps", "Your business logic", "brand"]]],
+  ["CapRover", [["web", "gunicorn · Django", "success"], ["worker", "Background tasks", "success"], ["PostgreSQL + Redis", "One schema per workspace", "violet"]]],
+]
+edges = ["copier copy", "./deploy prod"]
+loops = ["SDK fixes reach every project", "uv lock --upgrade-package tripaulx-sdk", "Template improvements", "copier update"]
+
+[pt]
+title = "Como as partes se encaixam"
+head = ["01", "Como se encaixa", "Um repositório, todos os projetos", "O SDK leva o que todo projeto compartilha. O template cria o que é de cada projeto."]
+cols = [
+  ["tripaulx-builder-init", [["sdk/ → tripaulx-sdk", "Apps Django · no PyPI", "brand"], ["template/ → Copier", "Settings, users, scripts", "violet"], [".github/", "Lint, testes, gitleaks", "neutral"]]],
+  ["seu projeto", [["config/", "Settings em pedaços", "neutral"], ["users/", "Seu modelo User", "neutral"], ["seus apps", "Sua regra de negócio", "brand"]]],
+  ["CapRover", [["web", "gunicorn · Django", "success"], ["worker", "Tarefas em segundo plano", "success"], ["PostgreSQL + Redis", "Um schema por workspace", "violet"]]],
+]
+edges = ["copier copy", "./deploy prod"]
+loops = ["Correções do SDK chegam a todos", "uv lock --upgrade-package tripaulx-sdk", "Melhorias do template", "copier update"]

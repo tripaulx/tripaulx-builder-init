@@ -1,0 +1,24 @@
+name: Release
+
+# Publishes tripaulx-sdk to PyPI with Trusted Publishing (OIDC, no stored token).
+# Configure the trusted publisher on PyPI for this repository and workflow first.
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+      - name: Tag must match the package version
+        run: |
+          version="$(uv run python -c 'import tripaulx; print(tripaulx.__version__)')"
+          test "v$version" = "$GITHUB_REF_NAME"
+      - run: uv build --package tripaulx-sdk
+      - uses: pypa/gh-action-pypi-publish@release/v1

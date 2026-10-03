@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# =============================================================================
+# start - one command to run the project locally.
+#
+#   ./start          setup (if needed) and run the dev server on :8000
+#   ./start setup    .env.local + database + migrations + bootstrap only
+#   ./start test     run the test-suite
+#
+# Workspaces are served at http://<slug>.<APP_BASE_DOMAIN>:8000
+# (*.localhost resolves to 127.0.0.1 in browsers and curl).
+# =============================================================================
+set -euo pipefail
+
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$BASE_DIR"
+PORT="${PORT:-8000}"
+export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:-config.settings.local}"
+
+log() { echo "[start] $*"; }
+
+ensure_env_file() {
+  [ -f .env.local ] && return 0
+  log "creating .env.local from .env.example (with a fresh SECRET_KEY)"
+  local secret
+  secret="$(uv run python -c 'import secrets; print(secrets.token_urlsafe(50))')"
+  sed "s|^SECRET_KEY=.*|SECRET_KEY=$secret|" .env.example > .env.local
+}
+
+setup() {
+  uv sync --quiet
+  ensure_env_file
+  ./pg ensure
+  uv run python manage.py migrate_schemas --shared
+  uv run python manage.py bootstrap_workspace
+  uv run python manage.py migrate_schemas
+}
+
+base_domain() { grep -E '^APP_BASE_DOMAIN=' .env.local | cut -d= -f2-; }
+
+case "${1:-run}" in
+  setup) setup ;;
+  test) uv run pytest "${@:2}" ;;
+  run)
+    setup
+    log "public:     http://$(base_domain):$PORT/admin/"
+    log "workspaces: http://<slug>.$(base_domain):$PORT/admin/"
+    exec uv run python manage.py runserver "0.0.0.0:$PORT"
+    ;;
+  *) echo "Usage: ./start [run|setup|test]" >&2; exit 2 ;;
+esac

@@ -1,0 +1,31 @@
+# Copy of the roadmap diagram (en and pt-BR).
+
+[en]
+title = "Roadmap"
+head = ["05", "Roadmap", "From skeleton to 0.1.0", "Each phase lands with its tests and pt-BR translations."]
+phase = "Phase"
+next = "Next"
+items = [
+  ["Skeleton", "Workspaces, CI"],
+  ["Accounts", "2FA, passkeys"],
+  ["Storage", "Encrypted S3"],
+  ["AI", "Providers, agents"],
+  ["Legal", "Governance docs"],
+  ["Deploy", "Web and worker"],
+  ["Release 0.1", "PyPI and docs"],
+]
+
+[pt]
+title = "Roadmap"
+head = ["05", "Roadmap", "Do esqueleto ao 0.1.0", "Cada fase chega com seus testes e traduções pt-BR."]
+phase = "Fase"
+next = "Próxima"
+items = [
+  ["Esqueleto", "Workspaces, CI"],
+  ["Contas", "2FA, passkeys"],
+  ["Storage", "S3 cifrado"],
+  ["IA", "Provedores, agentes"],
+  ["Legal", "Governança"],
+  ["Deploy", "Web e worker"],
+  ["Release 0.1", "PyPI e docs"],
+]

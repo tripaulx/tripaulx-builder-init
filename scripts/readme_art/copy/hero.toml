@@ -1,0 +1,17 @@
+# Copy of the hero diagram (en and pt-BR).
+
+[en]
+title = "tripaulx builder init"
+kicker = "OPEN SOURCE · MIT"
+line1 = "The foundation of every"
+line2 = "tripaulx-builders project."
+lead = "Multi-tenant Django with workspaces per subdomain, mandatory"
+lead2 = "2-step verification, passkeys and AI providers. Ready for CapRover."
+
+[pt]
+title = "tripaulx builder init"
+kicker = "CÓDIGO ABERTO · MIT"
+line1 = "A base de todo projeto"
+line2 = "tripaulx-builders."
+lead = "Django multi-tenant com workspace por subdomínio, verificação"
+lead2 = "em duas etapas obrigatória, passkeys e provedores de IA. Pronto para CapRover."

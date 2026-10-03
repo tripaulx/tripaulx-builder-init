@@ -1,0 +1,41 @@
+# Copy of the sdk-apps diagram (en and pt-BR).
+
+[en]
+title = "What's inside tripaulx-sdk"
+head = ["03", "Inside the SDK", "Small apps, one settings dict", "Each app has its own label (tpsdk_*), translations and tests. Options live in TRIPAULX."]
+lines = [
+  ["BaseModel, soft delete", "Tenant middleware, probes"],
+  ["Workspace and Domain", "Slugs, bootstrap command"],
+  ["E-mail login and roles", "2FA, TOTP, passkeys"],
+  ["App lists, middleware", ".env loading, logging"],
+  ["Mailgun, encrypted key", "Overridable templates"],
+  ["S3-compatible buckets", "AES-GCM per file"],
+  ["OpenAI and Anthropic", "Agents, skills, costs"],
+  ["Governance documents", "Terms and privacy"],
+]
+phase = ["Phase 2", "Phase 3", "Phase 4"]
+
+[en.status]
+ready = "Available"
+progress = "Phase 1"
+planned = "Planned"
+
+[pt]
+title = "O que há dentro do tripaulx-sdk"
+head = ["03", "Dentro do SDK", "Apps pequenos, um dict de settings", "Cada app tem label próprio (tpsdk_*), traduções e testes. As opções ficam em TRIPAULX."]
+lines = [
+  ["BaseModel, soft delete", "Middleware de tenant, probes"],
+  ["Workspace e Domain", "Slugs, comando de bootstrap"],
+  ["Login por e-mail e papéis", "2FA, TOTP, passkeys"],
+  ["Listas de apps, middleware", "Carga do .env, logging"],
+  ["Mailgun, chave cifrada", "Templates sobrescrevíveis"],
+  ["Buckets compatíveis com S3", "AES-GCM por arquivo"],
+  ["OpenAI e Anthropic", "Agentes, skills, custos"],
+  ["Documentos de governança", "Termos e privacidade"],
+]
+phase = ["Fase 2", "Fase 3", "Fase 4"]
+
+[pt.status]
+ready = "Disponível"
+progress = "Fase 1"
+planned = "Planejado"

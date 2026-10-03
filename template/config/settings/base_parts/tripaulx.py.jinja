@@ -1,0 +1,11 @@
+"""Options of tripaulx-sdk (see each SDK app's ``conf.py`` for defaults)."""
+
+from .common import get_env, get_env_list
+
+TRIPAULX = {
+    # Workspaces are served at <slug>.<BASE_DOMAIN>.
+    "BASE_DOMAIN": get_env("APP_BASE_DOMAIN", "{{ local_base_domain }}"),
+    "PUBLIC_DOMAINS": tuple(get_env_list("APP_PUBLIC_DOMAINS")),
+    "BOOTSTRAP_WORKSPACE": get_env("APP_BOOTSTRAP_WORKSPACE", "{{ initial_workspace }}"),
+    "BOOTSTRAP_WORKSPACE_NAME": get_env("APP_BOOTSTRAP_WORKSPACE_NAME", ""),
+}

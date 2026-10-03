@@ -1,0 +1,59 @@
+# Workspace root: developer tooling only. The publishable package is in sdk/.
+[project]
+name = "tripaulx-builder-init"
+version = "0.0.0"
+description = "Monorepo of tripaulx-sdk and its Copier project template."
+authors = [{ name = "Flavio Almeida Paulino", email = "f1@tripaulx.com" }]
+requires-python = ">=3.12"
+dependencies = ["tripaulx-sdk"]
+
+[dependency-groups]
+dev = [
+  "copier>=9.18",
+  "factory-boy>=3.3",
+  "pytest>=9.1",
+  "pytest-django>=4.14",
+  "ruff>=0.16",
+]
+# README diagrams (scripts/readme_art): font subsetting and measurement.
+docs = ["fonttools[woff]>=4.60"]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["sdk"]
+
+[tool.uv.sources]
+tripaulx-sdk = { workspace = true }
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+extend-exclude = ["template", "example"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B", "C4", "UP", "D"]
+ignore = [
+  "D105", # magic methods
+  "D106", # nested classes (Meta)
+  "D203", # pep257 convention: blank line before class docstring
+  "D212", # multi-line summary on the second line (PEP 257 style)
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = ["tripaulx"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/**" = ["D", "E501"]
+"**/tests/**" = ["D100", "D101", "D102", "D103", "D104"]
+"__init__.py" = ["F401"]
+"scripts/readme_art/brand.py" = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

@@ -1,0 +1,57 @@
+[project]
+name = "{{ project_slug }}"
+version = "0.1.0"
+description = "{{ project_name }}"
+requires-python = ">=3.12"
+dependencies = [
+  "django>=6.1,<6.2",
+  "tripaulx-sdk>=0.1.0.dev0,<0.2",
+  "whitenoise>=6.12",
+  "gunicorn>=26",
+]
+
+[dependency-groups]
+dev = [
+  "factory-boy>=3.3",
+  "pytest>=9.1",
+  "pytest-django>=4.14",
+  "ruff>=0.16",
+]
+
+[tool.uv]
+package = false
+{%- if sdk_source == "path" %}
+
+[tool.uv.sources]
+tripaulx-sdk = { path = "{{ sdk_path }}", editable = true }
+{%- endif %}
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+extend-exclude = ["**/migrations/**"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B", "C4", "UP", "D"]
+ignore = ["D105", "D106", "D203", "D212"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = ["config", "users"]
+known-third-party = ["tripaulx"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D100", "D101", "D102", "D103", "D104"]
+"__init__.py" = ["F401"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+filterwarnings = [
+  # WhiteNoise warns when collectstatic has not run yet (local and tests).
+  "ignore:No directory at:UserWarning",
+]

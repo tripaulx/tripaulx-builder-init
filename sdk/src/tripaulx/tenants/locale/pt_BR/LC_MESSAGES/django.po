@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 19:44-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: apps.py:12
+msgid "Workspaces"
+msgstr "Workspaces"
+
+#: models/domain.py:13
+msgid "domain"
+msgstr "domínio"
+
+#: models/domain.py:14
+msgid "domains"
+msgstr "domínios"
+
+#: models/workspace.py:17
+msgid "name"
+msgstr "nome"
+
+#: models/workspace.py:18
+msgid "active"
+msgstr "ativo"
+
+#: models/workspace.py:19
+msgid "created at"
+msgstr "criado em"
+
+#: models/workspace.py:20
+msgid "updated at"
+msgstr "atualizado em"
+
+#: models/workspace.py:25
+msgid "workspace"
+msgstr "workspace"
+
+#: models/workspace.py:26
+msgid "workspaces"
+msgstr "workspaces"
+
+#: validators/slug.py:42
+msgid ""
+"Use 3 to 30 lowercase letters, digits or underscores, starting with a letter."
+msgstr ""
+"Use de 3 a 30 letras minúsculas, dígitos ou sublinhados, começando com uma "
+"letra."
+
+#: validators/slug.py:48
+msgid "This address is reserved."
+msgstr "Este endereço é reservado."

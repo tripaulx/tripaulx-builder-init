@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# =============================================================================
+# pg - manage the local PostgreSQL (Homebrew) used by this project.
+#
+# django-tenants needs PostgreSQL schemas, so development runs on Postgres too.
+# Database, role and password are read from .env.local (DB_* keys).
+#
+#   ./pg ensure   start the service and create role/database if missing
+#   ./pg start    start the service only
+#   ./pg stop     stop the service
+#   ./pg status   show whether it accepts connections
+#   ./pg psql     open psql on the project database
+#   ./pg reset    DROP and recreate the database (deletes ALL data)
+# =============================================================================
+set -euo pipefail
+
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+PG_FORMULA="${PG_FORMULA:-postgresql@16}"
+ENV_FILE="$BASE_DIR/.env.local"
+
+log() { echo "[pg] $*"; }
+err() { echo "[pg][error] $*" >&2; }
+
+# Read KEY from .env.local, falling back to the process env, then a default.
+read_env() {
+  local key="$1" default="${2:-}" val=""
+  if [ -f "$ENV_FILE" ]; then
+    val="$(grep -E "^${key}=" "$ENV_FILE" | tail -n1 | cut -d= -f2- || true)"
+    val="${val%\"}"; val="${val#\"}"; val="${val%\'}"; val="${val#\'}"
+  fi
+  if [ -n "$val" ]; then echo "$val"; else echo "${!key:-$default}"; fi
+}
+
+DB_NAME="$(read_env DB_NAME)"
+DB_USER="$(read_env DB_USER "$DB_NAME")"
+DB_PASSWORD="$(read_env DB_PASSWORD)"
+DB_HOST="$(read_env DB_HOST 127.0.0.1)"
+DB_PORT="$(read_env DB_PORT 5432)"
+
+if [ -z "$DB_NAME" ]; then
+  err "DB_NAME is not set. Create .env.local (./start does it from .env.example)."
+  exit 1
+fi
+
+# Administrative psql: connects as the OS user (superuser on Homebrew).
+psql_admin() { psql -h "$DB_HOST" -p "$DB_PORT" -d postgres -v ON_ERROR_STOP=1 "$@"; }
+is_ready() { pg_isready -h "$DB_HOST" -p "$DB_PORT" -q; }
+
+# Escape SQL literals (' -> '') and identifiers (" -> "").
+sql_lit() { local s="$1" q="'"; printf "%s" "${s//$q/$q$q}"; }
+sql_ident() { local s="$1" q='"'; printf "%s" "${s//$q/$q$q}"; }
+
+ensure_service() {
+  is_ready && return 0
+  command -v brew >/dev/null 2>&1 || { err "Start PostgreSQL at $DB_HOST:$DB_PORT."; return 1; }
+  log "starting $PG_FORMULA..."
+  brew services start "$PG_FORMULA" >/dev/null || true
+  for _ in $(seq 1 40); do is_ready && return 0; sleep 0.5; done
+  err "PostgreSQL did not become ready at $DB_HOST:$DB_PORT."
+  return 1
+}
+
+role_exists() {
+  [ "$(psql_admin -tAc "SELECT 1 FROM pg_roles WHERE rolname='$(sql_lit "$DB_USER")'")" = "1" ]
+}
+db_exists() {
+  [ "$(psql_admin -tAc "SELECT 1 FROM pg_database WHERE datname='$(sql_lit "$DB_NAME")'")" = "1" ]
+}
+
+ensure_role_and_db() {
+  if ! role_exists; then
+    log "creating role '$DB_USER'..."
+    psql_admin -c "CREATE ROLE \"$(sql_ident "$DB_USER")\" LOGIN PASSWORD '$(sql_lit "$DB_PASSWORD")' CREATEDB"
+  fi
+  if ! db_exists; then
+    log "creating database '$DB_NAME'..."
+    psql_admin -c "CREATE DATABASE \"$(sql_ident "$DB_NAME")\" OWNER \"$(sql_ident "$DB_USER")\""
+  fi
+}
+
+case "${1:-ensure}" in
+  ensure) ensure_service; ensure_role_and_db; log "ready: postgresql://$DB_USER@$DB_HOST:$DB_PORT/$DB_NAME" ;;
+  start) ensure_service ;;
+  stop) brew services stop "$PG_FORMULA" >/dev/null || true ;;
+  status) if is_ready; then log "ONLINE at $DB_HOST:$DB_PORT"; else log "OFFLINE at $DB_HOST:$DB_PORT"; fi ;;
+  psql) exec psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" ;;
+  reset)
+    ensure_service
+    log "DROPPING database '$DB_NAME'..."
+    psql_admin -c "DROP DATABASE IF EXISTS \"$(sql_ident "$DB_NAME")\""
+    ensure_role_and_db ;;
+  *) err "unknown command: $1"; echo "Usage: ./pg [ensure|start|stop|status|psql|reset]" >&2; exit 2 ;;
+esac

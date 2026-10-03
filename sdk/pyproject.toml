@@ -1,0 +1,47 @@
+[project]
+name = "tripaulx-sdk"
+dynamic = ["version"]
+description = "Multi-tenant Django foundation: workspaces, accounts with mandatory 2FA and passkeys, AI providers, legal and storage."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Flavio Almeida Paulino", email = "f1@tripaulx.com" }]
+maintainers = [{ name = "Flavio Almeida Paulino", email = "f1@tripaulx.com" }]
+requires-python = ">=3.12"
+classifiers = [
+  "Framework :: Django",
+  "Framework :: Django :: 6.0",
+  "Framework :: Django :: 6.1",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Natural Language :: Portuguese (Brazilian)",
+]
+dependencies = [
+  "django>=6.0,<6.2",
+  "django-tenants>=3.14,<4",
+  "psycopg[binary]>=3.2,<4",
+  "python-dotenv>=1.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/tripaulx/tripaulx-builder-init"
+Issues = "https://github.com/tripaulx/tripaulx-builder-init/issues"
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/tripaulx/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tripaulx"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.project.settings"
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

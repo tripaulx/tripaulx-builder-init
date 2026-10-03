@@ -1,0 +1,38 @@
+# {{ project_name }}
+
+Multi-tenant Django project built on [tripaulx-sdk](https://github.com/tripaulx/tripaulx-builder-init).
+Each workspace has its own PostgreSQL schema and is served at
+`<slug>.{{ base_domain }}`.
+
+## Run locally
+
+Requirements: [uv](https://docs.astral.sh/uv/) and PostgreSQL 16 (Homebrew).
+
+```bash
+./start          # creates .env.local and the database, migrates, runs :8000
+./start test     # test-suite
+```
+
+- Public schema: http://{{ local_base_domain }}:8000/admin/
+- First workspace: http://{{ initial_workspace | replace('_', '-') }}.{{ local_base_domain }}:8000/admin/
+
+Create an admin inside a workspace:
+
+```bash
+uv run python manage.py create_tenant_superuser --schema {{ initial_workspace }}
+```
+
+## Layout
+
+| Path | What |
+|---|---|
+| `config/settings/base_parts/` | settings chunks (never edit `base.py`) |
+| `config/settings/{local,prod,test}.py` | per-environment settings |
+| `config/urls.py` / `urls_public.py` | workspace / public-schema routes |
+| `users/` | concrete `User` (inherits `AbstractTripaulxUser`) |
+
+## Update from the template
+
+```bash
+uvx copier update --trust
+```

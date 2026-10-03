@@ -1,0 +1,28 @@
+# {{ project_name }}
+
+This is a multi-tenant Django project on **tripaulx-sdk**: django-tenants, one schema per
+workspace, served at `<slug>.{{ base_domain }}`. Deploys go to CapRover.
+
+## Language
+- Code, identifiers, docs and commits are written in **English**.
+- pt-BR is a translation: wrap user-facing strings in `gettext` / `gettext_lazy` and translate them in `locale/pt_BR`.
+
+## Code standards
+- **PEP 8**, enforced by `uv run ruff check` and `uv run ruff format` (line length 88).
+- **PEP 257** docstrings and type hints everywhere.
+- **About 150 LOC per file, 300 at most.** Split by responsibility before a file grows past that.
+- App layout:
+  - `models/` with one file per model and `__init__` re-exports;
+  - `api/serializers/` and `api/views/`;
+  - `services/` (business logic);
+  - `validators/`, `tasks/`, `admin/`;
+  - `tests/` with pytest + factory_boy, under 150 LOC per file.
+- Never duplicate a rule across validators, serializers and services.
+- Settings live in `config/settings/base_parts/` chunks. `base.py` only re-exports them.
+- New business apps go in `PROJECT_TENANT_APPS` (`base_parts/apps.py`).
+- Models inherit `tripaulx.core.models.BaseModel` (UUID, audit, soft delete).
+
+## Commands
+- Always use `uv run ...` with an explicit `DJANGO_SETTINGS_MODULE` (`config.settings.local`, `.prod` or `.test`).
+- Migrations use `migrate_schemas`, never `migrate`.
+- Never remove or rename a field without explicit confirmation.

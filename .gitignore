@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+.env
+.env.*
+!.env.example
+!.env.*.example
+.DS_Store
+.idea/
+.vscode/
+# Rendered from template/ by scripts/render_example.sh (never committed).
+example/
