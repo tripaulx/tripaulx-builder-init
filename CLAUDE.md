@@ -89,6 +89,12 @@ tripaulx/<app>/
   - Never edit the generated SVGs by hand.
 - When a template file changes, re-render, run `ruff check --fix` and `ruff format` in `example/`, and copy any fixes back into `template/`.
 
+## Claude Code plugin
+- `.claude-plugin/marketplace.json` (marketplace `tripaulx`) lists the plugin in `plugin/`, named `tripaulx-builder`.
+- Its skills are `plugin/skills/new-project` and `plugin/skills/update-project`.
+- After any change to them, run `claude plugin validate . --strict && claude plugin validate ./plugin --strict`.
+- Keep the skills in sync with the Copier questions (`copier.yml`) and with `./start`.
+
 ## Public repository hygiene
 - This repository is public. Never write any of the following into it:
   - internal project names, client or tenant names, or people's names (the only exception is the maintainer, Flavio Almeida Paulino <f1@tripaulx.com>);

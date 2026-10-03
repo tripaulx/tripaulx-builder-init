@@ -6,6 +6,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Claude Code plugin marketplace (`tripaulx`) with the `tripaulx-builder` plugin:
+  - the `new-project` skill creates, sets up and verifies a project from the template;
+  - the `update-project` skill applies template and SDK updates.
+
 ## [0.1.0] - 2026-10-03
 
 First release.

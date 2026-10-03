@@ -1,0 +1,17 @@
+{
+  "name": "tripaulx",
+  "description": "Claude Code plugins for tripaulx-builders projects.",
+  "owner": {
+    "name": "Flavio Almeida Paulino",
+    "email": "f1@tripaulx.com",
+    "url": "https://github.com/tripaulx"
+  },
+  "plugins": [
+    {
+      "name": "tripaulx-builder",
+      "source": "./plugin",
+      "description": "Create and update multi-tenant Django projects from tripaulx-builder-init (tripaulx-sdk + Copier template, CapRover-ready).",
+      "version": "0.1.0"
+    }
+  ]
+}

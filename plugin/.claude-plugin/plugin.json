@@ -1,0 +1,15 @@
+{
+  "name": "tripaulx-builder",
+  "displayName": "tripaulx builder",
+  "version": "0.1.0",
+  "description": "Create and update multi-tenant Django projects from tripaulx-builder-init: workspaces per subdomain, mandatory 2FA, passkeys, AI providers, encrypted storage, legal documents and CapRover deploy.",
+  "author": {
+    "name": "Flavio Almeida Paulino",
+    "email": "f1@tripaulx.com",
+    "url": "https://github.com/tripaulx"
+  },
+  "homepage": "https://github.com/tripaulx/tripaulx-builder-init",
+  "repository": "https://github.com/tripaulx/tripaulx-builder-init",
+  "license": "MIT",
+  "keywords": ["django", "django-tenants", "multi-tenant", "copier", "caprover", "scaffold"]
+}

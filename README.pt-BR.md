@@ -6,6 +6,7 @@
 <p align="center">
   <a href="README.md">English</a> ·
   <a href="#início-rápido">Início rápido</a> ·
+  <a href="#plugin-do-claude-code">Plugin do Claude Code</a> ·
   <a href="#como-as-partes-se-encaixam">Como funciona</a> ·
   <a href="#roadmap">Roadmap</a> ·
   <a href="CONTRIBUTING.md">Contribuir</a>
@@ -40,6 +41,26 @@ cd meu-projeto
 Depois abra `http://main.meu-projeto.localhost:8000/admin/`. Qualquer nome
 `*.localhost` aponta para a sua máquina, então todo workspace funciona localmente sem
 editar o arquivo hosts.
+
+## Plugin do Claude Code
+
+Instale o plugin **tripaulx-builder** e deixe o Claude criar ou atualizar projetos para você:
+
+```bash
+claude plugin marketplace add tripaulx/tripaulx-builder-init
+claude plugin install tripaulx-builder@tripaulx
+```
+
+Dentro do Claude Code também dá para usar `/plugin marketplace add tripaulx/tripaulx-builder-init`
+e depois `/plugin install tripaulx-builder@tripaulx`.
+
+| Skill | O que faz |
+|---|---|
+| `/tripaulx-builder:new-project [nome]` | Confere os pré-requisitos, pergunta as respostas, roda o template Copier, prepara banco e chaves, roda os testes e explica os próximos passos. |
+| `/tripaulx-builder:update-project [tag]` | `copier update` + `uv lock --upgrade-package tripaulx-sdk`, migrations e testes, com um resumo do que mudou. |
+
+O Claude também as usa sozinho quando você pede, por exemplo, "crie um projeto tripaulx
+novo chamado Acme".
 
 ## Como as partes se encaixam
 
