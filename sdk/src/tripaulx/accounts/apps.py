@@ -11,3 +11,7 @@ class AccountsConfig(AppConfig):
     label = "tpsdk_accounts"
     verbose_name = _("Accounts")
     default_auto_field = "django.db.models.BigAutoField"
+
+    def ready(self) -> None:
+        """Register the OpenAPI extension of the JWT authentication."""
+        from .api import schema  # noqa: F401

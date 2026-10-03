@@ -1,0 +1,3 @@
+{% extends "tripaulx/mail/code_base.txt" %}{% load i18n %}
+{% block intro %}{% include "tripaulx/mail/greeting.txt" %} {% blocktranslate %}use the code below to finish signing in to {{ app_name }}.{% endblocktranslate %}{% endblock %}
+{% block note %}{% translate "If you did not try to sign in, ignore this e-mail and consider changing your password." %}{% endblock %}

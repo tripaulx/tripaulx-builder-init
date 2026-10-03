@@ -5,5 +5,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/auth/", include("tripaulx.accounts.api.urls")),
+    path("api/workspace/", include("tripaulx.accounts.api.urls_workspace")),
     path("", include("tripaulx.core.urls")),
 ]

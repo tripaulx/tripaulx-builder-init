@@ -1,0 +1,8 @@
+{% load i18n %}{% autoescape off %}{% if workspace %}{% blocktranslate %}{{ inviter }} invited you to join the {{ workspace }} workspace on {{ app_name }}.{% endblocktranslate %}{% else %}{% blocktranslate %}{{ inviter }} invited you to join a workspace on {{ app_name }}.{% endblocktranslate %}{% endif %}
+
+{% translate "Accept the invitation:" %} {{ url }}
+
+{% blocktranslate count days=days %}The link expires in {{ days }} day.{% plural %}The link expires in {{ days }} days.{% endblocktranslate %}
+{% translate "If you were not expecting this invitation, you can ignore this e-mail." %}
+
+{{ app_name }}{% endautoescape %}

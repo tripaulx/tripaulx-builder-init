@@ -1,0 +1,13 @@
+{% extends "tripaulx/mail/base.html" %}{% load i18n %}
+{% block title %}{% translate "You have been invited" %}{% endblock %}
+{% block heading %}{% translate "You have been invited" %}{% endblock %}
+{% block intro %}{% if workspace %}{% blocktranslate %}{{ inviter }} invited you to join the {{ workspace }} workspace on {{ app_name }}.{% endblocktranslate %}{% else %}{% blocktranslate %}{{ inviter }} invited you to join a workspace on {{ app_name }}.{% endblocktranslate %}{% endif %}{% endblock %}
+{% block content %}
+        <tr><td style="padding:24px 40px 0;text-align:center;">
+          <a href="{{ url }}" style="display:inline-block;background:#0f172a;color:#ffffff;text-decoration:none;font-size:15px;font-weight:600;padding:12px 24px;border-radius:10px;">{% translate "Accept the invitation" %}</a>
+        </td></tr>
+        <tr><td style="padding:14px 40px 0;text-align:center;">
+          <p style="margin:0;font-size:13px;color:#64748b;">{% blocktranslate count days=days %}The link expires in {{ days }} day.{% plural %}The link expires in {{ days }} days.{% endblocktranslate %}</p>
+        </td></tr>
+{% endblock %}
+{% block note %}{% translate "If you were not expecting this invitation, you can ignore this e-mail." %}{% endblock %}

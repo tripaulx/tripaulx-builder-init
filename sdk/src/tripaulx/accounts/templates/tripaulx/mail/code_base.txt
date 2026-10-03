@@ -1,0 +1,8 @@
+{% load i18n %}{% autoescape off %}{% block intro %}{% endblock %}
+
+{% translate "Code:" %} {{ code }}
+
+{% blocktranslate count minutes=minutes %}This code expires in {{ minutes }} minute.{% plural %}This code expires in {{ minutes }} minutes.{% endblocktranslate %}
+{% block note %}{% endblock %}
+
+{{ app_name }}{% endautoescape %}

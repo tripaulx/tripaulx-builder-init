@@ -1,0 +1,3 @@
+{% extends "tripaulx/mail/code_base.txt" %}{% load i18n %}
+{% block intro %}{% include "tripaulx/mail/greeting.txt" %} {% blocktranslate %}use the code below to confirm your e-mail on {{ app_name }}.{% endblocktranslate %}{% endblock %}
+{% block note %}{% translate "If this was not you, you can ignore this e-mail." %}{% endblock %}

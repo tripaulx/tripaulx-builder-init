@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 19:44-0500\n"
+"POT-Creation-Date: 2026-10-02 22:17-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -53,6 +53,10 @@ msgstr "workspace"
 #: models/workspace.py:26
 msgid "workspaces"
 msgstr "workspaces"
+
+#: services/provisioning.py:32
+msgid "This address is already taken."
+msgstr "Este endereço já está em uso."
 
 #: validators/slug.py:42
 msgid ""
