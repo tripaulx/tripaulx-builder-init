@@ -13,5 +13,6 @@ from .base_parts.logging import *
 from .base_parts.middleware import *
 from .base_parts.security import *
 from .base_parts.storage import *
+from .base_parts.tasks import *
 from .base_parts.templates import *
 from .base_parts.tripaulx import *

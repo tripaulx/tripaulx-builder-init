@@ -2,11 +2,13 @@
 
 The ``users`` app defines ``AUTH_USER_MODEL`` and must be in both lists.
 Add tenant-only business apps to ``PROJECT_TENANT_APPS``.
+``django_tasks_db`` is shared only: one task queue table in the public schema,
+consumed by the worker for every workspace.
 """
 
 from tripaulx.settings import apps as sdk_apps
 
-PROJECT_SHARED_APPS = ("users",)
+PROJECT_SHARED_APPS = ("users", "django_tasks_db")
 PROJECT_TENANT_APPS = ("users",)
 
 SHARED_APPS = sdk_apps.shared_apps(*PROJECT_SHARED_APPS)
