@@ -17,7 +17,7 @@ def test_rest_framework_defaults():
     ]
     rates = config["DEFAULT_THROTTLE_RATES"]
     expected = {"anon", "user", "auth_login", "auth_register", "auth_otp"}
-    assert expected | {"auth_refresh"} == set(rates)
+    assert expected | {"auth_refresh", "ai_test", "ai_run", "ai_poll"} == set(rates)
     assert config["DEFAULT_SCHEMA_CLASS"] == "drf_spectacular.openapi.AutoSchema"
     assert config["PAGE_SIZE"] == 20
 

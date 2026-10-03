@@ -37,6 +37,8 @@ SDK_SHARED_APPS: tuple[str, ...] = (
     # Global e-mail configuration: one row in the public schema only.
     "tripaulx.mail",
     "tripaulx.storage",
+    # Shared AI model catalog (prices): one table in the public schema.
+    "tripaulx.ai.catalog",
 )
 
 SDK_TENANT_APPS: tuple[str, ...] = (
@@ -45,6 +47,7 @@ SDK_TENANT_APPS: tuple[str, ...] = (
     "tripaulx.accounts",
     "rest_framework_simplejwt.token_blacklist",
     "tripaulx.storage",
+    "tripaulx.ai",
 )
 
 TENANT_MODEL = "tpsdk_tenants.Workspace"

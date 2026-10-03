@@ -42,6 +42,11 @@ storage = [
   "cryptography>=44",
   "pillow>=11",
 ]
+# AI providers (tripaulx.ai). Each SDK is imported lazily, only when a call
+# goes to that provider; "ai" installs both.
+openai = ["openai>=2"]
+anthropic = ["anthropic>=1.0"]
+ai = ["openai>=2", "anthropic>=1.0"]
 
 [project.urls]
 Homepage = "https://github.com/tripaulx/tripaulx-builder-init"

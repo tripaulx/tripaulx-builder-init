@@ -1,0 +1,1167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 23:01-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: admin/agents.py:45
+msgid "Prompt"
+msgstr "Prompt"
+
+#: admin/agents.py:47
+msgid "Model"
+msgstr "Modelo"
+
+#: admin/agents.py:60 admin/agents.py:101
+msgid "Audit"
+msgstr "Auditoria"
+
+#: admin/agents.py:96
+msgid "Instructions (draft)"
+msgstr "Instruções (rascunho)"
+
+#: admin/agents.py:98
+msgid "Model and limits"
+msgstr "Modelo e limites"
+
+#: admin/agents.py:108
+msgid "Publish the draft as a new version"
+msgstr "Publicar o rascunho como nova versão"
+
+#: admin/agents.py:114
+msgid "Published from the admin."
+msgstr "Publicada pelo admin."
+
+#: admin/agents.py:123
+#, python-format
+msgid "%(name)s: version %(number)s published."
+msgstr "%(name)s: versão %(number)s publicada."
+
+#: admin/settings.py:28 catalog/models/ai_model.py:46 models/event.py:66
+#: models/key.py:51 models/settings.py:35
+msgid "provider"
+msgstr "provedor"
+
+#: admin/settings.py:30
+msgid "New API key of the chosen provider (blank keeps the current one)"
+msgstr "Nova chave de API do provedor escolhido (em branco mantém a atual)"
+
+#: admin/settings.py:35
+msgid "Stored encrypted and never shown again; replaces the current key."
+msgstr "Gravada criptografada e nunca mais exibida; substitui a chave atual."
+
+#: admin/settings.py:39
+msgid "Delete the current key of the chosen provider"
+msgstr "Excluir a chave atual do provedor escolhido"
+
+#: admin/settings.py:75
+msgid "Choose one: add a new key OR delete the current one."
+msgstr "Escolha uma coisa: cadastrar uma chave nova OU excluir a atual."
+
+#: admin/settings.py:93 admin/settings.py:102
+msgid "API key"
+msgstr "Chave de API"
+
+#: admin/settings.py:94
+msgid "Call defaults"
+msgstr "Padrões de chamada"
+
+#: admin/settings.py:96
+msgid "Limits and privacy"
+msgstr "Limites e privacidade"
+
+#: admin/settings.py:99 catalog/admin/__init__.py:72
+msgid "Dates"
+msgstr "Datas"
+
+#: admin/settings.py:107
+msgid "not set"
+msgstr "não definida"
+
+#: admin/settings.py:113
+#, python-format
+msgid "set on %(when)s by %(who)s"
+msgstr "definida em %(when)s por %(who)s"
+
+#: admin/settings.py:116
+#, python-format
+msgid "stored on %(when)s by %(who)s, but unreadable: add it again"
+msgstr "gravada em %(when)s por %(who)s, mas ilegível: cadastre de novo"
+
+#: api/permissions.py:26
+msgid "Only workspace owners and admins can change this."
+msgstr ""
+"Somente proprietários e administradores do workspace podem alterar isto."
+
+#: api/serializers/agent_links.py:23
+msgid "A specialist is repeated in the team."
+msgstr "Há especialista repetido na equipe."
+
+#: api/serializers/agent_links.py:25
+msgid "The agent cannot be in its own team."
+msgstr "O agente não pode estar na própria equipe."
+
+#: api/serializers/agent_links.py:32
+#, python-format
+msgid "Agent not found (id %(id)s)."
+msgstr "Agente não encontrado (id %(id)s)."
+
+#: api/serializers/agent_links.py:36
+#, python-format
+msgid "“%(name)s” is not a specialist."
+msgstr "“%(name)s” não é especialista."
+
+#: api/serializers/agent_links.py:40
+#, python-format
+msgid "“%(name)s” is inactive."
+msgstr "“%(name)s” está inativo."
+
+#: api/serializers/agent_links.py:50
+msgid "A skill is repeated."
+msgstr "Há skill repetida."
+
+#: api/serializers/agent_links.py:57
+#, python-format
+msgid "Skill not found (id %(id)s)."
+msgstr "Skill não encontrada (id %(id)s)."
+
+#: api/serializers/agent_links.py:61
+#, python-format
+msgid "The skill “%(name)s” is inactive."
+msgstr "A skill “%(name)s” está inativa."
+
+#: api/serializers/agents.py:113
+msgid "Write the agent instructions."
+msgstr "Escreva as instruções do agente."
+
+#: api/serializers/agents.py:163
+msgid "A coordinator needs at least one specialist."
+msgstr "Um coordenador precisa de ao menos um especialista na equipe."
+
+#: api/serializers/agents.py:167
+msgid "Only a coordinator has a team."
+msgstr "Só um coordenador tem equipe."
+
+#: api/serializers/common.py:21
+msgid "Enter the name."
+msgstr "Informe o nome."
+
+#: api/serializers/common.py:27
+#, python-format
+msgid "“%(name)s” already exists."
+msgstr "“%(name)s” já existe."
+
+#: api/serializers/runs.py:26 providers/errors.py:75
+msgid "Enter the input text."
+msgstr "Informe o texto de entrada."
+
+#: api/serializers/runs.py:43
+#, python-format
+msgid "Ensure this field has no more than %(size)s characters."
+msgstr "Este campo aceita no máximo %(size)s caracteres."
+
+#: api/serializers/settings.py:97
+msgid "Choose a model of the new provider."
+msgstr "Escolha um modelo do novo provedor."
+
+#: api/serializers/skills.py:77
+msgid "Write the skill instructions."
+msgstr "Escreva as instruções da skill."
+
+#: api/views/events.py:34
+msgid "Enter a number of days between 1 and 365."
+msgstr "Informe um número de dias entre 1 e 365."
+
+#: api/views/events.py:48 api/views/events.py:103
+#, python-format
+msgid "Use one of: %(choices)s."
+msgstr "Use um de: %(choices)s."
+
+#: api/views/executions.py:44
+msgid "Execution not found (the task backend keeps no results)."
+msgstr "Execução não encontrada (o backend de tarefas não guarda resultados)."
+
+#: api/views/keys.py:61
+msgid "Choose a registered provider."
+msgstr "Escolha um provedor cadastrado."
+
+#: api/views/settings.py:92 providers/errors.py:66
+#, python-format
+msgid "No API key for %(provider)s. Add the key in the AI settings."
+msgstr ""
+"Nenhuma chave de API para %(provider)s. Cadastre a chave nas configurações "
+"de IA."
+
+#: api/views/settings.py:97
+msgid "Choose a model and save before testing."
+msgstr "Escolha um modelo e salve antes de testar."
+
+#: apps.py:12
+msgid "Artificial intelligence"
+msgstr "Inteligência artificial"
+
+#: catalog/admin/__init__.py:39
+msgid "Presentation"
+msgstr "Apresentação"
+
+#: catalog/admin/__init__.py:51
+msgid "Call parameters"
+msgstr "Parâmetros de chamada"
+
+#: catalog/admin/__init__.py:62
+msgid "Prices"
+msgstr "Preços"
+
+#: catalog/apps.py:12
+msgid "AI model catalog"
+msgstr "Catálogo de modelos de IA"
+
+#: catalog/models/ai_model.py:26
+msgid "Economy"
+msgstr "Econômico"
+
+#: catalog/models/ai_model.py:27
+msgid "Balanced"
+msgstr "Equilibrado"
+
+#: catalog/models/ai_model.py:28
+msgid "Premium"
+msgstr "Premium"
+
+#: catalog/models/ai_model.py:48
+msgid "identifier"
+msgstr "identificador"
+
+#: catalog/models/ai_model.py:50
+msgid "Exact model name in the provider API."
+msgstr "Nome exato do modelo na API do provedor."
+
+#: catalog/models/ai_model.py:52
+msgid "label"
+msgstr "rótulo"
+
+#: catalog/models/ai_model.py:54 models/agent.py:41 models/skill.py:36
+msgid "description"
+msgstr "descrição"
+
+#: catalog/models/ai_model.py:58
+msgid "One line on when to use this model."
+msgstr "Uma linha sobre quando usar este modelo."
+
+#: catalog/models/ai_model.py:61
+msgid "nickname"
+msgstr "apelido"
+
+#: catalog/models/ai_model.py:65
+msgid "One or two words about the model profile."
+msgstr "Uma ou duas palavras sobre o perfil do modelo."
+
+#: catalog/models/ai_model.py:68
+msgid "cost tier"
+msgstr "faixa de custo"
+
+#: catalog/models/ai_model.py:71
+msgid "highlighted"
+msgstr "destaque"
+
+#: catalog/models/ai_model.py:73
+msgid "Shown as a card when choosing the model."
+msgstr "Aparece como cartão na escolha do modelo."
+
+#: catalog/models/ai_model.py:76
+msgid "recommended"
+msgstr "recomendado"
+
+#: catalog/models/ai_model.py:78
+msgid "Gets the “Recommended” badge."
+msgstr "Ganha o selo “Recomendado”."
+
+#: catalog/models/ai_model.py:81 models/agent.py:108 models/key.py:88
+#: models/skill.py:67
+msgid "active"
+msgstr "ativo"
+
+#: catalog/models/ai_model.py:83
+msgid "Uncheck to hide the model without deleting it."
+msgstr "Desmarque para tirar o modelo da lista sem apagar o cadastro."
+
+#: catalog/models/ai_model.py:85 models/agent.py:109 models/skill.py:68
+#: models/team.py:21 models/team.py:51
+msgid "order"
+msgstr "ordem"
+
+#: catalog/models/ai_model.py:87
+msgid "supports reasoning"
+msgstr "suporta raciocínio"
+
+#: catalog/models/ai_model.py:90
+msgid ""
+"Reasoning models receive effort and never temperature. A wrong check makes "
+"the provider reject the call."
+msgstr ""
+"Modelos de raciocínio recebem esforço e nunca temperatura. Uma marcação "
+"errada faz o provedor recusar a chamada."
+
+#: catalog/models/ai_model.py:95
+msgid "accepts minimal effort"
+msgstr "aceita esforço mínimo"
+
+#: catalog/models/ai_model.py:97
+msgid "Unchecked sends “low” instead of “minimal”."
+msgstr "Desmarcado, envia “baixo” no lugar de “mínimo”."
+
+#: catalog/models/ai_model.py:100
+msgid "uses a thinking budget"
+msgstr "usa orçamento de raciocínio"
+
+#: catalog/models/ai_model.py:103
+msgid ""
+"The model takes a thinking token budget instead of an effort level (older "
+"Anthropic models)."
+msgstr ""
+"O modelo recebe um orçamento de tokens de raciocínio em vez de um nível de "
+"esforço (modelos Anthropic anteriores)."
+
+#: catalog/models/ai_model.py:108
+msgid "provider options"
+msgstr "opções do provedor"
+
+#: catalog/models/ai_model.py:111
+msgid "Provider-specific call options (see the AI docs)."
+msgstr "Opções de chamada específicas do provedor (veja a documentação de IA)."
+
+#: catalog/models/ai_model.py:113 models/event.py:93
+msgid "input price (USD/1M tokens)"
+msgstr "preço de entrada (USD/1M tokens)"
+
+#: catalog/models/ai_model.py:115
+msgid "cached input price (USD/1M tokens)"
+msgstr "preço de entrada em cache (USD/1M tokens)"
+
+#: catalog/models/ai_model.py:115
+msgid "Empty uses the input price."
+msgstr "Vazio usa o preço de entrada."
+
+#: catalog/models/ai_model.py:117 models/event.py:100
+msgid "output price (USD/1M tokens)"
+msgstr "preço de saída (USD/1M tokens)"
+
+#: catalog/models/ai_model.py:118
+msgid "prices updated on"
+msgstr "preços atualizados em"
+
+#: catalog/models/ai_model.py:119 models/event.py:40
+msgid "created at"
+msgstr "criado em"
+
+#: catalog/models/ai_model.py:120 models/settings.py:78
+msgid "updated at"
+msgstr "atualizado em"
+
+#: catalog/models/ai_model.py:123
+msgid "AI model"
+msgstr "modelo de IA"
+
+#: catalog/models/ai_model.py:124
+msgid "AI models"
+msgstr "modelos de IA"
+
+#: catalog/services/sync.py:64
+#, python-format
+msgid "Cannot read %(path)s: %(error)s"
+msgstr "Não foi possível ler %(path)s: %(error)s"
+
+#: catalog/services/sync.py:68
+msgid "The file must hold a list of models."
+msgstr "O arquivo precisa conter uma lista de modelos."
+
+#: catalog/services/sync.py:75
+msgid "Every model must be an object."
+msgstr "Cada modelo precisa ser um objeto."
+
+#: catalog/services/sync.py:79
+msgid "Every model needs a provider and an identifier."
+msgstr "Cada modelo precisa de provedor e identificador."
+
+#: catalog/services/sync.py:86
+#, python-format
+msgid "Unknown fields in %(model)s: %(fields)s"
+msgstr "Campos desconhecidos em %(model)s: %(fields)s"
+
+#: catalog/services/sync.py:96
+#, python-format
+msgid "Invalid price %(field)s in %(model)s."
+msgstr "Preço inválido %(field)s em %(model)s."
+
+#: models/agent.py:36 models/skill.py:31
+msgid "name"
+msgstr "nome"
+
+#: models/agent.py:38 models/skill.py:33
+msgid "slug"
+msgstr "slug"
+
+#: models/agent.py:44
+msgid "role"
+msgstr "papel"
+
+#: models/agent.py:51 models/skill.py:117
+msgid "instructions"
+msgstr "instruções"
+
+#: models/agent.py:52
+msgid "Identity and rules of the agent (a system prompt layer)."
+msgstr "Identidade e regras do agente (camada do prompt de sistema)."
+
+#: models/agent.py:55
+msgid "input template"
+msgstr "template da entrada"
+
+#: models/agent.py:57
+#, python-brace-format
+msgid "User message. Placeholders: {input} and {context}."
+msgstr "Mensagem do usuário. Placeholders: {input} e {context}."
+
+#: models/agent.py:60 models/settings.py:37 models/skill.py:43
+msgid "model"
+msgstr "modelo"
+
+#: models/agent.py:64
+msgid "Empty inherits the model of the workspace settings."
+msgstr "Vazio herda o modelo das configurações do workspace."
+
+#: models/agent.py:67 models/skill.py:50
+msgid "reasoning effort"
+msgstr "esforço de raciocínio"
+
+#: models/agent.py:74
+msgid "verbosity"
+msgstr "verbosidade"
+
+#: models/agent.py:81
+msgid "temperature"
+msgstr "temperatura"
+
+#: models/agent.py:86
+msgid "Sent only to models without reasoning."
+msgstr "Só enviada a modelos sem raciocínio."
+
+#: models/agent.py:89 models/skill.py:57
+msgid "maximum output tokens"
+msgstr "máximo de tokens de saída"
+
+#: models/agent.py:92
+msgid "output schema"
+msgstr "esquema de saída"
+
+#: models/agent.py:95
+msgid "Empty is free text. An object JSON Schema requires JSON."
+msgstr "Vazio é texto livre. Um JSON Schema de objeto exige resposta em JSON."
+
+#: models/agent.py:98
+msgid "web search"
+msgstr "pesquisa na internet"
+
+#: models/agent.py:100
+msgid "The agent may search the web before answering."
+msgstr "O agente pode pesquisar na internet antes de responder."
+
+#: models/agent.py:103
+msgid "web search domains"
+msgstr "domínios da pesquisa"
+
+#: models/agent.py:106
+msgid "Only these sites (and subdomains). Empty means any site."
+msgstr "Só estes sites (e subdomínios). Vazio = qualquer site."
+
+#: models/agent.py:123 models/skill.py:71
+msgid "created by"
+msgstr "criado por"
+
+#: models/agent.py:131 models/event.py:56
+msgid "agent"
+msgstr "agente"
+
+#: models/agent.py:132
+msgid "agents"
+msgstr "agentes"
+
+#: models/choices.py:16 models/choices.py:26
+msgid "Inherit"
+msgstr "Herdar"
+
+#: models/choices.py:17
+msgid "Minimal"
+msgstr "Mínimo"
+
+#: models/choices.py:18 models/choices.py:27
+msgid "Low"
+msgstr "Baixo"
+
+#: models/choices.py:19 models/choices.py:28
+msgid "Medium"
+msgstr "Médio"
+
+#: models/choices.py:20 models/choices.py:29
+msgid "High"
+msgstr "Alto"
+
+#: models/choices.py:35 models/choices.py:50
+msgid "Specialist"
+msgstr "Especialista"
+
+#: models/choices.py:36
+msgid "Coordinator"
+msgstr "Coordenador"
+
+#: models/choices.py:42
+msgid "Success"
+msgstr "Sucesso"
+
+#: models/choices.py:43
+msgid "Error"
+msgstr "Erro"
+
+#: models/choices.py:49
+msgid "Single"
+msgstr "Única"
+
+#: models/choices.py:51
+msgid "Consolidation"
+msgstr "Consolidação"
+
+#: models/choices.py:57
+msgid "Deleted"
+msgstr "Excluída"
+
+#: models/choices.py:58
+msgid "Replaced by a new key"
+msgstr "Substituída por uma nova chave"
+
+#: models/event.py:41
+msgid "execution"
+msgstr "execução"
+
+#: models/event.py:43
+msgid "step"
+msgstr "etapa"
+
+#: models/event.py:48
+msgid "position"
+msgstr "posição"
+
+#: models/event.py:49
+msgid "origin"
+msgstr "origem"
+
+#: models/event.py:51
+msgid "reference"
+msgstr "referência"
+
+#: models/event.py:53
+msgid "operation"
+msgstr "operação"
+
+#: models/event.py:63
+msgid "agent (name)"
+msgstr "agente (nome)"
+
+#: models/event.py:65 models/skill.py:80
+msgid "skills"
+msgstr "skills"
+
+#: models/event.py:68
+msgid "requested model"
+msgstr "modelo pedido"
+
+#: models/event.py:71
+msgid "responding model"
+msgstr "modelo que respondeu"
+
+#: models/event.py:74
+msgid "status"
+msgstr "status"
+
+#: models/event.py:76
+msgid "HTTP"
+msgstr "HTTP"
+
+#: models/event.py:78
+msgid "error code"
+msgstr "código do erro"
+
+#: models/event.py:80
+msgid "error message"
+msgstr "mensagem do erro"
+
+#: models/event.py:81
+msgid "technical detail"
+msgstr "detalhe técnico"
+
+#: models/event.py:82
+msgid "latency (ms)"
+msgstr "latência (ms)"
+
+#: models/event.py:83
+msgid "input tokens"
+msgstr "tokens de entrada"
+
+#: models/event.py:84
+msgid "output tokens"
+msgstr "tokens de saída"
+
+#: models/event.py:85
+msgid "total tokens"
+msgstr "tokens no total"
+
+#: models/event.py:86
+msgid "cached tokens"
+msgstr "tokens em cache"
+
+#: models/event.py:87
+msgid "reasoning tokens"
+msgstr "tokens de raciocínio"
+
+#: models/event.py:88
+msgid "web searches"
+msgstr "pesquisas na internet"
+
+#: models/event.py:90
+msgid "cost (USD)"
+msgstr "custo (USD)"
+
+#: models/event.py:106
+msgid "system prompt"
+msgstr "prompt de sistema"
+
+#: models/event.py:107
+msgid "input"
+msgstr "entrada"
+
+#: models/event.py:108
+msgid "output"
+msgstr "saída"
+
+#: models/event.py:109
+msgid "raw response"
+msgstr "resposta bruta"
+
+#: models/event.py:112
+msgid "user"
+msgstr "usuário"
+
+#: models/event.py:118
+msgid "user (name)"
+msgstr "usuário (nome)"
+
+#: models/event.py:120
+msgid "content purged at"
+msgstr "conteúdo purgado em"
+
+#: models/event.py:124
+msgid "AI event"
+msgstr "evento de IA"
+
+#: models/event.py:125
+msgid "AI events"
+msgstr "eventos de IA"
+
+#: models/key.py:53
+msgid "added at"
+msgstr "cadastrada em"
+
+#: models/key.py:54
+msgid "added by"
+msgstr "cadastrada por"
+
+#: models/key.py:58
+msgid "added by (name)"
+msgstr "cadastrada por (nome)"
+
+#: models/key.py:60
+msgid "closed at"
+msgstr "encerrada em"
+
+#: models/key.py:61
+msgid "closed by"
+msgstr "encerrada por"
+
+#: models/key.py:63
+msgid "closed by (name)"
+msgstr "encerrada por (nome)"
+
+#: models/key.py:66
+msgid "reason"
+msgstr "motivo"
+
+#: models/key.py:76
+msgid "AI API key"
+msgstr "chave de API de IA"
+
+#: models/key.py:77
+msgid "AI API keys"
+msgstr "chaves de API de IA"
+
+#: models/settings.py:33
+msgid "enabled"
+msgstr "ativo"
+
+#: models/settings.py:33
+msgid "Turns AI on for this workspace."
+msgstr "Liga os recursos de IA para este workspace."
+
+#: models/settings.py:41
+msgid "Identifier of a catalog model of the chosen provider."
+msgstr "Identificador de um modelo do catálogo do provedor escolhido."
+
+#: models/settings.py:44
+msgid "default reasoning effort"
+msgstr "esforço de raciocínio padrão"
+
+#: models/settings.py:51
+msgid "default maximum output tokens"
+msgstr "máximo de tokens de saída padrão"
+
+#: models/settings.py:54
+msgid "daily cap (USD)"
+msgstr "teto diário (USD)"
+
+#: models/settings.py:60
+msgid "Once reached, no new run starts until the next day. Empty means no cap."
+msgstr ""
+"Atingido o teto, nenhuma execução nova começa até o dia seguinte. Vazio = "
+"sem teto."
+
+#: models/settings.py:64
+msgid "store event content"
+msgstr "guardar conteúdo dos eventos"
+
+#: models/settings.py:67
+msgid ""
+"Store the prompt, input and output of each call. Off keeps only metrics "
+"(tokens, cost, latency)."
+msgstr ""
+"Grava o prompt, a entrada e a saída de cada chamada. Desligado guarda só "
+"métricas (tokens, custo, latência)."
+
+#: models/settings.py:72
+msgid "content retention (days)"
+msgstr "retenção do conteúdo (dias)"
+
+#: models/settings.py:75
+msgid ""
+"Event content older than this is purged; metrics stay. 0 keeps it forever."
+msgstr ""
+"O conteúdo dos eventos mais antigo que isto é purgado; as métricas ficam. 0 "
+"guarda para sempre."
+
+#: models/settings.py:81 models/settings.py:82 models/settings.py:85
+msgid "AI settings"
+msgstr "Configurações de IA"
+
+#: models/settings.py:127 services/model_choice.py:42
+#, python-format
+msgid "“%(model)s” is not a catalog model of %(provider)s."
+msgstr "“%(model)s” não é um modelo do catálogo de %(provider)s."
+
+#: models/skill.py:39
+msgid "instructions (draft)"
+msgstr "instruções (rascunho)"
+
+#: models/skill.py:40
+msgid "Markdown. Used at runtime only after it is published."
+msgstr "Markdown. Só vale na execução depois de publicada."
+
+#: models/skill.py:47
+msgid "Overrides the agent's model while this skill is attached."
+msgstr "Sobrescreve o modelo do agente enquanto esta skill estiver anexada."
+
+#: models/skill.py:61
+msgid "published version"
+msgstr "versão publicada"
+
+#: models/skill.py:79
+msgid "skill"
+msgstr "skill"
+
+#: models/skill.py:116
+msgid "number"
+msgstr "número"
+
+#: models/skill.py:118
+msgid "note"
+msgstr "nota"
+
+#: models/skill.py:119
+msgid "published at"
+msgstr "publicada em"
+
+#: models/skill.py:122
+msgid "published by"
+msgstr "publicada por"
+
+#: models/skill.py:129
+msgid "published by (name)"
+msgstr "publicada por (nome)"
+
+#: models/skill.py:133
+msgid "skill version"
+msgstr "versão de skill"
+
+#: models/skill.py:134
+msgid "skill versions"
+msgstr "versões de skill"
+
+#: models/team.py:24
+msgid "team member"
+msgstr "membro da equipe"
+
+#: models/team.py:25
+msgid "team members"
+msgstr "membros da equipe"
+
+#: models/team.py:53
+msgid "required"
+msgstr "obrigatória"
+
+#: models/team.py:56
+msgid ""
+"A required skill without a published version makes the run fail; an optional "
+"one is skipped."
+msgstr ""
+"Obrigatória sem versão publicada faz a execução falhar; opcional é "
+"simplesmente pulada."
+
+#: models/team.py:62
+msgid "agent skill"
+msgstr "skill do agente"
+
+#: models/team.py:63
+msgid "agent skills"
+msgstr "skills do agente"
+
+#: providers/errors.py:39
+msgid "AI disabled"
+msgstr "IA desligada"
+
+#: providers/errors.py:40
+msgid "No API key"
+msgstr "Sem chave de API"
+
+#: providers/errors.py:41
+msgid "Invalid character in the key"
+msgstr "Caractere inválido na chave"
+
+#: providers/errors.py:42
+msgid "No model"
+msgstr "Sem modelo"
+
+#: providers/errors.py:43
+msgid "Inactive agent"
+msgstr "Agente inativo"
+
+#: providers/errors.py:44
+msgid "Empty team"
+msgstr "Equipe vazia"
+
+#: providers/errors.py:45
+msgid "Skill without a published version"
+msgstr "Skill sem versão publicada"
+
+#: providers/errors.py:46
+msgid "Daily cap reached"
+msgstr "Teto diário atingido"
+
+#: providers/errors.py:47
+msgid "Empty input"
+msgstr "Entrada vazia"
+
+#: providers/errors.py:48
+msgid "Key rejected"
+msgstr "Chave recusada"
+
+#: providers/errors.py:49
+msgid "No permission for the model"
+msgstr "Sem permissão para o modelo"
+
+#: providers/errors.py:50
+msgid "Unknown model"
+msgstr "Modelo desconhecido"
+
+#: providers/errors.py:51
+msgid "Usage limit or credits"
+msgstr "Limite de uso ou créditos"
+
+#: providers/errors.py:52
+msgid "Request rejected"
+msgstr "Pedido recusado"
+
+#: providers/errors.py:53
+msgid "Provider unavailable"
+msgstr "Provedor indisponível"
+
+#: providers/errors.py:54
+msgid "Timed out"
+msgstr "Tempo esgotado"
+
+#: providers/errors.py:55
+msgid "No connection"
+msgstr "Sem conexão"
+
+#: providers/errors.py:56
+msgid "Answer cut short"
+msgstr "Resposta cortada"
+
+#: providers/errors.py:57
+msgid "Invalid JSON"
+msgstr "JSON inválido"
+
+#: providers/errors.py:58
+msgid "Refused by the model"
+msgstr "Recusada pelo modelo"
+
+#: providers/errors.py:59
+msgid "Provider not installed"
+msgstr "Provedor não instalado"
+
+#: providers/errors.py:60
+msgid "Unexpected error"
+msgstr "Erro inesperado"
+
+#: providers/errors.py:65
+msgid "AI is turned off in the workspace settings."
+msgstr "A IA está desligada nas configurações do workspace."
+
+#: providers/errors.py:67
+msgid "No model chosen for this agent nor in the AI settings."
+msgstr "Nenhum modelo escolhido para este agente nem nas configurações de IA."
+
+#: providers/errors.py:68
+#, python-format
+msgid "The agent “%(name)s” is inactive."
+msgstr "O agente “%(name)s” está inativo."
+
+#: providers/errors.py:69
+#, python-format
+msgid "The coordinator “%(name)s” has no active specialist."
+msgstr "O coordenador “%(name)s” não tem nenhum especialista ativo na equipe."
+
+#: providers/errors.py:70
+#, python-format
+msgid "The required skill “%(name)s” has no published version."
+msgstr "A skill obrigatória “%(name)s” não tem versão publicada."
+
+#: providers/errors.py:72
+#, python-format
+msgid ""
+"The daily AI spending cap (US$ %(cap)s) was reached. It resets tomorrow or "
+"can be changed in the AI settings."
+msgstr ""
+"O teto diário de gasto com IA (US$ %(cap)s) foi atingido. Ele reinicia "
+"amanhã ou pode ser ajustado nas configurações de IA."
+
+#: providers/errors.py:77
+#, python-format
+msgid "%(provider)s rejected the API key. Add a valid key in the AI settings."
+msgstr ""
+"A %(provider)s recusou a chave de API. Cadastre uma chave válida nas "
+"configurações de IA."
+
+#: providers/errors.py:80
+#, python-format
+msgid ""
+"The API key has no permission to use this model. Check the account plan at "
+"%(provider)s."
+msgstr ""
+"A chave de API não tem permissão para usar este modelo. Confira o plano da "
+"conta na %(provider)s."
+
+#: providers/errors.py:84
+#, python-format
+msgid ""
+"%(provider)s does not know the model “%(model)s”. Check the identifier in "
+"the catalog."
+msgstr ""
+"A %(provider)s não reconhece o modelo “%(model)s”. Confira o identificador "
+"no catálogo."
+
+#: providers/errors.py:88
+#, python-format
+msgid ""
+"%(provider)s refused because of a usage limit or missing credits. Check the "
+"account balance and limits."
+msgstr ""
+"A %(provider)s recusou por limite de uso ou falta de créditos. Confira o "
+"saldo e os limites da conta."
+
+#: providers/errors.py:92
+#, python-format
+msgid ""
+"%(provider)s rejected the request parameters. The technical detail was "
+"recorded in the event."
+msgstr ""
+"A %(provider)s recusou os parâmetros do pedido. O detalhe técnico ficou "
+"registrado no evento."
+
+#: providers/errors.py:96
+#, python-format
+msgid "%(provider)s is unavailable right now. Try again in a few minutes."
+msgstr ""
+"A %(provider)s está fora do ar no momento. Tente de novo em alguns minutos."
+
+#: providers/errors.py:98
+#, python-format
+msgid "%(provider)s did not answer in time (%(seconds)s s)."
+msgstr "A %(provider)s não respondeu no tempo esperado (%(seconds)s s)."
+
+#: providers/errors.py:100
+#, python-format
+msgid "Could not reach %(provider)s: the server has no internet access."
+msgstr ""
+"Não foi possível falar com a %(provider)s: o servidor está sem acesso à "
+"internet."
+
+#: providers/errors.py:103
+msgid ""
+"The answer was cut by the output token limit. Raise the agent's limit or "
+"shorten the input."
+msgstr ""
+"A resposta foi cortada pelo limite de tokens de saída. Aumente o limite do "
+"agente ou reduza a entrada."
+
+#: providers/errors.py:106
+msgid "The model did not return JSON in the requested format."
+msgstr "O modelo não devolveu o JSON no formato pedido."
+
+#: providers/errors.py:107
+msgid "The model declined to answer this request."
+msgstr "O modelo se recusou a responder este pedido."
+
+#: providers/errors.py:109
+#, python-format
+msgid ""
+"The %(provider)s client is not installed on the server (install tripaulx-"
+"sdk[%(extra)s])."
+msgstr ""
+"O cliente da %(provider)s não está instalado no servidor (instale tripaulx-"
+"sdk[%(extra)s])."
+
+#: providers/errors.py:112
+msgid "Unexpected failure calling the AI. The detail was logged."
+msgstr "Falha inesperada ao chamar a IA. O detalhe foi registrado."
+
+#: providers/errors.py:148
+#, python-format
+msgid ""
+"The API key has a character that cannot be sent: “%(char)s” (U+%(code)s) at "
+"position %(position)s. This usually comes from copy and paste (letters of "
+"other alphabets look the same). Add the key again in the AI settings, typed "
+"or pasted from the original source."
+msgstr ""
+"A chave de API tem um caractere que não pode ser enviado: “%(char)s” (U+"
+"%(code)s), na posição %(position)s. Isso costuma vir de copiar e colar (há "
+"letras de outros alfabetos idênticas às nossas). Cadastre a chave de novo "
+"nas configurações de IA, digitando ou colando da fonte original."
+
+#: services/agents.py:40 services/skills.py:54
+#, python-format
+msgid "%(name)s (copy)"
+msgstr "%(name)s (cópia)"
+
+#: services/agents.py:82
+msgid "Remove the team before making this agent a specialist."
+msgstr "Remova a equipe antes de tornar este agente um especialista."
+
+#: services/agents.py:91
+#, python-format
+msgid ""
+"This agent is in the team of: %(names)s. Remove it before making it a "
+"coordinator."
+msgstr ""
+"Este agente participa da equipe de: %(names)s. Remova-o antes de torná-lo "
+"coordenador."
+
+#: services/keys.py:83 services/model_choice.py:24
+#, python-format
+msgid "Unknown provider: %(provider)s."
+msgstr "Provedor desconhecido: %(provider)s."
+
+#: services/keys.py:86
+msgid "Enter the API key."
+msgstr "Informe a chave de API."
+
+#: services/model_choice.py:47
+#, python-format
+msgid "The model “%(model)s” is inactive and cannot be chosen."
+msgstr "O modelo “%(model)s” está inativo e não pode ser escolhido."
+
+#: services/origins.py:25
+msgid "Playground"
+msgstr "Playground"
+
+#: services/origins.py:26
+msgid "Connection test"
+msgstr "Teste de conexão"
+
+#: services/origins.py:27
+msgid "API"
+msgstr "API"
+
+#: services/origins.py:28
+msgid "Other"
+msgstr "Outra"
+
+#: services/prompt.py:99
+#, python-brace-format
+msgid "The template must contain {input}."
+msgstr "O template precisa conter {input}."
+
+#: services/prompt.py:104
+#, python-format
+msgid "Invalid template: %(error)s. For a literal brace, double it: {{ }}."
+msgstr "Template inválido: %(error)s. Para uma chave literal, dobre-a: {{ }}."
+
+#: services/skills.py:31
+msgid "Write the instructions before publishing."
+msgstr "Escreva as instruções antes de publicar."
+
+#: services/skills.py:35
+msgid "Nothing to publish: the draft equals the published version."
+msgstr "Nada a publicar: o rascunho é igual à versão publicada."
+
+#: validators/__init__.py:27
+msgid "Enter a list of domains."
+msgstr "Informe uma lista de domínios."
+
+#: validators/__init__.py:35
+#, python-format
+msgid "Invalid domain: %(domain)s"
+msgstr "Domínio inválido: %(domain)s"
+
+#: validators/__init__.py:40
+#, python-format
+msgid "At most %(count)s web search domains."
+msgstr "No máximo %(count)s domínios na pesquisa."
+
+#: validators/__init__.py:51
+msgid "The output schema must be a JSON Schema of an object (type: object)."
+msgstr ""
+"O esquema de saída precisa ser um JSON Schema de objeto (type: object)."
+
+#: validators/__init__.py:59
+msgid "Temperature goes from 0 to 2."
+msgstr "A temperatura vai de 0 a 2."
