@@ -217,7 +217,7 @@ tripaulx-builder-init/              (monorepo público no GitHub)
 | 3 ✅ | `ai` + OpenAI + Anthropic + catálogo compartilhado | testes verdes; "Testar IA" funciona nos dois provedores |
 | 4 ✅ | `legal` com modelos + termos/privacidade públicos | testes de XSS e de permissão |
 | 5 ✅ | Deploy pelo template | imagem construída e testada (web + worker) na CI e localmente; **deploy real num servidor CapRover ainda pendente** |
-| 6 | Release `0.1.0` no PyPI + docs | projeto novo do zero: `copier copy` → `./start` → `./deploy prod all`, sem editar nada à mão |
+| 6 ✅ | Release `0.1.0` no PyPI + docs | projeto novo do zero: `copier copy` → `./start` → `./deploy prod all`, sem editar nada à mão |
 
 Cada funcionalidade entra junto com seus testes.
 

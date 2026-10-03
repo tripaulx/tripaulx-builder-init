@@ -22,9 +22,10 @@ Each **workspace** gets its own PostgreSQL schema and is served at
 and deploy to CapRover.
 
 > [!NOTE]
-> **0.1.0 release candidate.** Every app below is implemented, tested
+> **0.1.0 is out** on [PyPI](https://pypi.org/project/tripaulx-sdk/)
+> (`uv add "tripaulx-sdk[storage,ai]"`). Every app below is implemented, tested
 > (Python 3.12/3.13 × Django 6.0/6.1 × PostgreSQL 16/17) and translated to pt-BR.
-> The template deploys to CapRover. See the [roadmap](#roadmap).
+> The template deploys to CapRover.
 
 ## Quick start
 
@@ -106,7 +107,7 @@ resolves to your machine, so every workspace works locally with no hosts file.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/roadmap-en-dark.svg">
-  <img alt="Roadmap: phases 0 to 5 done; next the 0.1 release" src="docs/assets/readme/roadmap-en-light.svg" width="100%">
+  <img alt="Roadmap: every phase done; 0.1.0 released" src="docs/assets/readme/roadmap-en-light.svg" width="100%">
 </picture>
 
 ## Develop this repository

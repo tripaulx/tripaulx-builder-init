@@ -8,7 +8,7 @@ from ..svg import Svg
 
 NAME = "roadmap"
 SIZE = (1280, 430)
-DONE = 6  # phases completed so far
+DONE = 7  # phases completed so far (7 = all, 0.1.0 released)
 
 STRINGS = load_copy(NAME)
 
@@ -23,9 +23,10 @@ def draw(theme: str, lang: str) -> Svg:
     count = len(t["items"])
     step = 1032 / (count - 1)
     xs = [124 + index * step for index in range(count)]
+    last = xs[min(DONE, count - 1)]
     svg.add(
-        f'<path class="dash" d="M{xs[DONE]} {LINE_Y} L{xs[-1]} {LINE_Y}"/>'
-        f'<path d="M{xs[0]} {LINE_Y} L{xs[DONE]} {LINE_Y}" stroke="var(--brand)" '
+        f'<path class="dash" d="M{last} {LINE_Y} L{xs[-1]} {LINE_Y}"/>'
+        f'<path d="M{xs[0]} {LINE_Y} L{last} {LINE_Y}" stroke="var(--brand)" '
         'stroke-width="3" stroke-linecap="round"/>'
     )
     for index, (title, sub) in enumerate(t["items"]):
