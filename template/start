@@ -26,9 +26,20 @@ ensure_env_file() {
   sed "s|^SECRET_KEY=.*|SECRET_KEY=$secret|" .env.example > .env.local
 }
 
+# Fill an empty APP_FILE_ENCRYPTION_KEY in .env.local (tripaulx.storage).
+ensure_file_key() {
+  grep -qE '^APP_FILE_ENCRYPTION_KEY=$' .env.local || return 0
+  log "generating APP_FILE_ENCRYPTION_KEY in .env.local (back it up)"
+  local key
+  key="$(uv run python -c 'import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())')"
+  sed "s|^APP_FILE_ENCRYPTION_KEY=$|APP_FILE_ENCRYPTION_KEY=$key|" .env.local > .env.local.tmp
+  mv .env.local.tmp .env.local
+}
+
 setup() {
   uv sync --quiet
   ensure_env_file
+  ensure_file_key
   ./pg ensure
   uv run python manage.py migrate_schemas --shared
   uv run python manage.py bootstrap_workspace

@@ -81,7 +81,7 @@ class IntegrityTests(WithMasterKey):
 
     def test_flipped_byte_fails(self):
         out = bytearray(encrypt_bytes(b"important content"))
-        out[-1] ^= 0x01  # last byte (inside the tag/ciphertext)
+        out[-1] ^= 1  # last byte (inside the tag/ciphertext)
 
         with pytest.raises(StorageError, match="tampered|corrupted"):
             decrypt_bytes(bytes(out))
