@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from ...services import get_document, list_documents, summary
 from ..permissions import LegalAccessPermission
+from ..serializers import LegalDocumentDetailSerializer, LegalDocumentListSerializer
 from .base import LegalAPIView
 
 
@@ -24,6 +26,7 @@ class RestrictedLegalView(LegalAPIView):
 class LegalDocumentListView(RestrictedLegalView):
     """List the published documents, public and restricted."""
 
+    @extend_schema(operation_id="legal_list", responses=LegalDocumentListSerializer)
     def get(self, request: Request) -> Response:
         """Return ``{"documents": [...]}`` in editorial order."""
         return Response({"documents": [summary(d) for d in list_documents()]})
@@ -32,6 +35,9 @@ class LegalDocumentListView(RestrictedLegalView):
 class LegalDocumentDetailView(RestrictedLegalView):
     """Serve one document as sanitized HTML; never an arbitrary path."""
 
+    @extend_schema(
+        operation_id="legal_retrieve", responses=LegalDocumentDetailSerializer
+    )
     def get(self, request: Request, slug: str) -> Response:
         """Return the document, 404 for an unknown slug."""
         return self.document_response(get_document(slug))

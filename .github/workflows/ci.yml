@@ -88,6 +88,7 @@ jobs:
           uv run ruff format --check .
           uv run pytest -q
           DJANGO_SETTINGS_MODULE=config.settings.test uv run python manage.py makemigrations --check --dry-run
+          DJANGO_SETTINGS_MODULE=config.settings.test uv run python manage.py spectacular --validate --fail-on-warn --file /dev/null
       - name: Production settings pass check --deploy
         working-directory: example
         env:

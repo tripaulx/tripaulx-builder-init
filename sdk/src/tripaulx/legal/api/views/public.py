@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from django.utils.cache import patch_cache_control, patch_vary_headers
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from ...conf import app_settings
 from ...services import PUBLIC, get_document, list_documents, summary
+from ..serializers import LegalDocumentDetailSerializer, LegalDocumentListSerializer
 from .base import LegalAPIView
 
 
@@ -31,6 +33,9 @@ class PublicLegalView(LegalAPIView):
 class PublicLegalDocumentListView(PublicLegalView):
     """List the public documents."""
 
+    @extend_schema(
+        operation_id="legal_public_list", responses=LegalDocumentListSerializer
+    )
     def get(self, request: Request) -> Response:
         """Return ``{"documents": [...]}`` in editorial order."""
         return Response({"documents": [summary(d) for d in list_documents(PUBLIC)]})
@@ -39,6 +44,9 @@ class PublicLegalDocumentListView(PublicLegalView):
 class PublicLegalDocumentDetailView(PublicLegalView):
     """Serve one public document; restricted slugs answer 404."""
 
+    @extend_schema(
+        operation_id="legal_public_retrieve", responses=LegalDocumentDetailSerializer
+    )
     def get(self, request: Request, slug: str) -> Response:
         """Return the document, 404 for an unknown or restricted slug."""
         return self.document_response(get_document(slug, PUBLIC))
