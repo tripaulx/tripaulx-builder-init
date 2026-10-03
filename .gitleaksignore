@@ -1,0 +1,2 @@
+# False positive: a serializer default display name ("Passkey"), not a secret.
+6cc208820fe52bce1e596268b138ab20a385babe:sdk/src/tripaulx/accounts/api/serializers/devices.py:generic-api-key:24

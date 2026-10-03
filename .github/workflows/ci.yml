@@ -135,6 +135,7 @@ jobs:
         run: |
           docker run -d --name web --network host \
             -e SECRET_KEY="$(openssl rand -base64 48)" \
+            -e APP_FIELD_ENCRYPTION_KEY="$(openssl rand -base64 32 | tr '+/' '-_')" \
             -e APP_BASE_DOMAIN=example.com \
             -e DB_NAME=example -e DB_USER=postgres -e DB_PASSWORD=postgres \
             -e DB_HOST=127.0.0.1 example:ci

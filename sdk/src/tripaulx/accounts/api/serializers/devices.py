@@ -16,12 +16,15 @@ class PasskeySerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at", "last_used_at"]
 
 
+DEFAULT_PASSKEY_NAME = "Passkey"
+
+
 class PasskeyRegisterSerializer(serializers.Serializer):
     """The browser's registration response and a name for the passkey."""
 
     credential = serializers.JSONField()
     name = serializers.CharField(
-        required=False, allow_blank=True, default="Passkey", max_length=120
+        required=False, allow_blank=True, default=DEFAULT_PASSKEY_NAME, max_length=120
     )
 
 
