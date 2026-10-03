@@ -28,6 +28,11 @@ THROTTLE_RATES: dict[str, str] = {
     # whole office behind one IP would exhaust it and get logged out. The
     # refresh token is unguessable, so this only contains abuse.
     "auth_refresh": "60/min",
+    # AI (tripaulx.ai): the test call spends tokens and holds a worker for up
+    # to 30 s; runs are bounded by the daily cap too; polling is cheap.
+    "ai_test": "6/min",
+    "ai_run": "10/min",
+    "ai_poll": "120/min",
 }
 
 
@@ -106,5 +111,10 @@ def spectacular(title: str, version: str = "0.1.0", **overrides: Any) -> dict:
         ],
         "COMPONENT_SPLIT_REQUEST": True,
         "SCHEMA_PATH_PREFIX": r"/api/",
+        # Workspace roles and agent roles are both fields named "role".
+        "ENUM_NAME_OVERRIDES": {
+            "WorkspaceRoleEnum": "tripaulx.accounts.models.roles.Role",
+            "AgentRoleEnum": "tripaulx.ai.models.choices.AgentRole",
+        },
     }
     return {**config, **overrides}

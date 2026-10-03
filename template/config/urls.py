@@ -13,6 +13,7 @@ urlpatterns = [
     # Legal: governance documents (restricted) and terms/privacy (public).
     path("api/v1/legal/", include("tripaulx.legal.api.urls")),
     path("api/legal/public/", include("tripaulx.legal.api.urls_public")),
+    path("api/v1/ai/", include("tripaulx.ai.api.urls")),
     path("", include("tripaulx.core.urls")),
 ]
 

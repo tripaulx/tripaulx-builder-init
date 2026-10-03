@@ -1,5 +1,6 @@
 """Options of tripaulx-sdk (see each SDK app's ``conf.py`` for defaults)."""
 
+from .ai import AI
 from .common import get_env, get_env_bool, get_env_list
 from .legal import LEGAL
 from .object_storage import OBJECT_STORAGE
@@ -21,4 +22,6 @@ TRIPAULX = {
     **OBJECT_STORAGE,
     # tripaulx.legal (APP_LEGAL_*).
     **LEGAL,
+    # tripaulx.ai (APP_AI_*).
+    **AI,
 }
