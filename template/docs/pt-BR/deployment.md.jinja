@@ -1,0 +1,176 @@
+{%- set app = project_slug | replace('_', '-') -%}
+# Deploy (CapRover)
+
+> English: [../deployment.md](../deployment.md)
+
+{{ project_name }} roda no [CapRover](https://caprover.com). Uma única imagem
+Docker serve dois apps, escolhidos por `APP_ROLE`. Cada workspace fica em
+`<slug>.{{ base_domain }}` graças a um registro DNS curinga e a um certificado
+curinga, então criar um workspace nunca mexe em DNS nem no CapRover.
+
+| App no CapRover | O quê | Notas |
+|---|---|---|
+| `{{ app }}` | web: gunicorn na :8000 | `APP_ROLE=web`, roda as migrations |
+| `{{ app }}-worker` | `manage.py db_worker` | `APP_ROLE=worker`, não exposto como web app |
+| `{{ app }}-db` | PostgreSQL (one-click app) | dados persistentes |
+| `{{ app }}-redis` | Redis (one-click app) | cache compartilhado |
+
+**O código nunca chama a API do CapRover, e a senha do CapRover nunca entra no
+ambiente de nenhum app.** O deploy usa tokens por app, a partir da sua máquina.
+
+## Arquivos
+
+| Arquivo | Papel |
+|---|---|
+| `Dockerfile` | `python:3.13-slim`, `uv sync --frozen --no-dev`, usuário não root, `collectstatic` no build, `HEALTHCHECK` |
+| `captain-definition` | diz ao CapRover para buildar o `Dockerfile` |
+| `entrypoint.sh` | confere o env obrigatório, espera o banco, migra, sobe o gunicorn ou o `db_worker` |
+| `healthcheck.sh` | web: `GET /healthz/`; worker: o PID 1 é o `db_worker` |
+| `deploy` + `scripts/caprover-deploy.sh` | `./deploy prod [web\|worker\|all]` |
+| `.env.prod.example` | todas as variáveis de runtime lidas pelo código |
+| `.env.deploy.example` | servidor do CapRover, nomes dos apps e App Tokens (só local) |
+
+Faça commit do `uv.lock`: a imagem instala exatamente o que ele fixa.
+
+## 1. Criar os apps
+
+1. **PostgreSQL**: Apps > One-Click Apps > PostgreSQL, nome `{{ app }}-db`.
+   Use uma senha forte; banco e usuário `{{ project_slug }}`. Os dados ficam num
+   volume persistente criado pelo one-click app.
+2. **Redis**: One-Click Apps > Redis, nome `{{ app }}-redis`, com senha.
+3. **Web**: Apps > Create New App `{{ app }}`. Marque *Has Persistent Data* só
+   se guardar uploads em disco (e mapeie o caminho `/app/media`).
+4. **Worker**: crie `{{ app }}-worker`. Em *HTTP Settings* marque **Do not
+   expose as web-app**. Mantenha uma instância.
+
+Dentro do CapRover, os apps se enxergam em `srv-captain--<nome do app>`.
+
+## 2. Variáveis de ambiente
+
+Use o `.env.prod.example` como lista. Defina-as em *App Configs > Environment
+Variables* de cada app, nunca no repositório nem na imagem.
+
+- **Nos dois apps:** `SECRET_KEY`, `APP_FIELD_ENCRYPTION_KEY`,
+  `APP_BASE_DOMAIN={{ base_domain }}`, `DB_*`
+  (`DB_HOST=srv-captain--{{ app }}-db`), `REDIS_URL`, `MAIL_*`,
+  `DEFAULT_FROM_EMAIL`, `DJANGO_TASKS_BACKEND`, `ADMIN_URL_PREFIX`.
+- **Só no web:** `APP_ROLE=web`, `RUN_MIGRATIONS=1`, `GUNICORN_WORKERS`,
+  `GUNICORN_THREADS` (2 ou mais), `GUNICORN_TIMEOUT`, `HEALTHCHECK_*`.
+- **Só no worker:** `APP_ROLE=worker`, `RUN_MIGRATIONS=0`,
+  `DJANGO_TASKS_BACKEND=database`, `TASKS_WORKER_INTERVAL`, `TASKS_QUEUE_NAME`.
+
+O `entrypoint.sh` se recusa a subir sem `SECRET_KEY`, `APP_BASE_DOMAIN` ou uma
+credencial `DB_*`, e o worker recusa qualquer backend de tarefas que não seja
+`database`. Mantenha `DJANGO_TASKS_BACKEND` igual no web e no worker: com
+`database` no web e nenhum worker no ar, as tarefas ficam na fila para sempre.
+Sem Redis, use `GUNICORN_WORKERS=1` (o cache em memória é por processo).
+
+## 3. Subdomínios curinga (uma vez por projeto)
+
+Os workspaces ficam em `<slug>.{{ base_domain }}`. A borda é montada uma vez:
+
+1. **DNS na Cloudflare**: crie `A *` e `A @` apontando para o IP do servidor do
+   CapRover, os dois **Proxied** (nuvem laranja). O domínio raiz do CapRover
+   (aqui `apps.{{ base_domain }}`, painel em `captain.apps.{{ base_domain }}`) mantém o
+   próprio registro `A *.apps`, só DNS, para os certificados Let's Encrypt dele
+   continuarem funcionando.
+2. **SSL/TLS na Cloudflare**: modo **Full (strict)**. Nunca rebaixe.
+3. **Certificado de origem**: SSL/TLS > Origin Server > Create Certificate para
+   `*.{{ base_domain }}` e `{{ base_domain }}`. Prefira gerar a chave privada no
+   servidor e colar um CSR, assim a chave nunca sai dele. Guarde os dois
+   arquivos no host do CapRover, legíveis só pelo root:
+
+   ```bash
+   sudo mkdir -p /captain/data/nginx-shared/cf-origin
+   # cert.pem (certificado) e key.pem (chave privada, chmod 600)
+   ```
+
+   O container nginx do CapRover enxerga essa pasta como `/nginx-shared/cf-origin/`.
+   O Origin CA só é aceito pela Cloudflare, então os registros ficam proxied.
+4. **Bloco nginx**: no app web, em *HTTP Settings > Edit Default Nginx
+   Configurations*, acrescente o bloco abaixo **depois do último `<% } %>`** do
+   template. O CapRover renderiza o template uma vez por domínio do app, e a
+   guarda evita que o bloco curinga se repita; troque `apps.{{ base_domain }}`
+   pelo domínio raiz do seu CapRover.
+
+   ```nginx
+   <% if (s.publicDomain === '{{ app }}.apps.{{ base_domain }}') { %>
+   server {
+       listen              443 ssl;
+       http2               on;
+       server_name         {{ base_domain }} *.{{ base_domain }};
+       ssl_certificate     /nginx-shared/cf-origin/cert.pem;
+       ssl_certificate_key /nginx-shared/cf-origin/key.pem;
+       client_max_body_size 50m;
+       resolver 127.0.0.11 valid=10s;
+       set $upstream http://<%-s.localDomain%>:<%-s.containerHttpPort%>;
+
+       location / {
+           proxy_pass $upstream;
+           proxy_http_version 1.1;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection "upgrade";
+       }
+   }
+   <% } %>
+   ```
+
+   Não precisa de `listen 80`: em Full (strict) a Cloudflare sempre fala com a
+   origem na 443. Não adicione também `{{ base_domain }}` como custom domain
+   deste app no CapRover. Se mudar o bloco 443 principal do template, replique
+   aqui. Um template quebrado faz o `nginx -t` falhar e o CapRover mantém a
+   config antiga, então confira os logs do app depois do *Save & Restart*.
+
+O SDK já cuida do resto: o `ALLOWED_HOSTS` cobre `.{{ base_domain }}`, host
+desconhecido recebe 404 (`SHOW_PUBLIC_IF_NO_TENANT_FOUND=False`) e o
+`/healthz/` responde antes de resolver o tenant, para qualquer host.
+
+## 4. Primeiro deploy
+
+```bash
+cp .env.deploy.example .env.deploy   # preencha os App Tokens
+./deploy prod all                    # checagens, web (migra), depois worker
+```
+
+- Cada App Token vem da aba *Deployment* do app ("Enable App Token").
+- O `./deploy` roda antes o `scripts/check.sh` (ruff + pytest); `SKIP_CHECKS=1`
+  pula. `./deploy prod web` e `./deploy prod worker` publicam um app só.
+- O container web roda `migrate_schemas --shared`, `bootstrap_workspace` e
+  `migrate_schemas` a cada start; os três são idempotentes.
+
+Confira:
+
+```bash
+curl -sS https://{{ initial_workspace | replace('_', '-') }}.{{ base_domain }}/healthz/   # {"status": "ok"}
+```
+
+## 5. Workspaces e superusuários
+
+Rode os comandos dentro do container web, numa sessão SSH no host:
+
+```bash
+CID=$(docker ps -q -f name=srv-captain--{{ app }}. | head -1)
+docker exec -it "$CID" python manage.py bootstrap_workspace --schema acme --name "Acme Ltda"
+docker exec -it "$CID" python manage.py create_tenant_superuser --schema acme
+```
+
+Cada workspace tem os próprios usuários: crie um superusuário por workspace (e
+um com `--schema public` para o admin da plataforma em
+`https://{{ base_domain }}/admin/`). O admin do workspace fica em
+`https://acme.{{ base_domain }}/admin/`.
+
+## 6. Deploy sem downtime
+
+- O `collectstatic` roda no build, então um container novo serve os estáticos
+  assim que o gunicorn sobe.
+- O `HEALTHCHECK` (start period de 60s) impede o Swarm de mandar tráfego a um
+  container antes de o `/healthz/` responder. O `GUNICORN_THREADS` tem piso de
+  2 para que uma requisição lenta nunca bloqueie a sonda.
+- Ponha o *Instance Count* do web em 2 ou mais (exige Redis): uma instância
+  segue atendendo enquanto a outra reinicia. Mantenha o worker em 1.
+- As migrations precisam ser compatíveis com o código ainda no ar: adicione
+  campos primeiro e remova num deploy seguinte.

@@ -1,0 +1,174 @@
+{%- set app = project_slug | replace('_', '-') -%}
+# Deployment (CapRover)
+
+> Portuguese: [pt-BR/deployment.md](pt-BR/deployment.md)
+
+{{ project_name }} runs on [CapRover](https://caprover.com). One Docker image
+serves two apps, chosen by `APP_ROLE`. Each workspace is served at
+`<slug>.{{ base_domain }}` through one wildcard DNS record and one wildcard
+certificate, so creating a workspace never touches DNS or CapRover.
+
+| CapRover app | What | Notes |
+|---|---|---|
+| `{{ app }}` | web: gunicorn on :8000 | `APP_ROLE=web`, runs the migrations |
+| `{{ app }}-worker` | `manage.py db_worker` | `APP_ROLE=worker`, not exposed as a web app |
+| `{{ app }}-db` | PostgreSQL (one-click app) | persistent data |
+| `{{ app }}-redis` | Redis (one-click app) | shared cache |
+
+**The code never calls the CapRover API, and the CapRover password never goes
+into any app's environment.** Deploys use per-app tokens from your machine.
+
+## Files
+
+| File | Role |
+|---|---|
+| `Dockerfile` | `python:3.13-slim`, `uv sync --frozen --no-dev`, non-root user, `collectstatic` at build, `HEALTHCHECK` |
+| `captain-definition` | tells CapRover to build the `Dockerfile` |
+| `entrypoint.sh` | checks required env, waits for the DB, migrates, starts gunicorn or `db_worker` |
+| `healthcheck.sh` | web: `GET /healthz/`; worker: PID 1 is `db_worker` |
+| `deploy` + `scripts/caprover-deploy.sh` | `./deploy prod [web\|worker\|all]` |
+| `.env.prod.example` | every runtime variable the code reads |
+| `.env.deploy.example` | CapRover server, app names and App Tokens (local only) |
+
+Commit `uv.lock`: the image installs exactly what it pins.
+
+## 1. Create the apps
+
+1. **PostgreSQL**: Apps > One-Click Apps > PostgreSQL, app name `{{ app }}-db`.
+   Choose a strong password; set the database and user to `{{ project_slug }}`.
+   Its data lives in a persistent volume created by the one-click app.
+2. **Redis**: One-Click Apps > Redis, app name `{{ app }}-redis`, with a password.
+3. **Web**: Apps > Create New App `{{ app }}`, tick *Has Persistent Data* only if
+   you keep uploads on disk (then map the path `/app/media`).
+4. **Worker**: create `{{ app }}-worker`. In *HTTP Settings* tick **Do not expose
+   as web-app**. Keep one instance.
+
+Inside CapRover, apps reach each other at `srv-captain--<app name>`.
+
+## 2. Environment variables
+
+Use `.env.prod.example` as the list. Set them in *App Configs > Environment
+Variables* of each app, never in the repository or the image.
+
+- **Both apps:** `SECRET_KEY`, `APP_FIELD_ENCRYPTION_KEY`,
+  `APP_BASE_DOMAIN={{ base_domain }}`, `DB_*`
+  (`DB_HOST=srv-captain--{{ app }}-db`), `REDIS_URL`, `MAIL_*`,
+  `DEFAULT_FROM_EMAIL`, `DJANGO_TASKS_BACKEND`, `ADMIN_URL_PREFIX`.
+- **Web only:** `APP_ROLE=web`, `RUN_MIGRATIONS=1`, `GUNICORN_WORKERS`,
+  `GUNICORN_THREADS` (2 or more), `GUNICORN_TIMEOUT`, `HEALTHCHECK_*`.
+- **Worker only:** `APP_ROLE=worker`, `RUN_MIGRATIONS=0`,
+  `DJANGO_TASKS_BACKEND=database`, `TASKS_WORKER_INTERVAL`, `TASKS_QUEUE_NAME`.
+
+`entrypoint.sh` refuses to start when `SECRET_KEY`, `APP_BASE_DOMAIN` or a
+`DB_*` credential is missing, and the worker refuses any task backend other
+than `database`. Keep `DJANGO_TASKS_BACKEND` identical on web and worker:
+`database` on the web app without a running worker leaves tasks queued forever.
+Without Redis, use `GUNICORN_WORKERS=1` (the local-memory cache is per process).
+
+## 3. Wildcard subdomains (once per project)
+
+Workspaces live at `<slug>.{{ base_domain }}`. The edge is set up once:
+
+1. **Cloudflare DNS**: add `A *` and `A @` pointing to the CapRover server IP,
+   both **Proxied** (orange cloud). The CapRover root domain (here
+   `apps.{{ base_domain }}`, dashboard at `captain.apps.{{ base_domain }}`) keeps its
+   own `A *.apps` record, DNS only, so its Let's Encrypt certificates still work.
+2. **Cloudflare SSL/TLS**: mode **Full (strict)**. Never downgrade it.
+3. **Origin certificate**: SSL/TLS > Origin Server > Create Certificate for
+   `*.{{ base_domain }}` and `{{ base_domain }}`. Prefer generating the private key on
+   the server and pasting a CSR, so the key never leaves it. Store both files
+   on the CapRover host, readable only by root:
+
+   ```bash
+   sudo mkdir -p /captain/data/nginx-shared/cf-origin
+   # cert.pem (certificate) and key.pem (private key, chmod 600)
+   ```
+
+   CapRover's nginx container sees that folder as `/nginx-shared/cf-origin/`.
+   The Origin CA is only trusted by Cloudflare, so both records must stay proxied.
+4. **nginx block**: in the web app's *HTTP Settings > Edit Default Nginx
+   Configurations*, append the block below **after the last `<% } %>`** of the
+   template. CapRover renders the template once per domain of the app, so the
+   guard keeps the wildcard block from repeating; replace `apps.{{ base_domain }}`
+   with your CapRover root domain.
+
+   ```nginx
+   <% if (s.publicDomain === '{{ app }}.apps.{{ base_domain }}') { %>
+   server {
+       listen              443 ssl;
+       http2               on;
+       server_name         {{ base_domain }} *.{{ base_domain }};
+       ssl_certificate     /nginx-shared/cf-origin/cert.pem;
+       ssl_certificate_key /nginx-shared/cf-origin/key.pem;
+       client_max_body_size 50m;
+       resolver 127.0.0.11 valid=10s;
+       set $upstream http://<%-s.localDomain%>:<%-s.containerHttpPort%>;
+
+       location / {
+           proxy_pass $upstream;
+           proxy_http_version 1.1;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection "upgrade";
+       }
+   }
+   <% } %>
+   ```
+
+   No `listen 80` is needed: in Full (strict) Cloudflare always talks to the
+   origin on 443. Do not also add `{{ base_domain }}` as a CapRover custom
+   domain of this app. If you change the main 443 block of the template, copy
+   the change here. A broken template makes `nginx -t` fail and CapRover keeps
+   the old config, so check the app logs after *Save & Restart*.
+
+The SDK already does the rest: `ALLOWED_HOSTS` covers `.{{ base_domain }}`,
+unknown hosts get a 404 (`SHOW_PUBLIC_IF_NO_TENANT_FOUND=False`) and
+`/healthz/` answers before tenant resolution, for any host.
+
+## 4. First deploy
+
+```bash
+cp .env.deploy.example .env.deploy   # fill in the App Tokens
+./deploy prod all                    # checks, web (migrates), then worker
+```
+
+- Each App Token comes from the app's *Deployment* tab ("Enable App Token").
+- `./deploy` runs `scripts/check.sh` (ruff + pytest) first; `SKIP_CHECKS=1`
+  skips it. `./deploy prod web` and `./deploy prod worker` deploy one app.
+- The web container runs `migrate_schemas --shared`, `bootstrap_workspace` and
+  `migrate_schemas` on every start; all three are idempotent.
+
+Check it:
+
+```bash
+curl -sS https://{{ initial_workspace | replace('_', '-') }}.{{ base_domain }}/healthz/   # {"status": "ok"}
+```
+
+## 5. Workspaces and superusers
+
+Run commands inside the web container, from an SSH session on the host:
+
+```bash
+CID=$(docker ps -q -f name=srv-captain--{{ app }}. | head -1)
+docker exec -it "$CID" python manage.py bootstrap_workspace --schema acme --name "Acme Ltda"
+docker exec -it "$CID" python manage.py create_tenant_superuser --schema acme
+```
+
+Every workspace has its own users: create a superuser per workspace (and one
+with `--schema public` for the platform admin at `https://{{ base_domain }}/admin/`).
+The workspace admin is at `https://acme.{{ base_domain }}/admin/`.
+
+## 6. Zero-downtime deploys
+
+- `collectstatic` runs at build time, so a new container serves static files as
+  soon as gunicorn starts.
+- The `HEALTHCHECK` (start period 60s) keeps Swarm from routing traffic to a
+  container before `/healthz/` answers. `GUNICORN_THREADS` has a floor of 2 so
+  a slow request never blocks the probe.
+- Set the web app's *Instance Count* to 2 or more (needs Redis) so one instance
+  keeps serving while the other restarts. Keep the worker at 1.
+- Migrations must stay backwards compatible with the code still running: add
+  fields first, remove them in a later deploy.
