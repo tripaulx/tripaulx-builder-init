@@ -22,9 +22,9 @@ Each **workspace** gets its own PostgreSQL schema and is served at
 and deploy to CapRover.
 
 > [!NOTE]
-> **Pre-release.** Phase 0 is done: workspaces, the user model, the template and CI.
-> Accounts with mandatory 2-step verification, the authenticator app and passkeys
-> come next, followed by AI providers, storage and legal. See the [roadmap](#roadmap).
+> **0.1.0 release candidate.** Every app below is implemented, tested
+> (Python 3.12/3.13 × Django 6.0/6.1 × PostgreSQL 16/17) and translated to pt-BR.
+> The template deploys to CapRover. See the [roadmap](#roadmap).
 
 ## Quick start
 
@@ -69,16 +69,16 @@ resolves to your machine, so every workspace works locally with no hosts file.
   <img alt="The SDK apps: core, tenants, accounts, settings, mail, storage, ai and legal, with their status" src="docs/assets/readme/sdk-apps-en-light.svg" width="100%">
 </picture>
 
-| App | Django label | Status | Responsibility |
+| App | Django label | Ready | Responsibility |
 |---|---|---|---|
-| `tripaulx.core` | `tpsdk_core` | ✅ available | `BaseModel` (UUID, audit timestamps, soft delete), tenant middleware, log redaction, test helpers |
-| `tripaulx.tenants` | `tpsdk_tenants` | ✅ available | `Workspace` and `Domain`, slug rules with reserved names, `bootstrap_workspace` |
-| `tripaulx.accounts` | `tpsdk_accounts` | 🟠 phase 1 | `AbstractTripaulxUser` (available); sign-up, 2FA, TOTP and passkeys coming next |
-| `tripaulx.settings` | n/a | ✅ available | App lists, middleware, logging, hosts and `.env` loading for your settings |
-| `tripaulx.mail` | `tpsdk_mail` | 🟠 phase 1 | Mailgun backend with an encrypted key, overridable e-mail templates |
-| `tripaulx.storage` | `tpsdk_storage` | ⚪ phase 2 | S3-compatible storage, AES-GCM envelope encryption, per-workspace keys |
-| `tripaulx.ai` | `tpsdk_ai` | ⚪ phase 3 | OpenAI and Anthropic, agents, skills, cost tracking and daily caps |
-| `tripaulx.legal` | `tpsdk_legal` | ⚪ phase 4 | Governance documents, terms and privacy, sanitized Markdown |
+| `tripaulx.core` | `tpsdk_core` | ✅ | `BaseModel` (UUID, audit timestamps, soft delete), tenant middleware, log redaction, test helpers |
+| `tripaulx.tenants` | `tpsdk_tenants` | ✅ | `Workspace` and `Domain`, slug rules with reserved names, `bootstrap_workspace` |
+| `tripaulx.accounts` | `tpsdk_accounts` | ✅ | Sign-up that creates a workspace, mandatory 2FA, TOTP, passkeys, recovery codes, trusted devices, members and invitations, schema-bound JWT |
+| `tripaulx.settings` | n/a | ✅ | App lists, middleware, logging, hosts and `.env` loading for your settings |
+| `tripaulx.mail` | `tpsdk_mail` | ✅ | Mailgun backend with an encrypted key, overridable e-mail templates |
+| `tripaulx.storage` | `tpsdk_storage` | ✅ | S3-compatible storage, AES-GCM envelope encryption, per-workspace keys |
+| `tripaulx.ai` | `tpsdk_ai` | ✅ | OpenAI and Anthropic, agents, skills, cost tracking and daily caps |
+| `tripaulx.legal` | `tpsdk_legal` | ✅ | Governance documents, terms and privacy, sanitized Markdown |
 
 ## Accounts and 2-step verification
 
@@ -92,11 +92,21 @@ resolves to your machine, so every workspace works locally with no hosts file.
 - **Passkeys** (WebAuthn) sign in without a password. *Passkey-only* mode turns off password login while at least one passkey exists.
 - **Tokens are bound to their workspace schema.** A token issued for `acme` is rejected by every other workspace.
 
+## Documentation
+
+| Guide | English | Português |
+|---|---|---|
+| Accounts, 2FA and passkeys | [accounts](docs/accounts.md) | [contas](docs/pt-BR/accounts.md) |
+| Encrypted storage | [storage](docs/storage.md) | [storage](docs/pt-BR/storage.md) |
+| AI providers and agents | [ai](docs/ai.md) | [ia](docs/pt-BR/ai.md) |
+| Legal and governance | [legal](docs/legal.md) | [legal](docs/pt-BR/legal.md) |
+| Deploy to CapRover | [deployment](docs/deployment.md) | [deploy](docs/pt-BR/deployment.md) |
+
 ## Roadmap
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/roadmap-en-dark.svg">
-  <img alt="Roadmap: phase 0 skeleton done; next accounts, then storage, AI, legal, deploy and the 0.1 release" src="docs/assets/readme/roadmap-en-light.svg" width="100%">
+  <img alt="Roadmap: phases 0 to 5 done; next the 0.1 release" src="docs/assets/readme/roadmap-en-light.svg" width="100%">
 </picture>
 
 ## Develop this repository

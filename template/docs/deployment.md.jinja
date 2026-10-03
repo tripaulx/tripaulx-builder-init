@@ -172,3 +172,15 @@ The workspace admin is at `https://acme.{{ base_domain }}/admin/`.
   keeps serving while the other restarts. Keep the worker at 1.
 - Migrations must stay backwards compatible with the code still running: add
   fields first, remove them in a later deploy.
+
+## 7. Daily maintenance jobs
+
+CapRover has no built-in scheduler. Run these once a day from the host's cron:
+- `ai_purge_content` erases stored AI prompts and outputs older than each workspace's retention setting;
+- `flushexpiredtokens`, run in every workspace, removes expired refresh tokens.
+
+```cron
+# /etc/cron.d/{{ project_slug }} on the CapRover host
+15 3 * * * root docker exec $(docker ps -q -f name=srv-captain--{{ project_slug }}-worker | head -1) python manage.py ai_purge_content
+30 3 * * * root docker exec $(docker ps -q -f name=srv-captain--{{ project_slug }}-worker | head -1) python manage.py all_tenants_command flushexpiredtokens
+```

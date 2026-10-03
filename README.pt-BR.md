@@ -22,10 +22,9 @@ Cada **workspace** tem seu próprio schema PostgreSQL e é servido em
 fazem deploy no CapRover.
 
 > [!NOTE]
-> **Pré-lançamento.** A Fase 0 está pronta: workspaces, modelo de usuário, template e
-> CI. A seguir vêm contas com verificação em duas etapas obrigatória, aplicativo
-> autenticador e passkeys, e depois provedores de IA, storage e legal. Veja o
-> [roadmap](#roadmap).
+> **Candidato ao release 0.1.0.** Todos os apps abaixo estão implementados, testados
+> (Python 3.12/3.13 × Django 6.0/6.1 × PostgreSQL 16/17) e traduzidos para pt-BR.
+> O template faz deploy no CapRover. Veja o [roadmap](#roadmap).
 
 ## Início rápido
 
@@ -71,16 +70,16 @@ editar o arquivo hosts.
   <img alt="Os apps do SDK: core, tenants, accounts, settings, mail, storage, ai e legal, com seu status" src="docs/assets/readme/sdk-apps-pt-light.svg" width="100%">
 </picture>
 
-| App | Label Django | Status | Responsabilidade |
+| App | Label Django | Pronto | Responsabilidade |
 |---|---|---|---|
-| `tripaulx.core` | `tpsdk_core` | ✅ disponível | `BaseModel` (UUID, datas de auditoria, exclusão lógica), middleware de tenant, mascaramento de logs, helpers de teste |
-| `tripaulx.tenants` | `tpsdk_tenants` | ✅ disponível | `Workspace` e `Domain`, regras de slug com nomes reservados, `bootstrap_workspace` |
-| `tripaulx.accounts` | `tpsdk_accounts` | 🟠 fase 1 | `AbstractTripaulxUser` (disponível); cadastro, 2FA, TOTP e passkeys a seguir |
-| `tripaulx.settings` | n/a | ✅ disponível | Listas de apps, middleware, logging, hosts e carga do `.env` para as suas settings |
-| `tripaulx.mail` | `tpsdk_mail` | 🟠 fase 1 | Backend Mailgun com chave cifrada, templates de e-mail sobrescrevíveis |
-| `tripaulx.storage` | `tpsdk_storage` | ⚪ fase 2 | Storage compatível com S3, cifra envelope AES-GCM, chaves por workspace |
-| `tripaulx.ai` | `tpsdk_ai` | ⚪ fase 3 | OpenAI e Anthropic, agentes, skills, custos e teto diário |
-| `tripaulx.legal` | `tpsdk_legal` | ⚪ fase 4 | Documentos de governança, termos e privacidade, Markdown sanitizado |
+| `tripaulx.core` | `tpsdk_core` | ✅ | `BaseModel` (UUID, datas de auditoria, exclusão lógica), middleware de tenant, mascaramento de logs, helpers de teste |
+| `tripaulx.tenants` | `tpsdk_tenants` | ✅ | `Workspace` e `Domain`, regras de slug com nomes reservados, `bootstrap_workspace` |
+| `tripaulx.accounts` | `tpsdk_accounts` | ✅ | Cadastro que cria o workspace, 2FA obrigatório, TOTP, passkeys, códigos de recuperação, dispositivos confiáveis, membros e convites, JWT preso ao schema |
+| `tripaulx.settings` | n/a | ✅ | Listas de apps, middleware, logging, hosts e carga do `.env` para as suas settings |
+| `tripaulx.mail` | `tpsdk_mail` | ✅ | Backend Mailgun com chave cifrada, templates de e-mail sobrescrevíveis |
+| `tripaulx.storage` | `tpsdk_storage` | ✅ | Storage compatível com S3, cifra envelope AES-GCM, chaves por workspace |
+| `tripaulx.ai` | `tpsdk_ai` | ✅ | OpenAI e Anthropic, agentes, skills, custos e teto diário |
+| `tripaulx.legal` | `tpsdk_legal` | ✅ | Documentos de governança, termos e privacidade, Markdown sanitizado |
 
 ## Contas e verificação em duas etapas
 
@@ -94,11 +93,21 @@ editar o arquivo hosts.
 - **Passkeys** (WebAuthn) entram sem senha. O modo *somente passkey* desliga o login por senha enquanto houver ao menos uma passkey.
 - **Os tokens ficam presos ao schema do workspace.** Um token emitido para `acme` é recusado por qualquer outro workspace.
 
+## Documentação
+
+| Guia | Português | English |
+|---|---|---|
+| Contas, 2FA e passkeys | [contas](docs/pt-BR/accounts.md) | [accounts](docs/accounts.md) |
+| Storage cifrado | [storage](docs/pt-BR/storage.md) | [storage](docs/storage.md) |
+| Provedores de IA e agentes | [ia](docs/pt-BR/ai.md) | [ai](docs/ai.md) |
+| Legal e governança | [legal](docs/pt-BR/legal.md) | [legal](docs/legal.md) |
+| Deploy no CapRover | [deploy](docs/pt-BR/deployment.md) | [deployment](docs/deployment.md) |
+
 ## Roadmap
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/roadmap-pt-dark.svg">
-  <img alt="Roadmap: fase 0 esqueleto pronta; a seguir contas, depois storage, IA, legal, deploy e o release 0.1" src="docs/assets/readme/roadmap-pt-light.svg" width="100%">
+  <img alt="Roadmap: fases 0 a 5 prontas; a seguir o release 0.1" src="docs/assets/readme/roadmap-pt-light.svg" width="100%">
 </picture>
 
 ## Desenvolver este repositório

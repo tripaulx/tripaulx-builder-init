@@ -10,14 +10,20 @@ The shared foundation of tripaulx-builders Django projects. It provides:
 
 It ships an API and the Django admin. There is no frontend.
 
-> Status: **pre-release (0.1.0.dev)**. See the
+> Version **0.1.0**. See the
 > [project repository](https://github.com/tripaulx/tripaulx-builder-init) and its
 > Copier template to start a new project.
 
 ## Install
 
 ```bash
-uv add tripaulx-sdk
+uv add "tripaulx-sdk[storage,ai]"   # extras: storage, openai, anthropic, ai
+```
+
+Start new projects from the Copier template instead of wiring settings by hand:
+
+```bash
+uvx copier copy --trust gh:tripaulx/tripaulx-builder-init my-project
 ```
 
 ## Maintainer

@@ -15,17 +15,18 @@ ICON_TONE = {"ready": "brand", "progress": "orange", "planned": "neutral"}
 APPS = [
     ("core", "ready", 0),
     ("tenants", "ready", 1),
-    ("accounts", "progress", 2),
+    ("accounts", "ready", 2),
     ("settings", "ready", 3),
-    ("mail", "progress", 4),
-    ("storage", "planned", 5),
-    ("ai", "planned", 6),
-    ("legal", "planned", 7),
+    ("mail", "ready", 4),
+    ("storage", "ready", 5),
+    ("ai", "ready", 6),
+    ("legal", "ready", 7),
 ]
 
 STRINGS = load_copy(NAME)
 
-PLANNED_PHASE = {"storage": 0, "ai": 1, "legal": 2}
+# Phase label for apps still planned (none since 0.1.0).
+PLANNED_PHASE: dict[str, int] = {}
 COLS, GAP, TOP, CARD_H = 4, 24, 200, 196
 
 

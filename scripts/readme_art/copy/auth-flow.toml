@@ -3,7 +3,7 @@
 [en]
 title = "From sign-up to a signed-in workspace"
 head = ["04", "Accounts", "Sign up, verify, always a second step", "Every login asks for a second factor. Tokens only work in the workspace that issued them."]
-badge = "Roadmap · Phase 1"
+badge = "Available in 0.1"
 steps = [
   ["1", "Sign up", "example.com", "Creates the workspace,\nits schema and its owner"],
   ["2", "Verify e-mail", "6-digit code", "Stored hashed, expires,\nlimited attempts"],
@@ -22,7 +22,7 @@ note = "Passkey-only mode turns off password login while at least one passkey ex
 [pt]
 title = "Do cadastro ao workspace logado"
 head = ["04", "Contas", "Cadastre, verifique, sempre uma segunda etapa", "Todo login pede um segundo fator. O token só vale no workspace que o emitiu."]
-badge = "Roadmap · Fase 1"
+badge = "Disponível no 0.1"
 steps = [
   ["1", "Cadastro", "example.com", "Cria o workspace,\no schema e o dono"],
   ["2", "Verificar e-mail", "código de 6 dígitos", "Em hash, expira,\ntentativas limitadas"],

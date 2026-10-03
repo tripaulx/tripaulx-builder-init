@@ -174,3 +174,15 @@ um com `--schema public` para o admin da plataforma em
   segue atendendo enquanto a outra reinicia. Mantenha o worker em 1.
 - As migrations precisam ser compatíveis com o código ainda no ar: adicione
   campos primeiro e remova num deploy seguinte.
+
+## 7. Tarefas diárias de manutenção
+
+O CapRover não tem agendador próprio. Rode estes comandos uma vez por dia pelo cron do host:
+- `ai_purge_content` apaga os prompts e respostas de IA guardados além da retenção configurada em cada workspace;
+- `flushexpiredtokens`, rodado em cada workspace, remove os refresh tokens expirados.
+
+```cron
+# /etc/cron.d/{{ project_slug }} no host do CapRover
+15 3 * * * root docker exec $(docker ps -q -f name=srv-captain--{{ project_slug }}-worker | head -1) python manage.py ai_purge_content
+30 3 * * * root docker exec $(docker ps -q -f name=srv-captain--{{ project_slug }}-worker | head -1) python manage.py all_tenants_command flushexpiredtokens
+```

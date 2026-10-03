@@ -8,7 +8,7 @@ from ..svg import Svg
 
 NAME = "roadmap"
 SIZE = (1280, 430)
-DONE = 1  # phases completed so far
+DONE = 6  # phases completed so far
 
 STRINGS = load_copy(NAME)
 

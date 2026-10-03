@@ -19,7 +19,7 @@ def draw(theme: str, lang: str) -> Svg:
     svg = Svg(*SIZE, theme)
     header(svg, *t["head"])
     width = badge_width(t["badge"], dot=True)
-    badge(svg, 1216 - width, 96, t["badge"], "orange", dot=True)
+    badge(svg, 1216 - width, 96, t["badge"], "success", dot=True)
     step_row(svg, 200, t["steps"], h=162)
     panel(svg, 64, 396, 1152, 210)
     caption(svg, 88, 432, t["factors"])
