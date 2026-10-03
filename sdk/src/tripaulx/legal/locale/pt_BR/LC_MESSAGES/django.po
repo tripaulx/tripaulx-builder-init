@@ -1,0 +1,119 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 22:42-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: api/permissions.py:17
+msgid "The legal area is restricted to authorized users."
+msgstr "A área legal é restrita a usuários autorizados."
+
+#: api/views/base.py:23
+msgid "Document not found."
+msgstr "Documento não encontrado."
+
+#: api/views/base.py:29
+msgid "Document temporarily unavailable."
+msgstr "Documento temporariamente indisponível."
+
+#: apps.py:12
+msgid "Legal and governance"
+msgstr "Jurídico e governança"
+
+#: services/defaults.py:9
+msgid "Governance"
+msgstr "Governança"
+
+#: services/defaults.py:10
+msgid "Records"
+msgstr "Registros"
+
+#: services/defaults.py:11
+msgid "Inventory"
+msgstr "Inventário"
+
+#: services/defaults.py:12
+msgid "Architecture"
+msgstr "Arquitetura"
+
+#: services/defaults.py:13
+msgid "Policies"
+msgstr "Políticas"
+
+#: services/defaults.py:18
+msgid "Terms of use"
+msgstr "Termos de uso"
+
+#: services/defaults.py:19
+msgid "Rules for using the service, accounts and responsibilities."
+msgstr "Regras de uso do serviço, contas e responsabilidades."
+
+#: services/defaults.py:26
+msgid "Privacy policy"
+msgstr "Política de privacidade"
+
+#: services/defaults.py:27
+msgid "Which personal data is processed, why, for how long and your rights."
+msgstr ""
+"Quais dados pessoais são tratados, por quê, por quanto tempo e seus direitos."
+
+#: services/defaults.py:34
+msgid "Security and privacy risk matrix"
+msgstr "Matriz de riscos de segurança e privacidade"
+
+#: services/defaults.py:35
+msgid "Risks, controls, owners and treatment actions."
+msgstr "Riscos, controles, responsáveis e ações de tratamento."
+
+#: services/defaults.py:41
+msgid "Incident response plan"
+msgstr "Plano de resposta a incidentes"
+
+#: services/defaults.py:42
+msgid "How to detect, contain, investigate and report incidents."
+msgstr "Como detectar, conter, investigar e comunicar incidentes."
+
+#: services/defaults.py:48
+msgid "Incident register"
+msgstr "Registro de incidentes"
+
+#: services/defaults.py:49
+msgid "Policy and minimum format for recording every occurrence."
+msgstr "Política e formato mínimo para registrar cada ocorrência."
+
+#: services/defaults.py:55
+msgid "Incident record template"
+msgstr "Modelo de registro de incidente"
+
+#: services/defaults.py:56
+msgid "Form to copy for each new incident record."
+msgstr "Formulário a copiar para cada novo registro de incidente."
+
+#: services/defaults.py:62
+msgid "Data and systems inventory"
+msgstr "Inventário de dados e sistemas"
+
+#: services/defaults.py:63
+msgid "Data processed, systems, flows, access, retention and suppliers."
+msgstr "Dados tratados, sistemas, fluxos, acessos, retenção e fornecedores."
+
+#: services/defaults.py:69
+msgid "Architecture and governance backlog"
+msgstr "Backlog de arquitetura e governança"
+
+#: services/defaults.py:70
+msgid "Architecture, security and governance improvements to schedule."
+msgstr "Melhorias de arquitetura, segurança e governança a planejar."
