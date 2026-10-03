@@ -11,6 +11,7 @@ from .base_parts.core import *
 from .base_parts.i18n import *
 from .base_parts.logging import *
 from .base_parts.middleware import *
+from .base_parts.rest import *
 from .base_parts.security import *
 from .base_parts.storage import *
 from .base_parts.tasks import *

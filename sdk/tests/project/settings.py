@@ -9,6 +9,7 @@ from tripaulx.settings import apps as sdk_apps
 from tripaulx.settings.env import get_database_config, get_env
 from tripaulx.settings.middleware import middleware
 from tripaulx.settings.observability import logging_config
+from tripaulx.settings.rest import rest_framework, simple_jwt, spectacular
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -56,4 +57,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 LOGGING = logging_config("WARNING")
 
-TRIPAULX = {"BASE_DOMAIN": "sdk.test"}
+REST_FRAMEWORK = rest_framework()
+SIMPLE_JWT = simple_jwt("sdk-tests-only-signing-key-0123456789abcdef")
+SPECTACULAR_SETTINGS = spectacular("SDK test API")
+DEFAULT_FROM_EMAIL = "noreply@example.com"
+MAILERS = {"default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend"}}
+AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
+
+TRIPAULX = {"BASE_DOMAIN": "sdk.test", "APP_NAME": "Acme"}

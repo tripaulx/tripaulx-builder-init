@@ -22,8 +22,8 @@ def test_public_only_is_idempotent(public_schema):
     second = _run()
     assert "public schema: created" in first
     assert "public schema: already existed" in second
-    public_domains = Domain.objects.filter(tenant__schema_name="public")
-    hosts = set(public_domains.values_list("domain", flat=True))
+    public = Domain.objects.filter(tenant__schema_name="public")
+    hosts = set(public.values_list("domain", flat=True))
     assert hosts == {"sdk.test", "www.sdk.test"}
 
 

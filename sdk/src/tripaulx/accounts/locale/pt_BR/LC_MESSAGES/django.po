@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 19:44-0500\n"
+"POT-Creation-Date: 2026-10-02 22:25-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -38,9 +38,114 @@ msgstr "Permissões"
 msgid "Important dates"
 msgstr "Datas importantes"
 
+#: api/views/devices.py:41
+msgid "Device not found."
+msgstr "Dispositivo não encontrado."
+
+#: api/views/email.py:43
+msgid "If there is a pending account, we sent a new code."
+msgstr "Se houver uma conta pendente, enviamos um novo código."
+
+#: api/views/login.py:74
+msgid "If the code expired, we sent a new one."
+msgstr "Se o código expirou, enviamos um novo."
+
+#: api/views/password.py:31
+msgid "If the e-mail exists, we sent a recovery code."
+msgstr "Se o e-mail existir, enviamos um código de recuperação."
+
+#: api/views/password.py:46
+msgid "Password reset."
+msgstr "Senha redefinida."
+
+#: api/views/password.py:64
+msgid "Password changed."
+msgstr "Senha alterada."
+
+#: api/views/signup.py:39
+msgid "Signup is disabled."
+msgstr "O cadastro está desativado."
+
 #: apps.py:12
 msgid "Accounts"
 msgstr "Contas"
+
+#: models/email_code.py:16
+msgid "E-mail verification"
+msgstr "Confirmação de e-mail"
+
+#: models/email_code.py:17
+msgid "Two-step verification"
+msgstr "Verificação em duas etapas"
+
+#: models/email_code.py:18
+msgid "Password reset"
+msgstr "Redefinição de senha"
+
+#: models/email_code.py:19
+msgid "Workspace invitation"
+msgstr "Convite para o workspace"
+
+#: models/email_code.py:32 models/passkey.py:22 models/recovery_code.py:23
+#: models/totp_device.py:28 models/trusted_device.py:26 models/user.py:46
+msgid "user"
+msgstr "usuário"
+
+#: models/email_code.py:35
+msgid "purpose"
+msgstr "finalidade"
+
+#: models/email_code.py:37 models/recovery_code.py:25
+msgid "code hash"
+msgstr "hash do código"
+
+#: models/email_code.py:38 models/invitation.py:34 models/trusted_device.py:32
+msgid "expires at"
+msgstr "expira em"
+
+#: models/email_code.py:39
+msgid "attempts"
+msgstr "tentativas"
+
+#: models/email_code.py:40
+msgid "consumed at"
+msgstr "consumido em"
+
+#: models/email_code.py:43
+msgid "e-mail code"
+msgstr "código por e-mail"
+
+#: models/email_code.py:44
+msgid "e-mail codes"
+msgstr "códigos por e-mail"
+
+#: models/invitation.py:21 models/user.py:21
+msgid "e-mail address"
+msgstr "endereço de e-mail"
+
+#: models/invitation.py:23 models/user.py:36
+msgid "role"
+msgstr "papel"
+
+#: models/invitation.py:25 models/trusted_device.py:28
+msgid "token hash"
+msgstr "hash do token"
+
+#: models/invitation.py:32
+msgid "invited by"
+msgstr "convidado por"
+
+#: models/invitation.py:35
+msgid "accepted at"
+msgstr "aceito em"
+
+#: models/invitation.py:38
+msgid "invitation"
+msgstr "convite"
+
+#: models/invitation.py:39
+msgid "invitations"
+msgstr "convites"
 
 #: models/managers.py:21
 msgid "An e-mail address is required."
@@ -49,6 +154,62 @@ msgstr "O e-mail é obrigatório."
 #: models/managers.py:43
 msgid "A superuser needs is_staff and is_superuser."
 msgstr "Um superusuário precisa de is_staff e is_superuser."
+
+#: models/passkey.py:25
+msgid "credential ID"
+msgstr "ID da credencial"
+
+#: models/passkey.py:26
+msgid "public key"
+msgstr "chave pública"
+
+#: models/passkey.py:27
+msgid "signature counter"
+msgstr "contador de assinaturas"
+
+#: models/passkey.py:28
+msgid "transports"
+msgstr "transportes"
+
+#: models/passkey.py:29
+msgid "AAGUID"
+msgstr "AAGUID"
+
+#: models/passkey.py:30
+msgid "name"
+msgstr "nome"
+
+#: models/passkey.py:31 models/totp_device.py:32 models/trusted_device.py:33
+msgid "last used at"
+msgstr "último uso em"
+
+#: models/passkey.py:34
+msgid "passkey"
+msgstr "passkey"
+
+#: models/passkey.py:35
+msgid "passkeys"
+msgstr "passkeys"
+
+#: models/recovery_code.py:28
+msgid "prefix"
+msgstr "prefixo"
+
+#: models/recovery_code.py:29
+msgid "label"
+msgstr "rótulo"
+
+#: models/recovery_code.py:30
+msgid "used at"
+msgstr "usado em"
+
+#: models/recovery_code.py:33
+msgid "recovery code"
+msgstr "código de recuperação"
+
+#: models/recovery_code.py:34
+msgid "recovery codes"
+msgstr "códigos de recuperação"
 
 #: models/roles.py:12
 msgid "Owner"
@@ -62,9 +223,49 @@ msgstr "Administrador"
 msgid "Member"
 msgstr "Membro"
 
-#: models/user.py:21
-msgid "e-mail address"
-msgstr "endereço de e-mail"
+#: models/totp_device.py:30
+msgid "encrypted secret"
+msgstr "segredo cifrado"
+
+#: models/totp_device.py:31
+msgid "confirmed at"
+msgstr "confirmado em"
+
+#: models/totp_device.py:33
+msgid "last accepted step"
+msgstr "último intervalo aceito"
+
+#: models/totp_device.py:36
+msgid "authenticator app"
+msgstr "aplicativo autenticador"
+
+#: models/totp_device.py:37
+msgid "authenticator apps"
+msgstr "aplicativos autenticadores"
+
+#: models/trusted_device.py:29
+msgid "device label"
+msgstr "nome do dispositivo"
+
+#: models/trusted_device.py:30
+msgid "IP address"
+msgstr "endereço IP"
+
+#: models/trusted_device.py:31
+msgid "user agent"
+msgstr "navegador (user agent)"
+
+#: models/trusted_device.py:34
+msgid "active"
+msgstr "ativo"
+
+#: models/trusted_device.py:37
+msgid "trusted device"
+msgstr "dispositivo confiável"
+
+#: models/trusted_device.py:38
+msgid "trusted devices"
+msgstr "dispositivos confiáveis"
 
 #: models/user.py:23
 msgid "e-mail verified"
@@ -86,14 +287,280 @@ msgstr ""
 "Desativa o login por e-mail e senha. Só vale enquanto o usuário tiver ao "
 "menos uma passkey."
 
-#: models/user.py:36
-msgid "role"
-msgstr "papel"
-
-#: models/user.py:46
-msgid "user"
-msgstr "usuário"
-
 #: models/user.py:47
 msgid "users"
 msgstr "usuários"
+
+#: services/email_codes.py:66
+msgid "No active code. Request a new one."
+msgstr "Nenhum código ativo. Solicite um novo."
+
+#: services/email_codes.py:68
+msgid "Code expired. Request a new one."
+msgstr "Código expirado. Solicite um novo."
+
+#: services/email_codes.py:73
+msgid "Too many attempts. Request a new code."
+msgstr "Muitas tentativas. Solicite um novo código."
+
+#: services/email_codes.py:76 services/email_codes.py:82
+#: services/verification.py:22
+msgid "Invalid code."
+msgstr "Código inválido."
+
+#: services/invitations.py:51 services/members.py:67
+msgid "Unknown role."
+msgstr "Papel desconhecido."
+
+#: services/invitations.py:53 services/members.py:47
+msgid "Only an owner can grant the owner role."
+msgstr "Só um proprietário pode conceder o papel de proprietário."
+
+#: services/invitations.py:55 services/invitations.py:88
+msgid "This person is already a member."
+msgstr "Esta pessoa já é membro."
+
+#: services/invitations.py:78
+msgid "Invitation not found."
+msgstr "Convite não encontrado."
+
+#: services/invitations.py:86 services/invitations.py:95
+msgid "This invitation is invalid or has expired."
+msgstr "Este convite é inválido ou expirou."
+
+#: services/login/flow.py:53
+msgid "Confirm your e-mail address with the code we sent you."
+msgstr "Confirme seu e-mail com o código que enviamos."
+
+#: services/login/flow.py:67
+msgid "Incorrect e-mail or password."
+msgstr "E-mail ou senha incorretos."
+
+#: services/login/flow.py:72
+msgid "This account signs in with a passkey only."
+msgstr "Esta conta entra apenas com passkey."
+
+#: services/login/flow.py:96
+msgid "Your session expired. Log in again."
+msgstr "Sua sessão expirou. Faça login novamente."
+
+#: services/login/flow.py:129
+msgid "This account is inactive."
+msgstr "Esta conta está inativa."
+
+#: services/members.py:36
+msgid "Member not found."
+msgstr "Membro não encontrado."
+
+#: services/members.py:45
+msgid "Only an owner can change another owner."
+msgstr "Só um proprietário pode alterar outro proprietário."
+
+#: services/members.py:61
+msgid "The workspace needs at least one owner."
+msgstr "O workspace precisa de pelo menos um proprietário."
+
+#: services/notifications.py:19 templates/tripaulx/mail/email_verify.html:2
+#: templates/tripaulx/mail/email_verify.html:3
+msgid "Confirm your e-mail"
+msgstr "Confirme seu e-mail"
+
+#: services/notifications.py:20
+msgid "Your access code"
+msgstr "Seu código de acesso"
+
+#: services/notifications.py:21 templates/tripaulx/mail/password_reset.html:2
+#: templates/tripaulx/mail/password_reset.html:3
+msgid "Reset your password"
+msgstr "Redefina sua senha"
+
+#: services/notifications.py:22 templates/tripaulx/mail/invite.html:2
+#: templates/tripaulx/mail/invite.html:3
+msgid "You have been invited"
+msgstr "Você foi convidado"
+
+#: services/passkeys/ceremonies.py:67 services/passkeys/ceremonies.py:113
+msgid "The challenge expired. Try again."
+msgstr "O desafio expirou. Tente novamente."
+
+#: services/passkeys/ceremonies.py:77
+msgid "Could not register the passkey."
+msgstr "Não foi possível cadastrar a passkey."
+
+#: services/passkeys/ceremonies.py:117
+msgid "Invalid credential."
+msgstr "Credencial inválida."
+
+#: services/passkeys/ceremonies.py:124
+msgid "Passkey not recognized."
+msgstr "Passkey não reconhecida."
+
+#: services/passkeys/ceremonies.py:136
+msgid "Passkey authentication failed."
+msgstr "Falha na autenticação com passkey."
+
+#: services/passkeys/rules.py:31
+msgid "Register a passkey before turning off e-mail and password login."
+msgstr "Cadastre uma passkey antes de desativar o login por e-mail e senha."
+
+#: services/passkeys/rules.py:54
+msgid ""
+"This is the account's only passkey and password login is off. Turn password "
+"login back on before removing it."
+msgstr ""
+"Esta é a única passkey da conta e o login por senha está desativado. Reative "
+"o login por senha antes de removê-la."
+
+#: services/passkeys/rules.py:65
+msgid "Passkey not found."
+msgstr "Passkey não encontrada."
+
+#: services/passkeys/rules.py:68
+msgid "The name cannot be empty."
+msgstr "O nome não pode ficar vazio."
+
+#: services/passwords.py:24
+msgid "Invalid or expired code. Request a new one."
+msgstr "Código inválido ou expirado. Solicite um novo."
+
+#: services/passwords.py:83
+msgid "The current password is incorrect."
+msgstr "A senha atual está incorreta."
+
+#: services/recovery_codes.py:95
+msgid "Invalid or already used recovery code."
+msgstr "Código de recuperação inválido ou já utilizado."
+
+#: services/signup.py:43
+msgid "Enter the workspace name."
+msgstr "Informe o nome do workspace."
+
+#: services/signup.py:47
+msgid "Enter a valid e-mail address."
+msgstr "Informe um endereço de e-mail válido."
+
+#: services/tokens.py:27
+msgid "Token not valid for this workspace. Log in again."
+msgstr "Token inválido para este workspace. Faça login novamente."
+
+#: services/totp/devices.py:54
+msgid "The authenticator app is already active. Disable it first."
+msgstr "O aplicativo autenticador já está ativo. Desative-o primeiro."
+
+#: services/totp/devices.py:70
+msgid "There is no pending setup. Start again."
+msgstr "Não há configuração pendente. Comece de novo."
+
+#: services/totp/devices.py:74
+msgid "Invalid code. Check the time on your phone and try again."
+msgstr "Código inválido. Confira o horário do celular e tente de novo."
+
+#: services/totp/devices.py:94
+msgid "This account has no active authenticator app."
+msgstr "Esta conta não tem aplicativo autenticador ativo."
+
+#: services/totp/devices.py:97
+msgid "Invalid authenticator code."
+msgstr "Código do autenticador inválido."
+
+#: services/totp/devices.py:99
+msgid "This code was already used. Wait for the next one."
+msgstr "Este código já foi usado. Aguarde o próximo."
+
+#: services/totp/devices.py:109
+msgid "The authenticator app is not active."
+msgstr "O aplicativo autenticador não está ativo."
+
+#: templates/tripaulx/mail/code_base.html:7
+#: templates/tripaulx/mail/code_base.txt:5
+#, python-format
+msgid "This code expires in %(minutes)s minute."
+msgid_plural "This code expires in %(minutes)s minutes."
+msgstr[0] "Este código expira em %(minutes)s minuto."
+msgstr[1] "Este código expira em %(minutes)s minutos."
+
+#: templates/tripaulx/mail/code_base.txt:3
+msgid "Code:"
+msgstr "Código:"
+
+#: templates/tripaulx/mail/email_verify.html:4
+#: templates/tripaulx/mail/email_verify.txt:2
+#, python-format
+msgid "use the code below to confirm your e-mail on %(app_name)s."
+msgstr "use o código abaixo para confirmar seu e-mail em %(app_name)s."
+
+#: templates/tripaulx/mail/email_verify.html:5
+#: templates/tripaulx/mail/email_verify.txt:3
+msgid "If this was not you, you can ignore this e-mail."
+msgstr "Se não foi você, pode ignorar este e-mail."
+
+#: templates/tripaulx/mail/greeting.txt:1
+#, python-format
+msgid "Hello %(first_name)s,"
+msgstr "Olá %(first_name)s,"
+
+#: templates/tripaulx/mail/greeting.txt:1
+msgid "Hello,"
+msgstr "Olá,"
+
+#: templates/tripaulx/mail/invite.html:4 templates/tripaulx/mail/invite.txt:1
+#, python-format
+msgid ""
+"%(inviter)s invited you to join the %(workspace)s workspace on %(app_name)s."
+msgstr ""
+"%(inviter)s convidou você para o workspace %(workspace)s em %(app_name)s."
+
+#: templates/tripaulx/mail/invite.html:4 templates/tripaulx/mail/invite.txt:1
+#, python-format
+msgid "%(inviter)s invited you to join a workspace on %(app_name)s."
+msgstr "%(inviter)s convidou você para um workspace em %(app_name)s."
+
+#: templates/tripaulx/mail/invite.html:7
+msgid "Accept the invitation"
+msgstr "Aceitar o convite"
+
+#: templates/tripaulx/mail/invite.html:10 templates/tripaulx/mail/invite.txt:5
+#, python-format
+msgid "The link expires in %(days)s day."
+msgid_plural "The link expires in %(days)s days."
+msgstr[0] "O link expira em %(days)s dia."
+msgstr[1] "O link expira em %(days)s dias."
+
+#: templates/tripaulx/mail/invite.html:13 templates/tripaulx/mail/invite.txt:6
+msgid "If you were not expecting this invitation, you can ignore this e-mail."
+msgstr "Se você não esperava este convite, pode ignorar este e-mail."
+
+#: templates/tripaulx/mail/invite.txt:3
+msgid "Accept the invitation:"
+msgstr "Aceite o convite:"
+
+#: templates/tripaulx/mail/login_2fa.html:2
+#: templates/tripaulx/mail/login_2fa.html:3
+msgid "Verify your sign-in"
+msgstr "Confirme seu acesso"
+
+#: templates/tripaulx/mail/login_2fa.html:4
+#: templates/tripaulx/mail/login_2fa.txt:2
+#, python-format
+msgid "use the code below to finish signing in to %(app_name)s."
+msgstr "use o código abaixo para concluir o login em %(app_name)s."
+
+#: templates/tripaulx/mail/login_2fa.html:5
+#: templates/tripaulx/mail/login_2fa.txt:3
+msgid ""
+"If you did not try to sign in, ignore this e-mail and consider changing your "
+"password."
+msgstr ""
+"Se você não tentou entrar, ignore este e-mail e considere trocar sua senha."
+
+#: templates/tripaulx/mail/password_reset.html:4
+#: templates/tripaulx/mail/password_reset.txt:2
+#, python-format
+msgid "use the code below to reset your password on %(app_name)s."
+msgstr "use o código abaixo para redefinir sua senha em %(app_name)s."
+
+#: templates/tripaulx/mail/password_reset.html:5
+#: templates/tripaulx/mail/password_reset.txt:3
+msgid ""
+"If you did not ask for it, ignore this e-mail: your password stays the same."
+msgstr "Se você não pediu, ignore este e-mail: sua senha continua a mesma."

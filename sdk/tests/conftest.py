@@ -4,8 +4,19 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 
+from django.core import mail
+from django.core.cache import cache
 from django.db import connection
 import pytest
+
+
+@pytest.fixture(autouse=True)
+def _fresh_cache_and_outbox() -> Iterator[None]:
+    """Reset throttle counters, WebAuthn challenges and sent e-mails."""
+    cache.clear()
+    mail.outbox = []
+    yield
+    cache.clear()
 
 
 @pytest.fixture

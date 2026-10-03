@@ -26,8 +26,16 @@ SDK_SHARED_APPS: tuple[str, ...] = (
     "tripaulx.tenants",
     *_CONTRIB_APPS,
     "django.contrib.postgres",
+    "rest_framework",
+    "drf_spectacular",
+    "corsheaders",
     "tripaulx.core",
     "tripaulx.accounts",
+    # Outstanding/blacklisted refresh tokens point at the user, so they live
+    # in every schema that holds users.
+    "rest_framework_simplejwt.token_blacklist",
+    # Global e-mail configuration: one row in the public schema only.
+    "tripaulx.mail",
     "tripaulx.storage",
 )
 
@@ -35,6 +43,7 @@ SDK_TENANT_APPS: tuple[str, ...] = (
     *_CONTRIB_APPS,
     "tripaulx.core",
     "tripaulx.accounts",
+    "rest_framework_simplejwt.token_blacklist",
     "tripaulx.storage",
 )
 

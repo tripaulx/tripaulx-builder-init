@@ -1,0 +1,9 @@
+{% extends "tripaulx/mail/base.html" %}{% load i18n %}
+{% block content %}
+        <tr><td style="padding:24px 40px 0;">
+          <div style="background:#f1f5f9;border-radius:12px;padding:22px;text-align:center;font-size:32px;font-weight:700;letter-spacing:10px;color:#0f172a;">{{ code_spaced }}</div>
+        </td></tr>
+        <tr><td style="padding:14px 40px 0;text-align:center;">
+          <p style="margin:0;font-size:13px;color:#64748b;">{% blocktranslate count minutes=minutes %}This code expires in {{ minutes }} minute.{% plural %}This code expires in {{ minutes }} minutes.{% endblocktranslate %}</p>
+        </td></tr>
+{% endblock %}

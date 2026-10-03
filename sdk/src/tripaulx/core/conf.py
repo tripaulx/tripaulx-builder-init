@@ -28,3 +28,15 @@ class AppSettings:
             raise AttributeError(name)
         overrides = getattr(settings, SETTINGS_NAME, {}) or {}
         return overrides.get(name, self._defaults[name])
+
+
+#: Defaults of the core app.
+app_settings = AppSettings(
+    {
+        # Product name used in e-mails, the TOTP issuer and the passkey RP name.
+        "APP_NAME": "App",
+        # Fernet key (urlsafe base64, 32 bytes) for encrypted fields. Empty
+        # derives a key from SECRET_KEY (development only; see core.crypto).
+        "FIELD_ENCRYPTION_KEY": "",
+    }
+)

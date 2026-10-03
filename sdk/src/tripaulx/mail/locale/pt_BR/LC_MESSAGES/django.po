@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-02 22:17-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: admin/mailgun_config.py:21
+msgid "New API key (leave blank to keep the current one)"
+msgstr "Nova API key (deixe em branco para manter a atual)"
+
+#: admin/mailgun_config.py:66
+msgid "API key"
+msgstr "API key"
+
+#: admin/mailgun_config.py:70
+msgid "•••• set"
+msgstr "•••• definida"
+
+#: admin/mailgun_config.py:71
+msgid "not set"
+msgstr "não definida"
+
+#: apps.py:12
+msgid "E-mail"
+msgstr "E-mail"
+
+#: models/mailgun_config.py:27
+msgid "United States"
+msgstr "Estados Unidos"
+
+#: models/mailgun_config.py:28
+msgid "Europe"
+msgstr "Europa"
+
+#: models/mailgun_config.py:35
+msgid "enabled"
+msgstr "ativado"
+
+#: models/mailgun_config.py:35
+msgid "Send e-mail through Mailgun."
+msgstr "Envia e-mails pelo Mailgun."
+
+#: models/mailgun_config.py:37
+msgid "encrypted API key"
+msgstr "API key cifrada"
+
+#: models/mailgun_config.py:39
+msgid "sending domain"
+msgstr "domínio de envio"
+
+#: models/mailgun_config.py:42
+msgid "For example: mg.example.com"
+msgstr "Por exemplo: mg.example.com"
+
+#: models/mailgun_config.py:45
+msgid "region"
+msgstr "região"
+
+#: models/mailgun_config.py:47
+msgid "default sender address"
+msgstr "endereço do remetente padrão"
+
+#: models/mailgun_config.py:49
+msgid "default sender name"
+msgstr "nome do remetente padrão"
+
+#: models/mailgun_config.py:51
+msgid "updated at"
+msgstr "atualizado em"
+
+#: models/mailgun_config.py:54 models/mailgun_config.py:55
+msgid "e-mail configuration (Mailgun)"
+msgstr "configuração de e-mail (Mailgun)"
+
+#: models/mailgun_config.py:58
+msgid "E-mail configuration (Mailgun)"
+msgstr "Configuração de e-mail (Mailgun)"

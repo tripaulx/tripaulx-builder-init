@@ -19,6 +19,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+# Any local frontend may call the API (it authenticates with bearer JWTs).
+CORS_ALLOW_ALL_ORIGINS = True
 
 CACHES = {
     "default": {

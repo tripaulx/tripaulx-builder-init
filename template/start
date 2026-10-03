@@ -20,10 +20,13 @@ log() { echo "[start] $*"; }
 
 ensure_env_file() {
   [ -f .env.local ] && return 0
-  log "creating .env.local from .env.example (with a fresh SECRET_KEY)"
-  local secret
+  log "creating .env.local from .env.example (fresh SECRET_KEY and field key)"
+  local secret field_key
   secret="$(uv run python -c 'import secrets; print(secrets.token_urlsafe(50))')"
-  sed "s|^SECRET_KEY=.*|SECRET_KEY=$secret|" .env.example > .env.local
+  field_key="$(uv run python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())')"
+  sed -e "s|^SECRET_KEY=.*|SECRET_KEY=$secret|" \
+    -e "s|^APP_FIELD_ENCRYPTION_KEY=.*|APP_FIELD_ENCRYPTION_KEY=$field_key|" \
+    .env.example > .env.local
 }
 
 # Fill an empty APP_FILE_ENCRYPTION_KEY in .env.local (tripaulx.storage).
@@ -48,13 +51,25 @@ setup() {
 
 base_domain() { grep -E '^APP_BASE_DOMAIN=' .env.local | cut -d= -f2-; }
 
+# Tests run on config.settings.test, which does not read .env.local: export
+# its database credentials unless the process already has them (CI).
+run_tests() {
+  local key value
+  for key in DB_NAME DB_USER DB_PASSWORD DB_HOST DB_PORT; do
+    value="$(grep -E "^${key}=" .env.local 2>/dev/null | tail -n1 | cut -d= -f2- || true)"
+    if [ -n "$value" ] && [ -z "${!key:-}" ]; then export "$key=$value"; fi
+  done
+  DJANGO_SETTINGS_MODULE=config.settings.test exec uv run pytest "$@"
+}
+
 case "${1:-run}" in
   setup) setup ;;
-  test) uv run pytest "${@:2}" ;;
+  test) run_tests "${@:2}" ;;
   run)
     setup
     log "public:     http://$(base_domain):$PORT/admin/"
     log "workspaces: http://<slug>.$(base_domain):$PORT/admin/"
+    log "API docs:   http://$(base_domain):$PORT/api/docs/ (admins)"
     exec uv run python manage.py runserver "0.0.0.0:$PORT"
     ;;
   *) echo "Usage: ./start [run|setup|test]" >&2; exit 2 ;;
