@@ -26,6 +26,16 @@ dependencies = [
   "python-dotenv>=1.1",
 ]
 
+[project.optional-dependencies]
+# S3-compatible object storage with envelope encryption (tripaulx.storage).
+# boto3 >= 1.36 needs request_checksum_calculation="when_required" for
+# non-AWS providers; tripaulx.storage.client sets it.
+storage = [
+  "boto3>=1.36,<2",
+  "cryptography>=44",
+  "pillow>=11",
+]
+
 [project.urls]
 Homepage = "https://github.com/tripaulx/tripaulx-builder-init"
 Issues = "https://github.com/tripaulx/tripaulx-builder-init/issues"

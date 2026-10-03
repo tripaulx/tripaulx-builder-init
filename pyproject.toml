@@ -5,7 +5,7 @@ version = "0.0.0"
 description = "Monorepo of tripaulx-sdk and its Copier project template."
 authors = [{ name = "Flavio Almeida Paulino", email = "f1@tripaulx.com" }]
 requires-python = ">=3.12"
-dependencies = ["tripaulx-sdk"]
+dependencies = ["tripaulx-sdk[storage]"]
 
 [dependency-groups]
 dev = [

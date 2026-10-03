@@ -28,12 +28,14 @@ SDK_SHARED_APPS: tuple[str, ...] = (
     "django.contrib.postgres",
     "tripaulx.core",
     "tripaulx.accounts",
+    "tripaulx.storage",
 )
 
 SDK_TENANT_APPS: tuple[str, ...] = (
     *_CONTRIB_APPS,
     "tripaulx.core",
     "tripaulx.accounts",
+    "tripaulx.storage",
 )
 
 TENANT_MODEL = "tpsdk_tenants.Workspace"
