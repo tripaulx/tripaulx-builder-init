@@ -1,0 +1,37 @@
+# Build context sent to CapRover. Keep it small; uv.lock MUST stay in.
+
+# Git / CI
+.git/
+.github/
+
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Generated at build time or persisted outside the image
+/staticfiles/
+/media/
+
+# Secrets and local environment (CapRover injects them at runtime)
+.env
+.env.*
+
+# Deploy artifacts, logs, OS and editor files
+deploy.tar.gz
+*.tar
+*.tar.gz
+*.log
+.DS_Store
+.idea/
+.vscode/

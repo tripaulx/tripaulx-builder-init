@@ -22,6 +22,16 @@ Create an admin inside a workspace:
 uv run python manage.py create_tenant_superuser --schema {{ initial_workspace }}
 ```
 
+## Deploy (CapRover)
+
+```bash
+cp .env.deploy.example .env.deploy   # CapRover App Tokens (never committed)
+./deploy prod all                    # checks, then web and worker
+```
+
+Setup of the four CapRover apps, the variables and the wildcard subdomains:
+[docs/deployment.md](docs/deployment.md).
+
 ## Layout
 
 | Path | What |

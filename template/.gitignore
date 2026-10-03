@@ -11,4 +11,7 @@ media/
 .env.*
 !.env.example
 !.env.*.example
+# Template sources of the examples above (only exist in the template repo).
+!.env*.example.jinja
+deploy.tar.gz
 .DS_Store
