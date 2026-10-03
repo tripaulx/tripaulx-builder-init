@@ -35,3 +35,8 @@ deploy.tar.gz
 .DS_Store
 .idea/
 .vscode/
+
+# Keep the project's legal documents (legal/**/*.md): the API serves them.
+# Never add a blanket *.md rule above without this exception.
+!legal/
+!legal/**/*.md

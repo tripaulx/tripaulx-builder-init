@@ -37,6 +37,9 @@ SDK_SHARED_APPS: tuple[str, ...] = (
     # Global e-mail configuration: one row in the public schema only.
     "tripaulx.mail",
     "tripaulx.storage",
+    # No models: documents are files; installed for the API, locale and
+    # the legal_check command.
+    "tripaulx.legal",
 )
 
 SDK_TENANT_APPS: tuple[str, ...] = (

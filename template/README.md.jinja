@@ -21,6 +21,9 @@ API (tripaulx-sdk accounts):
 - `POST /api/auth/signup/` on the apex domain creates a workspace and its owner.
 - `/api/auth/...` on each workspace: login with mandatory 2FA, TOTP, passkeys,
   recovery codes, password reset; `/api/workspace/...`: members and invitations.
+- `/api/legal/public/...` (apex and workspaces): terms of use and privacy
+  policy; `/api/v1/legal/...` (workspace admins): governance documents.
+  Before going live, edit `legal/` and run `manage.py legal_check`.
 - OpenAPI docs for admins: http://{{ local_base_domain }}:8000/api/docs/
   (on workspaces only while `DEBUG` is on).
 
@@ -48,6 +51,7 @@ Setup of the four CapRover apps, the variables and the wildcard subdomains:
 | `config/settings/{local,prod,test}.py` | per-environment settings |
 | `config/urls.py` / `urls_public.py` | workspace / public-schema routes |
 | `users/` | concrete `User` (inherits `AbstractTripaulxUser`) |
+| `legal/` | project legal documents, overriding the SDK templates |
 
 ## Update from the template
 

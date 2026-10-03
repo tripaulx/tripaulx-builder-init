@@ -11,6 +11,8 @@ urlpatterns = [
     # Signup (creates a workspace) exists only here.
     path("api/auth/", include("tripaulx.accounts.api.urls_public")),
     path("api/auth/", include("tripaulx.accounts.api.urls")),
+    # Terms of use and privacy policy, also served on the apex domain.
+    path("api/legal/public/", include("tripaulx.legal.api.urls_public")),
     # OpenAPI docs, served to platform admins only (SPECTACULAR_SETTINGS).
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(

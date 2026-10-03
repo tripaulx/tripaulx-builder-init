@@ -1,0 +1,1 @@
+"""Commands: ``legal_check``."""

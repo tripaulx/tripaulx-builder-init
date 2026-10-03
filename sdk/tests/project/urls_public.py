@@ -7,5 +7,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("tripaulx.accounts.api.urls_public")),
     path("api/auth/", include("tripaulx.accounts.api.urls")),
+    path("api/legal/public/", include("tripaulx.legal.api.urls_public")),
     path("", include("tripaulx.core.urls")),
 ]
