@@ -95,6 +95,54 @@ jobs:
           APP_BASE_DOMAIN: example.com
         run: SECRET_KEY="$(openssl rand -base64 48)" uv run python manage.py check --deploy --fail-level WARNING
 
+  deploy:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: example
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+      - name: shellcheck the shell scripts
+        run: >-
+          shellcheck -x template/entrypoint.sh template/healthcheck.sh
+          template/deploy template/start template/pg template/scripts/*.sh
+          scripts/*.sh
+      - run: uv sync --locked
+      # The SDK is not on PyPI yet: vendor the local checkout into the build
+      # context so the image installs it as a path dependency.
+      - name: Render the example with a vendored SDK
+        run: |
+          scripts/render_example.sh --data sdk_path=vendor/tripaulx-sdk
+          mkdir -p example/vendor
+          cp -R sdk example/vendor/tripaulx-sdk
+          rm -rf example/vendor/tripaulx-sdk/tests
+      - working-directory: example
+        run: uv lock
+      - name: docker build
+        run: docker build -t example:ci example
+      - name: Boot the web role and probe /healthz/
+        run: |
+          docker run -d --name web --network host \
+            -e SECRET_KEY="$(openssl rand -base64 48)" \
+            -e APP_BASE_DOMAIN=example.com \
+            -e DB_NAME=example -e DB_USER=postgres -e DB_PASSWORD=postgres \
+            -e DB_HOST=127.0.0.1 example:ci
+          for _ in $(seq 1 60); do
+            docker exec web /app/healthcheck.sh && break
+            sleep 2
+          done
+          docker logs web
+          docker exec web /app/healthcheck.sh
+          test "$(docker exec web id -u)" != "0"
+
   secrets:
     runs-on: ubuntu-latest
     steps:
