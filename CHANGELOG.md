@@ -6,6 +6,8 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-04
+
 ### Changed (breaking API)
 - Signup requires `full_name` and `password_confirm`. The full name fills `first_name`/`last_name`.
 - Password reset confirm, password change and invitation acceptance require the confirmation: `password_confirm` / `new_password_confirm`.
@@ -106,5 +108,6 @@ First release.
 - Release workflow with PyPI Trusted Publishing.
 - README (en and pt-BR) with diagrams in the tripaulx design system.
 
-[Unreleased]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tripaulx/tripaulx-builder-init/releases/tag/v0.1.0
