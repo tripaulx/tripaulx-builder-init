@@ -25,6 +25,7 @@ from .password import (
     PasswordChangeView,
     PasswordResetConfirmView,
     PasswordResetRequestView,
+    PasswordRulesView,
 )
 from .session import LogoutView, MeView, TokenRefreshView
 from .signup import SignupView
@@ -52,6 +53,7 @@ __all__ = [
     "PasswordLoginToggleView",
     "PasswordResetConfirmView",
     "PasswordResetRequestView",
+    "PasswordRulesView",
     "RecoveryCodesView",
     "SignupView",
     "TokenRefreshView",

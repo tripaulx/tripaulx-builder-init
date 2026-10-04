@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 22:25-0500\n"
+"POT-Creation-Date: 2026-10-03 21:16-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -50,15 +50,15 @@ msgstr "Se houver uma conta pendente, enviamos um novo código."
 msgid "If the code expired, we sent a new one."
 msgstr "Se o código expirou, enviamos um novo."
 
-#: api/views/password.py:31
+#: api/views/password.py:33
 msgid "If the e-mail exists, we sent a recovery code."
 msgstr "Se o e-mail existir, enviamos um código de recuperação."
 
-#: api/views/password.py:46
+#: api/views/password.py:50
 msgid "Password reset."
 msgstr "Senha redefinida."
 
-#: api/views/password.py:64
+#: api/views/password.py:71
 msgid "Password changed."
 msgstr "Senha alterada."
 
@@ -69,6 +69,44 @@ msgstr "O cadastro está desativado."
 #: apps.py:12
 msgid "Accounts"
 msgstr "Contas"
+
+#: management/commands/create_workspace_admin.py:66
+#, python-format
+msgid "Workspace %(schema)s already has an owner; skipping."
+msgstr "O workspace %(schema)s já tem um dono; nada a fazer."
+
+#: management/commands/create_workspace_admin.py:71
+msgid "--password-stdin needs --email and --full-name."
+msgstr "--password-stdin exige --email e --full-name."
+
+#: management/commands/create_workspace_admin.py:72
+msgid "E-mail (login): "
+msgstr "E-mail (login): "
+
+#: management/commands/create_workspace_admin.py:73
+msgid "Full name: "
+msgstr "Nome completo: "
+
+#: management/commands/create_workspace_admin.py:81
+#, python-format
+msgid "Created %(email)s (%(role)s) in workspace %(schema)s."
+msgstr "%(email)s (%(role)s) criado no workspace %(schema)s."
+
+#: management/commands/create_workspace_admin.py:93
+msgid "Password rules:"
+msgstr "Regras de senha:"
+
+#: management/commands/create_workspace_admin.py:101
+msgid "Password: "
+msgstr "Senha: "
+
+#: management/commands/create_workspace_admin.py:102
+msgid "Password (again): "
+msgstr "Senha (de novo): "
+
+#: management/commands/create_workspace_admin.py:115
+msgid "No administrator was created."
+msgstr "Nenhum administrador foi criado."
 
 #: models/email_code.py:16
 msgid "E-mail verification"
@@ -291,6 +329,23 @@ msgstr ""
 msgid "users"
 msgstr "usuários"
 
+#: services/admins.py:40
+#, python-format
+msgid "Workspace %(schema)s does not exist."
+msgstr "O workspace %(schema)s não existe."
+
+#: services/admins.py:44 services/signup.py:58
+msgid "Enter a valid e-mail address."
+msgstr "Informe um endereço de e-mail válido."
+
+#: services/admins.py:47 services/signup.py:54
+msgid "Enter your full name."
+msgstr "Informe seu nome completo."
+
+#: services/admins.py:52
+msgid "A user with this e-mail already exists in this workspace."
+msgstr "Já existe um usuário com este e-mail neste workspace."
+
 #: services/email_codes.py:66
 msgid "No active code. Request a new one."
 msgstr "Nenhum código ativo. Solicite um novo."
@@ -308,6 +363,10 @@ msgstr "Muitas tentativas. Solicite um novo código."
 msgid "Invalid code."
 msgstr "Código inválido."
 
+#: services/identity.py:55
+msgid "The two passwords do not match."
+msgstr "As duas senhas não conferem."
+
 #: services/invitations.py:51 services/members.py:67
 msgid "Unknown role."
 msgstr "Papel desconhecido."
@@ -316,7 +375,7 @@ msgstr "Papel desconhecido."
 msgid "Only an owner can grant the owner role."
 msgstr "Só um proprietário pode conceder o papel de proprietário."
 
-#: services/invitations.py:55 services/invitations.py:88
+#: services/invitations.py:55 services/invitations.py:102
 msgid "This person is already a member."
 msgstr "Esta pessoa já é membro."
 
@@ -324,7 +383,7 @@ msgstr "Esta pessoa já é membro."
 msgid "Invitation not found."
 msgstr "Convite não encontrado."
 
-#: services/invitations.py:86 services/invitations.py:95
+#: services/invitations.py:100 services/invitations.py:114
 msgid "This invitation is invalid or has expired."
 msgstr "Este convite é inválido ou expirou."
 
@@ -423,7 +482,7 @@ msgstr "O nome não pode ficar vazio."
 msgid "Invalid or expired code. Request a new one."
 msgstr "Código inválido ou expirado. Solicite um novo."
 
-#: services/passwords.py:83
+#: services/passwords.py:93
 msgid "The current password is incorrect."
 msgstr "A senha atual está incorreta."
 
@@ -431,13 +490,9 @@ msgstr "A senha atual está incorreta."
 msgid "Invalid or already used recovery code."
 msgstr "Código de recuperação inválido ou já utilizado."
 
-#: services/signup.py:43
+#: services/signup.py:72
 msgid "Enter the workspace name."
 msgstr "Informe o nome do workspace."
-
-#: services/signup.py:47
-msgid "Enter a valid e-mail address."
-msgstr "Informe um endereço de e-mail válido."
 
 #: services/tokens.py:27
 msgid "Token not valid for this workspace. Log in again."

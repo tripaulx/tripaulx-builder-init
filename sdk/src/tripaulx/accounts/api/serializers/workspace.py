@@ -8,10 +8,13 @@ from ...models import Invitation, Role
 
 
 class SignupSerializer(serializers.Serializer):
-    """Owner credentials and the new workspace's name (and optional slug)."""
+    """Owner's name and credentials, and the new workspace (optional slug)."""
 
     email = serializers.EmailField()
+    # Blank passes here so the service answers with ``field: "full_name"``.
+    full_name = serializers.CharField(max_length=301, allow_blank=True)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
+    password_confirm = serializers.CharField(write_only=True, trim_whitespace=False)
     workspace_name = serializers.CharField(max_length=100)
     slug = serializers.CharField(
         required=False, allow_blank=True, default="", max_length=30
@@ -50,6 +53,10 @@ class InvitationAcceptSerializer(serializers.Serializer):
 
     token = serializers.CharField()
     password = serializers.CharField(write_only=True, trim_whitespace=False)
+    password_confirm = serializers.CharField(write_only=True, trim_whitespace=False)
+    full_name = serializers.CharField(
+        required=False, allow_blank=True, default="", max_length=301
+    )
     first_name = serializers.CharField(
         required=False, allow_blank=True, default="", max_length=150
     )

@@ -23,7 +23,7 @@ from tripaulx.tenants.services.slugs import normalize_slug
 
 from ..models import EmailCodePurpose, Role
 from ..signals import user_signed_up
-from . import email_codes, passwords
+from . import email_codes, identity
 from .errors import PasswordError, SignupError
 
 
@@ -36,32 +36,64 @@ class SignupResult:
     domain: str
 
 
-def _clean(email: str, password: str, name: str, slug: str) -> tuple[str, str]:
-    """Validate the input; return the normalized e-mail and slug."""
-    name = (name or "").strip()
-    if not name:
-        raise SignupError(_("Enter the workspace name."), field="workspace_name")
+@dataclass(frozen=True)
+class OwnerInput:
+    """The owner's identity, already validated and normalized."""
+
+    email: str
+    first_name: str
+    last_name: str
+
+
+def _clean_owner(
+    email: str, full_name: str, password: str, confirmation: str
+) -> OwnerInput:
+    """Validate the owner's name, e-mail and password (against the person)."""
+    first, last = identity.split_full_name(full_name)
+    if not first:
+        raise SignupError(_("Enter your full name."), field="full_name")
     try:
         validate_email(email)
     except ValidationError as exc:
         raise SignupError(_("Enter a valid e-mail address."), field="email") from exc
-    try:
-        passwords.check_strength(password)
-    except PasswordError as exc:
-        raise SignupError(exc.message, field="password") from exc
     email = get_user_model().objects.normalize_email(email)
-    return email, (slug or normalize_slug(name)).strip()
+    candidate = identity.candidate_user(email, first, last)
+    try:
+        identity.check_new_password(password, confirmation, candidate)
+    except PasswordError as exc:
+        raise SignupError(exc.message, **exc.extra) from exc
+    return OwnerInput(email, first, last)
+
+
+def _clean_workspace(name: str, slug: str) -> str:
+    """Validate the workspace name; return the slug to use."""
+    name = (name or "").strip()
+    if not name:
+        raise SignupError(_("Enter the workspace name."), field="workspace_name")
+    return (slug or normalize_slug(name)).strip()
 
 
 def signup(
-    *, email: str, password: str, workspace_name: str, slug: str = ""
+    *,
+    email: str,
+    full_name: str,
+    password: str,
+    password_confirm: str,
+    workspace_name: str,
+    slug: str = "",
 ) -> SignupResult:
     """Create the workspace and its owner; send the verification code."""
-    email, slug = _clean(email, password, workspace_name, slug)
+    owner_input = _clean_owner(email, full_name, password, password_confirm)
+    slug = _clean_workspace(workspace_name, slug)
 
     def create_owner(workspace: Workspace) -> Any:
         owner = get_user_model().objects.create_user(
-            email=email, password=password, role=Role.OWNER, email_verified=False
+            email=owner_input.email,
+            password=password,
+            first_name=owner_input.first_name,
+            last_name=owner_input.last_name,
+            role=Role.OWNER,
+            email_verified=False,
         )
         email_codes.issue_code(owner, EmailCodePurpose.EMAIL_VERIFY)
         return owner

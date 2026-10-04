@@ -31,6 +31,7 @@ urlpatterns = [
     path(
         "password/change/", views.PasswordChangeView.as_view(), name="password-change"
     ),
+    path("password/rules/", views.PasswordRulesView.as_view(), name="password-rules"),
     # Second factor settings
     path(
         "mfa/recovery-codes/",

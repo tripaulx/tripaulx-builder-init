@@ -9,7 +9,9 @@ Each workspace has its own PostgreSQL schema and is served at
 Requirements: [uv](https://docs.astral.sh/uv/) and PostgreSQL 16 (Homebrew).
 
 ```bash
-./start          # creates .env.local and the database, migrates, runs :8000
+./start          # creates .env.local and the database, migrates, asks for the
+                 # first workspace's owner (in a terminal), runs :8000
+./start admin    # another administrator (name, e-mail, password twice)
 ./start test     # test-suite
 ```
 
@@ -30,7 +32,8 @@ API (tripaulx-sdk accounts):
 Create an admin inside a workspace:
 
 ```bash
-uv run python manage.py create_tenant_superuser --schema {{ initial_workspace }}
+./start admin                     # first workspace ({{ initial_workspace }})
+./start admin --schema <slug> --role admin
 ```
 
 ## Deploy (CapRover)

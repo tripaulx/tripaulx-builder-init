@@ -35,7 +35,8 @@ Requisitos: [uv](https://docs.astral.sh/uv/) e PostgreSQL 16+.
 ```bash
 uvx copier copy --trust gh:tripaulx/tripaulx-builder-init meu-projeto
 cd meu-projeto
-./start            # .env.local, banco, migrations, primeiro workspace, :8000
+./start            # .env.local, banco, migrations, primeiro workspace e seu
+                   # dono (nome completo, e-mail, senha duas vezes), depois :8000
 ```
 
 Depois abra `http://main.meu-projeto.localhost:8000/admin/`. Qualquer nome

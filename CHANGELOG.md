@@ -6,7 +6,21 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed (breaking API)
+- Signup requires `full_name` and `password_confirm`. The full name fills `first_name`/`last_name`.
+- Password reset confirm, password change and invitation acceptance require the confirmation: `password_confirm` / `new_password_confirm`.
+- Passwords are validated against the person (e-mail, first and last name) everywhere, including signup, so `UserAttributeSimilarityValidator` applies before the user exists. Errors carry `field: "password"` or `field: "password_confirm"`.
+
 ### Added
+- `GET /api/auth/password/rules/` (anonymous) returns the active password rules, translated.
+- `create_workspace_admin` management command:
+  - asks for full name, e-mail and the password twice, shows the rules and repeats on failure;
+  - creates a verified owner with Django admin access;
+  - options `--role`, `--no-superuser`, `--password-stdin` and `--if-none`.
+- Template:
+  - `./start setup` asks for the first workspace's owner when run in a terminal (onboarding);
+  - `./start admin` creates more administrators.
+- The `new-project` skill collects the owner's full name and e-mail and creates the owner. It prefers the user typing the password in their own terminal.
 - Claude Code plugin marketplace (`tripaulx`) with the `tripaulx-builder` plugin:
   - the `new-project` skill creates, sets up and verifies a project from the template;
   - the `update-project` skill applies template and SDK updates.

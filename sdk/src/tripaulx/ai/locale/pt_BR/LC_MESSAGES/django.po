@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 23:01-0500\n"
+"POT-Creation-Date: 2026-10-03 20:49-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -191,7 +191,7 @@ msgstr "Informe um número de dias entre 1 e 365."
 msgid "Use one of: %(choices)s."
 msgstr "Use um de: %(choices)s."
 
-#: api/views/executions.py:44
+#: api/views/executions.py:57
 msgid "Execution not found (the task backend keeps no results)."
 msgstr "Execução não encontrada (o backend de tarefas não guarda resultados)."
 
@@ -199,14 +199,14 @@ msgstr "Execução não encontrada (o backend de tarefas não guarda resultados)
 msgid "Choose a registered provider."
 msgstr "Escolha um provedor cadastrado."
 
-#: api/views/settings.py:92 providers/errors.py:66
+#: api/views/settings.py:94 providers/errors.py:66
 #, python-format
 msgid "No API key for %(provider)s. Add the key in the AI settings."
 msgstr ""
 "Nenhuma chave de API para %(provider)s. Cadastre a chave nas configurações "
 "de IA."
 
-#: api/views/settings.py:97
+#: api/views/settings.py:99
 msgid "Choose a model and save before testing."
 msgstr "Escolha um modelo e salve antes de testar."
 

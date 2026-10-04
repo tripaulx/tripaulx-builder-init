@@ -15,7 +15,11 @@ class PasswordChangeTests(AccountsTestCase):
         self.client = self.api_client(self.user)
 
     def _change(self, current=PASSWORD, new=NEW):
-        body = {"current_password": current, "new_password": new}
+        body = {
+            "current_password": current,
+            "new_password": new,
+            "new_password_confirm": new,
+        }
         return self.client.post(CHANGE, body, format="json")
 
     def test_changes_password_and_returns_new_tokens(self):

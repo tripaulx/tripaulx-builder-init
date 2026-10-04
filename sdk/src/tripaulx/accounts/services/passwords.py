@@ -15,7 +15,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from ..models import EmailCodePurpose
-from . import email_codes, tokens, trusted_devices
+from . import email_codes, identity, tokens, trusted_devices
 from .errors import CodeError, PasswordError
 
 
@@ -35,7 +35,7 @@ def check_strength(password: str, user: Any = None) -> None:
     try:
         validate_password(password, user=user)
     except ValidationError as exc:
-        raise PasswordError(" ".join(exc.messages)) from exc
+        raise PasswordError(" ".join(exc.messages), field="password") from exc
 
 
 def end_sessions(user: Any) -> None:
@@ -57,14 +57,18 @@ def issue_reset(email: str) -> None:
         email_codes.issue_code(user, EmailCodePurpose.PASSWORD_RESET)
 
 
-def confirm_reset(email: str, code: str, new_password: str) -> Any:
+def confirm_reset(
+    email: str, code: str, new_password: str, confirmation: str | None = None
+) -> Any:
     """Check the code, set the new password and end every session.
 
     The password is validated **before** the code is consumed, so a weak
     password never burns the single-use code.
     """
     user = _active_user(email)
-    check_strength(new_password, user)
+    identity.check_new_password(
+        new_password, new_password if confirmation is None else confirmation, user
+    )
     if user is None:
         raise _generic_code_error()
     try:
@@ -77,11 +81,20 @@ def confirm_reset(email: str, code: str, new_password: str) -> Any:
     return user
 
 
-def change_password(user: Any, current: str, new_password: str) -> None:
-    """Change the password of a logged-in user who knows the current one."""
+def change_password(
+    user: Any, current: str, new_password: str, confirmation: str | None = None
+) -> None:
+    """Change the password of a logged-in user who knows the current one.
+
+    ``confirmation`` (the retyped new password) is checked when given.
+    """
     if not user.check_password(current):
-        raise PasswordError(_("The current password is incorrect."))
-    check_strength(new_password, user)
+        raise PasswordError(
+            _("The current password is incorrect."), field="current_password"
+        )
+    identity.check_new_password(
+        new_password, new_password if confirmation is None else confirmation, user
+    )
     user.set_password(new_password)
     user.save(update_fields=["password"])
     end_sessions(user)

@@ -43,7 +43,9 @@ def test_signup_on_the_public_domain():
     bootstrap.ensure_domain("test.localhost", public, primary=False)
     body = {
         "email": "owner@example.com",
+        "full_name": "Ana Souza",
         "password": PASSWORD,
+        "password_confirm": PASSWORD,
         "workspace_name": "Acme",
     }
     client = APIClient(HTTP_HOST="test.localhost")

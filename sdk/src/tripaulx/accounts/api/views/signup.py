@@ -44,7 +44,9 @@ class SignupView(AccountsAPIView):
         data = self.validated(SignupSerializer)
         result = signup.signup(
             email=data["email"],
+            full_name=data["full_name"],
             password=data["password"],
+            password_confirm=data["password_confirm"],
             workspace_name=data["workspace_name"],
             slug=data["slug"],
         )

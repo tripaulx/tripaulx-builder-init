@@ -38,10 +38,13 @@ next to the users) and `tripaulx.mail` (public schema only).
 
 ### Signup (public schema)
 
-1. `POST /api/auth/signup/` with `{email, password, workspace_name, slug?}`.
+1. `POST /api/auth/signup/` with
+   `{email, full_name, password, password_confirm, workspace_name, slug?}`.
+   The full name is split into `first_name` (first word) and `last_name`
+   (the rest).
    Without `slug`, it is derived from the name (`Acme Ltda` → `acme_ltda`).
 2. The SDK validates the slug (reserved words, pattern, availability) and the
-   password, then creates the `Workspace`, its schema (all tenant migrations)
+   password (see [Password rules](#password-rules)), then creates the `Workspace`, its schema (all tenant migrations)
    and the `Domain` `<slug>.<BASE_DOMAIN>` in a single transaction.
 3. Inside the new schema it creates the owner (`role=owner`,
    `email_verified=False`) and e-mails the verification code.
@@ -139,14 +142,44 @@ challenge.
 
 - `POST /api/auth/password/reset/` with `{email}` e-mails a code (silent for
   unknown addresses).
-- `POST /api/auth/password/reset/confirm/` with `{email, code, password}`.
+- `POST /api/auth/password/reset/confirm/` with
+  `{email, code, password, password_confirm}`.
   The password is validated before the code is consumed; every failure has
   the same message.
-- `POST /api/auth/password/change/` with `{current_password, new_password}`
-  (logged in) returns a fresh token pair.
+- `POST /api/auth/password/change/` with
+  `{current_password, new_password, new_password_confirm}` (logged in) returns a
+  fresh token pair.
 
 Reset and change revoke every trusted device and blacklist every refresh
 token of the user.
+
+### Password rules
+
+Every place that sets a password requires a matching confirmation and runs the
+project's `AUTH_PASSWORD_VALIDATORS` *against the person*: e-mail, first name
+and last name. So `UserAttributeSimilarityValidator` rejects a password close
+to the user's own data, even at signup, before the user exists. This applies to
+signup, password reset, password change, invitation acceptance and
+`create_workspace_admin`.
+
+- A mismatch answers `400` with `field: "password_confirm"`; a broken rule
+  answers `field: "password"` with the validators' (translated) messages.
+- `GET /api/auth/password/rules/` (anonymous) returns `{"rules": [...]}`, the
+  validators' help texts in the request language, for forms to show up front.
+
+### The first administrator of a workspace
+
+`manage.py create_workspace_admin --schema <slug>` asks for e-mail, full name
+and the password twice. The password is hidden, the rules are shown first and
+the question repeats when a rule fails. It creates an owner with a verified
+e-mail and Django admin access.
+- Options: `--email`, `--full-name`, `--role owner|admin|member`, `--no-superuser`.
+- `--password-stdin` reads the password from stdin, for scripts.
+- `--if-none` does nothing when the workspace already has an owner.
+
+In generated projects, `./start setup` runs it with `--if-none` for the first
+workspace when it runs in a terminal (onboarding). `./start admin` runs it at
+any time.
 
 ### Members and invitations (owners and admins)
 
@@ -158,7 +191,7 @@ Permission: `tripaulx.accounts.api.permissions.IsWorkspaceAdmin`.
 - `GET|POST /api/workspace/invitations/` (`{email, role}`),
   `DELETE /api/workspace/invitations/<id>/` revokes.
 - `POST /api/auth/invitations/accept/` (anonymous) with `{token, password,
-  first_name?, last_name?}` creates the user with a verified e-mail and the
+  password_confirm, full_name?}` (or `first_name?`/`last_name?`) creates the user with a verified e-mail and the
   invited role, and returns the tokens.
 
 Rules: only an owner changes an owner or grants the owner role; the
@@ -177,6 +210,7 @@ workspace always keeps one active owner. The invitation link is
 | GET | `me/` | JWT |
 | POST | `password/reset/`, `password/reset/confirm/` | anonymous |
 | POST | `password/change/` | JWT |
+| GET | `password/rules/` | anonymous |
 | GET, POST | `mfa/recovery-codes/` | JWT |
 | GET / POST, DELETE / POST / POST | `totp/`, `totp/setup/`, `totp/confirm/`, `totp/disable/` | JWT |
 | GET / DELETE | `devices/`, `devices/<id>/` | JWT |

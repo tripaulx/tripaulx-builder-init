@@ -3,8 +3,11 @@
 # start - one command to run the project locally.
 #
 #   ./start          setup (if needed) and run the dev server on :8000
-#   ./start setup    .env.local + database + migrations + bootstrap only
+#   ./start setup    .env.local + database + migrations + bootstrap, then (in a
+#                    terminal) asks for the first workspace's owner
 #   ./start test     run the test-suite
+#   ./start admin    create a workspace administrator (asks name, e-mail and
+#                    password twice; extra args go to create_workspace_admin)
 #
 # Workspaces are served at http://<slug>.<APP_BASE_DOMAIN>:8000
 # (*.localhost resolves to 127.0.0.1 in browsers and curl).
@@ -47,6 +50,23 @@ setup() {
   uv run python manage.py migrate_schemas --shared
   uv run python manage.py bootstrap_workspace
   uv run python manage.py migrate_schemas
+  onboard_owner
+}
+
+# Onboarding: in a terminal, ask for the first workspace's owner (full name,
+# e-mail, password twice, checked by AUTH_PASSWORD_VALIDATORS). Skipped when
+# the workspace already has one, without a terminal, or with START_SKIP_ADMIN=1.
+onboard_owner() {
+  local workspace
+  workspace="$(bootstrap_workspace)"
+  [ -n "$workspace" ] || return 0
+  if [ "${START_SKIP_ADMIN:-0}" = "1" ]; then return 0; fi
+  if [ -t 0 ] && [ -t 1 ]; then
+    uv run python manage.py create_workspace_admin --schema "$workspace" --if-none \
+      || log "owner not created; run ./start admin when ready"
+  else
+    log "no terminal: if '$workspace' has no owner yet, run ./start admin"
+  fi
 }
 
 base_domain() { grep -E '^APP_BASE_DOMAIN=' .env.local | cut -d= -f2-; }
@@ -62,9 +82,22 @@ run_tests() {
   DJANGO_SETTINGS_MODULE=config.settings.test exec uv run pytest "$@"
 }
 
+# First workspace from .env.local (overridable with --schema in the args).
+bootstrap_workspace() { grep -E '^APP_BOOTSTRAP_WORKSPACE=' .env.local | cut -d= -f2-; }
+
+create_admin() {
+  # ${args[@]+...} keeps an empty array safe under `set -u` on macOS bash 3.2.
+  local args=("$@")
+  if [[ " ${args[*]-} " != *" --schema "* ]]; then
+    args=(--schema "$(bootstrap_workspace)" ${args[@]+"${args[@]}"})
+  fi
+  uv run python manage.py create_workspace_admin "${args[@]}"
+}
+
 case "${1:-run}" in
   setup) setup ;;
   test) run_tests "${@:2}" ;;
+  admin) create_admin "${@:2}" ;;
   run)
     setup
     log "public:     http://$(base_domain):$PORT/admin/"
@@ -72,5 +105,5 @@ case "${1:-run}" in
     log "API docs:   http://$(base_domain):$PORT/api/docs/ (admins)"
     exec uv run python manage.py runserver "0.0.0.0:$PORT"
     ;;
-  *) echo "Usage: ./start [run|setup|test]" >&2; exit 2 ;;
+  *) echo "Usage: ./start [run|setup|test|admin]" >&2; exit 2 ;;
 esac

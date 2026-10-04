@@ -20,7 +20,7 @@ from django.utils.translation import gettext as _
 
 from ..conf import app_settings
 from ..models import Invitation, Role
-from . import notifications, passwords
+from . import identity, notifications
 from .errors import MembershipError, MembershipForbidden, NotFound
 
 
@@ -79,14 +79,33 @@ def revoke(pk: Any) -> None:
     invitation.delete()
 
 
-def accept(token: str, password: str, **profile: str) -> Any:
-    """Create the invited user; ``profile`` may hold first and last name."""
+def _names(profile: dict[str, str]) -> tuple[str, str]:
+    """First and last name from ``full_name`` or the separate fields."""
+    if profile.get("full_name"):
+        return identity.split_full_name(profile["full_name"])
+    first = (profile.get("first_name") or "").strip()
+    return first[:150], (profile.get("last_name") or "").strip()[:150]
+
+
+def accept(
+    token: str, password: str, confirmation: str | None = None, **profile: str
+) -> Any:
+    """Create the invited user.
+
+    ``profile`` may hold ``full_name`` or ``first_name``/``last_name``;
+    ``confirmation`` (the retyped password) is checked when given.
+    """
     invitation = Invitation.objects.filter(token_hash=hash_token(token)).first()
     if invitation is None or not invitation.is_pending:
         raise MembershipError(_("This invitation is invalid or has expired."))
     if _is_member(invitation.email):
         raise MembershipError(_("This person is already a member."))
-    passwords.check_strength(password)
+    first, last = _names(profile)
+    identity.check_new_password(
+        password,
+        password if confirmation is None else confirmation,
+        identity.candidate_user(invitation.email, first, last),
+    )
     with transaction.atomic():
         claimed = Invitation.objects.filter(
             pk=invitation.pk, accepted_at__isnull=True
@@ -98,6 +117,6 @@ def accept(token: str, password: str, **profile: str) -> Any:
             password=password,
             role=invitation.role,
             email_verified=True,
-            first_name=(profile.get("first_name") or "")[:150],
-            last_name=(profile.get("last_name") or "")[:150],
+            first_name=first,
+            last_name=last,
         )

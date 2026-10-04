@@ -17,7 +17,12 @@ class PasswordResetTests(AccountsTestCase):
         self.client = self.anon_api_client()
 
     def _confirm(self, code, password=NEW, email=None):
-        body = {"email": email or self.email, "code": code, "password": password}
+        body = {
+            "email": email or self.email,
+            "code": code,
+            "password": password,
+            "password_confirm": password,
+        }
         return self.client.post(CONFIRM, body, format="json")
 
     def test_full_flow_changes_the_password(self):

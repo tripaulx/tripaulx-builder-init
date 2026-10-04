@@ -38,7 +38,9 @@ junto dos usuários) e `tripaulx.mail` (só no schema public).
 
 ### Cadastro (schema public)
 
-1. `POST /api/auth/signup/` com `{email, password, workspace_name, slug?}`.
+1. `POST /api/auth/signup/` com
+   `{email, full_name, password, password_confirm, workspace_name, slug?}`.
+   O nome completo vira `first_name` (primeira palavra) e `last_name` (o resto).
    Sem `slug`, ele sai do nome (`Acme Ltda` → `acme_ltda`).
 2. O SDK valida o slug (palavras reservadas, formato, disponibilidade) e a
    senha, e cria o `Workspace`, o schema (todas as migrations de tenant) e o
@@ -143,14 +145,46 @@ o desafio.
 
 - `POST /api/auth/password/reset/` com `{email}` envia um código (silencioso
   para endereços desconhecidos).
-- `POST /api/auth/password/reset/confirm/` com `{email, code, password}`. A
+- `POST /api/auth/password/reset/confirm/` com
+  `{email, code, password, password_confirm}`. A
   senha é validada antes de o código ser consumido; toda falha tem a mesma
   mensagem.
-- `POST /api/auth/password/change/` com `{current_password, new_password}`
-  (logado) devolve um par de tokens novo.
+- `POST /api/auth/password/change/` com
+  `{current_password, new_password, new_password_confirm}` (logado) devolve um
+  par de tokens novo.
 
 Redefinir e trocar a senha revogam todos os dispositivos confiáveis e fazem
 blacklist de todos os refresh tokens do usuário.
+
+### Regras de senha
+
+Todo lugar que define uma senha exige a confirmação igual e roda os
+`AUTH_PASSWORD_VALIDATORS` do projeto *contra a pessoa*: e-mail, nome e
+sobrenome. Assim o `UserAttributeSimilarityValidator` recusa senhas parecidas
+com os dados da própria pessoa, inclusive no cadastro, antes de o usuário
+existir. Vale para cadastro, reset e troca de senha, aceite de convite e
+`create_workspace_admin`.
+
+- Confirmação diferente responde `400` com `field: "password_confirm"`; regra
+  violada responde `field: "password"` com as mensagens (traduzidas) dos
+  validadores.
+- `GET /api/auth/password/rules/` (anônimo) devolve `{"rules": [...]}`, os
+  textos de ajuda dos validadores no idioma da requisição, para os formulários
+  mostrarem antes.
+
+### O primeiro administrador de um workspace
+
+`manage.py create_workspace_admin --schema <slug>` pede e-mail, nome completo e
+a senha duas vezes. A senha fica oculta, as regras aparecem antes e a pergunta
+se repete quando uma regra falha. O comando cria um owner com e-mail
+confirmado e acesso ao admin do Django.
+- Opções: `--email`, `--full-name`, `--role owner|admin|member`, `--no-superuser`.
+- `--password-stdin` lê a senha do stdin, para scripts.
+- `--if-none` não faz nada se o workspace já tiver um owner.
+
+Nos projetos gerados, o `./start setup` roda o comando com `--if-none` para o
+primeiro workspace quando está num terminal (onboarding). O `./start admin`
+roda a qualquer momento.
 
 ### Membros e convites (owners e admins)
 
@@ -162,7 +196,7 @@ Permissão: `tripaulx.accounts.api.permissions.IsWorkspaceAdmin`.
 - `GET|POST /api/workspace/invitations/` (`{email, role}`) e
   `DELETE /api/workspace/invitations/<id>/` revoga.
 - `POST /api/auth/invitations/accept/` (anônimo) com `{token, password,
-  first_name?, last_name?}` cria o usuário com e-mail confirmado e o papel do
+  password_confirm, full_name?}` (ou `first_name?`/`last_name?`) cria o usuário com e-mail confirmado e o papel do
   convite, e devolve os tokens.
 
 Regras: só um owner altera outro owner ou concede o papel de owner; o
@@ -181,6 +215,7 @@ workspace sempre mantém um owner ativo. O link do convite é
 | GET | `me/` | JWT |
 | POST | `password/reset/`, `password/reset/confirm/` | anônimo |
 | POST | `password/change/` | JWT |
+| GET | `password/rules/` | anônimo |
 | GET, POST | `mfa/recovery-codes/` | JWT |
 | GET / POST, DELETE / POST / POST | `totp/`, `totp/setup/`, `totp/confirm/`, `totp/disable/` | JWT |
 | GET / DELETE | `devices/`, `devices/<id>/` | JWT |

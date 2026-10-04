@@ -67,6 +67,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     email = serializers.EmailField()
     code = serializers.CharField(min_length=4, max_length=12)
     password = serializers.CharField(write_only=True, trim_whitespace=False)
+    password_confirm = serializers.CharField(write_only=True, trim_whitespace=False)
 
 
 class PasswordChangeSerializer(serializers.Serializer):
@@ -74,6 +75,7 @@ class PasswordChangeSerializer(serializers.Serializer):
 
     current_password = serializers.CharField(write_only=True, trim_whitespace=False)
     new_password = serializers.CharField(write_only=True, trim_whitespace=False)
+    new_password_confirm = serializers.CharField(write_only=True, trim_whitespace=False)
 
 
 class RefreshSerializer(serializers.Serializer):

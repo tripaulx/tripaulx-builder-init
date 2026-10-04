@@ -16,7 +16,9 @@ pytestmark = pytest.mark.django_db
 SIGNUP = "/api/auth/signup/"
 BODY = {
     "email": "Owner@Example.com",
+    "full_name": "Ana Maria Souza",
     "password": "a-strong-password-31",
+    "password_confirm": "a-strong-password-31",
     "workspace_name": "Acme Ltda",
 }
 
@@ -47,6 +49,7 @@ def test_signup_creates_workspace_domain_and_owner(public_client):
         owner = get_user_model().objects.get()
         assert owner.role == Role.OWNER
         assert not owner.email_verified
+        assert (owner.first_name, owner.last_name) == ("Ana", "Maria Souza")
     assert re.search(r"\b\d{6}\b", mail.outbox[-1].body)
     assert mail.outbox[-1].to == ["Owner@example.com"]
 
@@ -64,7 +67,14 @@ def test_explicit_slug_and_taken_slug(public_client):
     [
         ({"slug": "www"}, "slug"),
         ({"slug": "Bad-Slug"}, "slug"),
-        ({"password": "123"}, "password"),
+        ({"password": "123", "password_confirm": "123"}, "password"),
+        ({"password_confirm": "another-strong-pass-77"}, "password_confirm"),
+        ({"full_name": "   "}, "full_name"),
+        # Too similar to the person: validated against the e-mail and name.
+        (
+            {"password": "anamariasouza", "password_confirm": "anamariasouza"},
+            "password",
+        ),
         ({"workspace_name": "  "}, None),
     ],
 )

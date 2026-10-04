@@ -32,7 +32,12 @@ class InvitationTests(AccountsTestCase):
         return match.group(1)
 
     def _accept(self, token, password=PASSWORD):
-        body = {"token": token, "password": password, "first_name": "New"}
+        body = {
+            "token": token,
+            "password": password,
+            "password_confirm": password,
+            "first_name": "New",
+        }
         return self.anon_api_client().post(ACCEPT, body, format="json")
 
     def test_invite_sends_a_link_built_from_the_request_host(self):

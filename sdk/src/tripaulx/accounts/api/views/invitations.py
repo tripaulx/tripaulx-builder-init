@@ -74,6 +74,8 @@ class InvitationAcceptView(AccountsAPIView):
         user = invitations.accept(
             data["token"],
             data["password"],
+            data["password_confirm"],
+            full_name=data["full_name"],
             first_name=data["first_name"],
             last_name=data["last_name"],
         )
