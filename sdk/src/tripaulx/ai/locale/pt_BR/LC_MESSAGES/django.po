@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 20:49-0500\n"
+"POT-Creation-Date: 2026-10-06 19:49-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -18,86 +18,86 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: admin/agents.py:45
+#: admin/agents.py:46
 msgid "Prompt"
 msgstr "Prompt"
 
-#: admin/agents.py:47
+#: admin/agents.py:48
 msgid "Model"
 msgstr "Modelo"
 
-#: admin/agents.py:60 admin/agents.py:101
+#: admin/agents.py:61 admin/agents.py:102
 msgid "Audit"
 msgstr "Auditoria"
 
-#: admin/agents.py:96
+#: admin/agents.py:97
 msgid "Instructions (draft)"
 msgstr "Instruções (rascunho)"
 
-#: admin/agents.py:98
+#: admin/agents.py:99
 msgid "Model and limits"
 msgstr "Modelo e limites"
 
-#: admin/agents.py:108
+#: admin/agents.py:109
 msgid "Publish the draft as a new version"
 msgstr "Publicar o rascunho como nova versão"
 
-#: admin/agents.py:114
+#: admin/agents.py:115
 msgid "Published from the admin."
 msgstr "Publicada pelo admin."
 
-#: admin/agents.py:123
+#: admin/agents.py:124
 #, python-format
 msgid "%(name)s: version %(number)s published."
 msgstr "%(name)s: versão %(number)s publicada."
 
-#: admin/settings.py:28 catalog/models/ai_model.py:46 models/event.py:66
+#: admin/settings.py:29 catalog/models/ai_model.py:46 models/event.py:66
 #: models/key.py:51 models/settings.py:35
 msgid "provider"
 msgstr "provedor"
 
-#: admin/settings.py:30
+#: admin/settings.py:31
 msgid "New API key of the chosen provider (blank keeps the current one)"
 msgstr "Nova chave de API do provedor escolhido (em branco mantém a atual)"
 
-#: admin/settings.py:35
+#: admin/settings.py:36
 msgid "Stored encrypted and never shown again; replaces the current key."
 msgstr "Gravada criptografada e nunca mais exibida; substitui a chave atual."
 
-#: admin/settings.py:39
+#: admin/settings.py:40
 msgid "Delete the current key of the chosen provider"
 msgstr "Excluir a chave atual do provedor escolhido"
 
-#: admin/settings.py:75
+#: admin/settings.py:76
 msgid "Choose one: add a new key OR delete the current one."
 msgstr "Escolha uma coisa: cadastrar uma chave nova OU excluir a atual."
 
-#: admin/settings.py:93 admin/settings.py:102
+#: admin/settings.py:94 admin/settings.py:103
 msgid "API key"
 msgstr "Chave de API"
 
-#: admin/settings.py:94
+#: admin/settings.py:95
 msgid "Call defaults"
 msgstr "Padrões de chamada"
 
-#: admin/settings.py:96
+#: admin/settings.py:97
 msgid "Limits and privacy"
 msgstr "Limites e privacidade"
 
-#: admin/settings.py:99 catalog/admin/__init__.py:72
+#: admin/settings.py:100 catalog/admin/__init__.py:72
 msgid "Dates"
 msgstr "Datas"
 
-#: admin/settings.py:107
+#: admin/settings.py:108
 msgid "not set"
 msgstr "não definida"
 
-#: admin/settings.py:113
+#: admin/settings.py:114
 #, python-format
 msgid "set on %(when)s by %(who)s"
 msgstr "definida em %(when)s por %(who)s"
 
-#: admin/settings.py:116
+#: admin/settings.py:117
 #, python-format
 msgid "stored on %(when)s by %(who)s, but unreadable: add it again"
 msgstr "gravada em %(when)s por %(who)s, mas ilegível: cadastre de novo"

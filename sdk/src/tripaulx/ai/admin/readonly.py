@@ -8,9 +8,10 @@ from django.contrib import admin
 from django.http import HttpRequest
 
 from tripaulx.ai.models import AIEvent, AIKey
+from tripaulx.core.admin_scope import WorkspaceSchemaAdmin
 
 
-class ReadOnlyAdmin(admin.ModelAdmin):
+class ReadOnlyAdmin(WorkspaceSchemaAdmin, admin.ModelAdmin):
     """No add, change or delete: rows are an audit trail."""
 
     def get_readonly_fields(self, request: HttpRequest, obj: Any = None) -> list[str]:

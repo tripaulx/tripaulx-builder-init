@@ -6,6 +6,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-06
+
+### Fixed
+- The public schema's Django admin no longer fails with `relation "tpsdk_ai_aisettings" does not exist`. The AI admins (settings, agents, skills, keys, events) are now hidden outside workspace schemas, where their tables live, and answer their permission checks there without querying the database.
+
+### Added
+- `tripaulx.core.admin_scope`: `PublicSchemaAdmin` and `WorkspaceSchemaAdmin` ModelAdmin mixins that keep a model to the schemas where its table exists.
+
 ## [0.2.0] - 2026-10-04
 
 ### Changed (breaking API)
@@ -108,6 +116,7 @@ First release.
 - Release workflow with PyPI Trusted Publishing.
 - README (en and pt-BR) with diagrams in the tripaulx design system.
 
-[Unreleased]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tripaulx/tripaulx-builder-init/releases/tag/v0.1.0

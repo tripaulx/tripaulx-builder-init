@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 from tripaulx.ai.models import Agent, AgentSkill, Skill, SkillVersion, TeamMember
 from tripaulx.ai.services import skills as skill_service
+from tripaulx.core.admin_scope import WorkspaceSchemaAdmin
 
 AUDIT = ("id", "created_by", "created_at", "updated_at", "deleted_at")
 
@@ -32,7 +33,7 @@ class AgentSkillInline(admin.TabularInline):
 
 
 @admin.register(Agent)
-class AgentAdmin(admin.ModelAdmin):
+class AgentAdmin(WorkspaceSchemaAdmin, admin.ModelAdmin):
     """Agents with team and skills inline."""
 
     list_display = ("name", "slug", "role", "model_identifier", "active", "deleted_at")
@@ -82,7 +83,7 @@ class SkillVersionInline(admin.TabularInline):
 
 
 @admin.register(Skill)
-class SkillAdmin(admin.ModelAdmin):
+class SkillAdmin(WorkspaceSchemaAdmin, admin.ModelAdmin):
     """Skills: draft, versions and the publish action."""
 
     list_display = ("name", "slug", "published_version", "active", "deleted_at")

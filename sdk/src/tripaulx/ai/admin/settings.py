@@ -20,6 +20,7 @@ from tripaulx.ai import providers
 from tripaulx.ai.models import AISettings
 from tripaulx.ai.services import keys
 from tripaulx.ai.services.model_choice import InvalidModelChoice, check
+from tripaulx.core.admin_scope import WorkspaceSchemaAdmin
 
 
 class AISettingsForm(forms.ModelForm):
@@ -82,7 +83,7 @@ class AISettingsForm(forms.ModelForm):
 
 
 @admin.register(AISettings)
-class AISettingsAdmin(admin.ModelAdmin):
+class AISettingsAdmin(WorkspaceSchemaAdmin, admin.ModelAdmin):
     """Singleton per workspace: no second row, no deletion."""
 
     form = AISettingsForm
@@ -128,8 +129,8 @@ class AISettingsAdmin(admin.ModelAdmin):
             keys.delete(obj.provider, by=request.user)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
-        """Only while the singleton does not exist."""
-        return not AISettings.objects.exists()
+        """Only while the singleton does not exist (and only in workspaces)."""
+        return super().has_add_permission(request) and not AISettings.objects.exists()
 
     def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         """Refuse deletion: the singleton stays."""
