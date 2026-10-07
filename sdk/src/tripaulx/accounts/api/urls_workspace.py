@@ -13,6 +13,11 @@ urlpatterns = [
     path("members/", views.MemberListView.as_view(), name="member-list"),
     # ``str``: the primary key type belongs to the project's user model.
     path("members/<str:pk>/", views.MemberDetailView.as_view(), name="member-detail"),
+    path(
+        "members/<str:pk>/reactivate/",
+        views.MemberReactivateView.as_view(),
+        name="member-reactivate",
+    ),
     path("invitations/", views.InvitationListView.as_view(), name="invitation-list"),
     path(
         "invitations/<uuid:pk>/",

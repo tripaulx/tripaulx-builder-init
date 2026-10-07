@@ -1,4 +1,4 @@
-"""Workspace members: list, change role and deactivate.
+"""Workspace members: list, change role, deactivate and reactivate.
 
 Rules:
 
@@ -82,4 +82,17 @@ def deactivate(actor: Any, member: Any) -> Any:
         member.is_active = False
         member.save(update_fields=["is_active"])
     passwords.end_sessions(member)
+    return member
+
+
+def reactivate(actor: Any, member: Any) -> Any:
+    """Give a deactivated ``member`` access again, with the same role.
+
+    The member signs in with their existing password and second factor;
+    sessions ended on deactivation stay ended.
+    """
+    _check_owner_rules(actor, member, None)
+    if not member.is_active:
+        member.is_active = True
+        member.save(update_fields=["is_active"])
     return member

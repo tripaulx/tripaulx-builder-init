@@ -187,7 +187,8 @@ Permission: `tripaulx.accounts.api.permissions.IsWorkspaceAdmin`.
 
 - `GET /api/workspace/members/`, `GET|PATCH|DELETE
   /api/workspace/members/<id>/` (PATCH `{role}`; DELETE deactivates and ends
-  the sessions).
+  the sessions), `POST /api/workspace/members/<id>/reactivate/` gives a
+  deactivated member access again, with the same role.
 - `GET|POST /api/workspace/invitations/` (`{email, role}`),
   `DELETE /api/workspace/invitations/<id>/` revokes.
 - `POST /api/auth/invitations/accept/` (anonymous) with `{token, password,
@@ -219,7 +220,7 @@ workspace always keeps one active owner. The invitation link is
 | POST | `passkey/password-login/` | JWT |
 | POST | `passkey/login/begin/`, `passkey/login/complete/` | anonymous |
 | POST | `invitations/accept/` | anonymous |
-| GET / GET, PATCH, DELETE | `/api/workspace/members/`, `.../<id>/` | owner/admin |
+| GET / GET, PATCH, DELETE / POST | `/api/workspace/members/`, `.../<id>/`, `.../<id>/reactivate/` | owner/admin |
 | GET, POST / DELETE | `/api/workspace/invitations/`, `.../<id>/` | owner/admin |
 
 ## Settings (`TRIPAULX`)

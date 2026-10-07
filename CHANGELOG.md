@@ -6,6 +6,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-07
+
+### Added
+- `POST /api/workspace/members/<id>/reactivate/` (owners and admins) gives a deactivated member access again, with the same role. Owner rules apply: only an owner reactivates an owner. Service: `tripaulx.accounts.services.members.reactivate`.
+
 ## [0.2.1] - 2026-10-06
 
 ### Fixed
@@ -116,7 +121,8 @@ First release.
 - Release workflow with PyPI Trusted Publishing.
 - README (en and pt-BR) with diagrams in the tripaulx design system.
 
-[Unreleased]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tripaulx/tripaulx-builder-init/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tripaulx/tripaulx-builder-init/releases/tag/v0.1.0

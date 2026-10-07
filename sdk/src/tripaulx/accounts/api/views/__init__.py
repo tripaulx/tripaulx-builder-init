@@ -4,7 +4,7 @@ from .devices import TrustedDeviceDetailView, TrustedDeviceListView
 from .email import EmailResendView, EmailVerifyView
 from .invitations import InvitationAcceptView, InvitationDetailView, InvitationListView
 from .login import LoginResendView, LoginVerifyView, LoginView
-from .members import MemberDetailView, MemberListView
+from .members import MemberDetailView, MemberListView, MemberReactivateView
 from .mfa import (
     RecoveryCodesView,
     TotpConfirmView,
@@ -43,6 +43,7 @@ __all__ = [
     "MeView",
     "MemberDetailView",
     "MemberListView",
+    "MemberReactivateView",
     "PasskeyDetailView",
     "PasskeyListView",
     "PasskeyLoginBeginView",

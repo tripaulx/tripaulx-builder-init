@@ -1,10 +1,11 @@
-"""Workspace members (admins only): list, change role, deactivate."""
+"""Workspace members (admins only): list, change role, (re)activate."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from django.db.models import QuerySet
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -46,3 +47,15 @@ class MemberDetailView(AccountsAPIView):
         """Deactivate the member and end their sessions."""
         members.deactivate(request.user, members.get_member(pk))
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class MemberReactivateView(AccountsAPIView):
+    """Give a deactivated member access again (POST)."""
+
+    permission_classes = [IsWorkspaceAdmin]
+
+    @extend_schema(request=None, responses=MemberSerializer)
+    def post(self, request: Request, pk: Any) -> Response:
+        """Reactivate the member and return it."""
+        member = members.reactivate(request.user, members.get_member(pk))
+        return Response(MemberSerializer(member).data)

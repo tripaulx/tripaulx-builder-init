@@ -100,3 +100,29 @@ class DeactivateTests(MembersTestCase):
         )
         self.owner.refresh_from_db()
         assert self.owner.is_active
+
+
+class ReactivateTests(MembersTestCase):
+    def _reactivate(self, actor, target):
+        return self.api_client(actor).post(f"{self._url(target)}reactivate/")
+
+    def test_admin_reactivates_member_with_the_same_role(self):
+        self.api_client(self.admin).delete(self._url(self.member))
+        resp = self._reactivate(self.admin, self.member)
+        assert resp.status_code == 200
+        assert resp.data["is_active"] is True
+        assert resp.data["role"] == "member"
+        self.member.refresh_from_db()
+        assert self.member.is_active
+
+    def test_admin_cannot_reactivate_owner(self):
+        second = self.verified_user("owner2@example.com", role=Role.OWNER)
+        self.api_client(self.owner).delete(self._url(second))
+        assert self._reactivate(self.admin, second).status_code == 403
+        assert self._reactivate(self.owner, second).status_code == 200
+
+    def test_member_is_forbidden(self):
+        assert self._reactivate(self.member, self.admin).status_code == 403
+
+    def test_active_member_is_a_no_op(self):
+        assert self._reactivate(self.admin, self.member).data["is_active"] is True
