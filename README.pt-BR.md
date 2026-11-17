@@ -96,10 +96,10 @@ novo chamado Acme".
 | App | Label Django | Pronto | Responsabilidade |
 |---|---|---|---|
 | `tripaulx.core` | `tpsdk_core` | ✅ | `BaseModel` (UUID, datas de auditoria, exclusão lógica), middleware de tenant, mascaramento de logs, helpers de teste |
-| `tripaulx.tenants` | `tpsdk_tenants` | ✅ | `Workspace` e `Domain`, regras de slug com nomes reservados, `bootstrap_workspace` |
-| `tripaulx.accounts` | `tpsdk_accounts` | ✅ | Cadastro que cria o workspace, 2FA obrigatório, TOTP, passkeys, códigos de recuperação, dispositivos confiáveis, membros e convites, JWT preso ao schema |
+| `tripaulx.tenants` | `tpsdk_tenants` | ✅ | `Workspace` e `Domain`, regras de slug com nomes reservados, consulta de workspace por slug, `bootstrap_workspace` |
+| `tripaulx.accounts` | `tpsdk_accounts` | ✅ | Cadastro que cria o workspace, cadastro de conta dentro do workspace com perfis, 2FA (obrigatório por padrão), TOTP, passkeys, códigos de recuperação, dispositivos confiáveis, membros e convites, JWT preso ao schema |
 | `tripaulx.settings` | n/a | ✅ | Listas de apps, middleware, logging, hosts e carga do `.env` para as suas settings |
-| `tripaulx.mail` | `tpsdk_mail` | ✅ | Backend Mailgun com chave cifrada, templates de e-mail sobrescrevíveis |
+| `tripaulx.mail` | `tpsdk_mail` | ✅ | Backend Mailgun com chave cifrada, templates de e-mail sobrescrevíveis, preview no navegador e envio de teste |
 | `tripaulx.storage` | `tpsdk_storage` | ✅ | Storage compatível com S3, cifra envelope AES-GCM, chaves por workspace |
 | `tripaulx.ai` | `tpsdk_ai` | ✅ | OpenAI e Anthropic, agentes, skills, custos e teto diário |
 | `tripaulx.legal` | `tpsdk_legal` | ✅ | Documentos de governança, termos e privacidade, Markdown sanitizado |
@@ -112,9 +112,14 @@ novo chamado Acme".
 </picture>
 
 - **O cadastro cria o workspace:** o schema, o subdomínio e o dono.
-- **A verificação em duas etapas é sempre ativa.** A segunda etapa usa o aplicativo autenticador (TOTP) quando o usuário o ativou; senão, um código de 6 dígitos por e-mail. Os códigos de recuperação são a reserva.
+- **A verificação em duas etapas vale para todos por padrão.** `MFA_POLICY` pode limitá-la a staff, owners e admins (`privileged`) ou torná-la opcional. A segunda etapa usa o aplicativo autenticador (TOTP) quando o usuário o ativou; senão, um código de 6 dígitos por e-mail. Os códigos de recuperação são a reserva.
+- **Um workspace também pode ser um produto de consumidor inteiro.** Com `REGISTRATION_ENABLED`, os visitantes criam a própria conta dentro do workspace (`POST /api/auth/register/`), escolhendo um dos **perfis** que você declara (por exemplo comprador, proprietário, corretor), cada um com seus campos obrigatórios. Vender o mesmo produto como white-label passa a ser só mais um workspace.
 - **Passkeys** (WebAuthn) entram sem senha. O modo *somente passkey* desliga o login por senha enquanto houver ao menos uma passkey.
 - **Os tokens ficam presos ao schema do workspace.** Um token emitido para `acme` é recusado por qualquer outro workspace.
+- **O cliente lê `GET /api/auth/config/` primeiro:** quais fluxos estão ligados, os perfis, a política de 2FA e se o e-mail está sendo entregue.
+
+As dependências acompanham os últimos patches de segurança: o SDK exige Django 6.0.10+ ou
+6.1.3+ e django-tenants 4, e recusa versões mais antigas já na instalação.
 
 ## Documentação
 

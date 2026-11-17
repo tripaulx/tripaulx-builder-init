@@ -52,17 +52,25 @@ _SMTP_OPTIONS = {
     "password": get_env("MAIL_PASSWORD", ""),
     "use_tls": get_env_bool("MAIL_USE_TLS", default=True),
 }
+_SMTP_READY = bool(get_env("MAIL_HOST", ""))
 _MAIL_BACKEND = get_env("MAIL_BACKEND", _MAILGUN)
-if _MAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
+# Console, or SMTP without MAIL_HOST (no provider yet), become Mailgun: it
+# sends once configured in the admin and, until then, falls back to SMTP when
+# MAIL_HOST is set or drops the message, so nothing fails for lack of e-mail.
+# ``GET /api/auth/config/`` reports ``email_available`` accordingly.
+if _MAIL_BACKEND == "django.core.mail.backends.console.EmailBackend" or (
+    _MAIL_BACKEND == _SMTP and not _SMTP_READY
+):
     _MAIL_BACKEND = _MAILGUN
+_FALLBACK = (
+    {"fallback_backend": _SMTP, "fallback_options": _SMTP_OPTIONS}
+    if _SMTP_READY
+    else {"fallback_backend": "django.core.mail.backends.dummy.EmailBackend"}
+)
 MAILERS = {
     "default": {
         "BACKEND": _MAIL_BACKEND,
-        "OPTIONS": (
-            {"fallback_backend": _SMTP, "fallback_options": _SMTP_OPTIONS}
-            if _MAIL_BACKEND == _MAILGUN
-            else _SMTP_OPTIONS
-        ),
+        "OPTIONS": (_FALLBACK if _MAIL_BACKEND == _MAILGUN else _SMTP_OPTIONS),
     },
 }
 

@@ -24,6 +24,8 @@ THROTTLE_RATES: dict[str, str] = {
     "auth_login": "10/min",
     "auth_register": "5/min",
     "auth_otp": "10/min",
+    # Workspace lookup by slug (typed character by character on signup).
+    "auth_lookup": "60/min",
     # Access-token refresh has its own bucket: in the shared "anon" bucket a
     # whole office behind one IP would exhaust it and get logged out. The
     # refresh token is unguessable, so this only contains abuse.

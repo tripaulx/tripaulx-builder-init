@@ -1,7 +1,8 @@
 """Login orchestrator: password, second factor, trusted device and passkey.
 
-Every login ends with a second factor; the only shortcuts are a valid
-trusted-device token and a passkey (which is itself a strong factor). The
+By default every login ends with a second factor; the only shortcuts are a
+valid trusted-device token and a passkey (which is itself a strong factor).
+``MFA_POLICY`` may exempt some users (see :mod:`.second_factor`). The
 functions return a :class:`LoginOutcome`; refusals raise the errors of
 :mod:`tripaulx.accounts.services.errors`.
 """
@@ -18,7 +19,14 @@ from django.utils.translation import gettext as _
 
 from ...models import EmailCodePurpose
 from ...signals import user_logged_in_2fa
-from .. import email_codes, passkeys, recovery_codes, tokens, trusted_devices
+from .. import (
+    email_codes,
+    passkeys,
+    recovery_codes,
+    tokens,
+    trusted_devices,
+    verification,
+)
 from ..errors import InvalidCredentials, LoginError, LoginForbidden
 from . import second_factor
 from .tickets import make_ticket, read_ticket
@@ -45,7 +53,7 @@ def complete_login(user: Any, request: HttpRequest, method: str, **extra: Any) -
 
 def _require_verified_email(user: Any) -> None:
     """Refuse (and send a verification code) while the e-mail is unconfirmed."""
-    if user.email_verified:
+    if user.email_verified or not verification.required():
         return
     if email_codes.can_resend(user, EmailCodePurpose.EMAIL_VERIFY):
         email_codes.issue_code(user, EmailCodePurpose.EMAIL_VERIFY)
@@ -76,6 +84,8 @@ def password_login(
     if device is not None:
         trusted_devices.touch(device)
         return complete_login(user, request, "trusted_device")
+    if not second_factor.is_required(user):
+        return complete_login(user, request, second_factor.METHOD_PASSWORD)
     found = second_factor.challenge(user)
     return LoginOutcome(
         challenge={"mfa_required": True, "ticket": make_ticket(user), **found}

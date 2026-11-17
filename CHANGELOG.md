@@ -6,6 +6,40 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-16
+
+Everything here is additive: with the default settings a project behaves as
+it did on 0.2.
+
+### Changed (dependencies)
+- Minimum versions raised to the current releases, so a new install can no longer resolve an older, unpatched one:
+  - Django `>=6.0.10` on the 6.0 series and `>=6.1.3` on 6.1 (6.1.0 to 6.1.2 are excluded);
+  - django-tenants `>=4.0.4,<5` (it was `<4`);
+  - djangorestframework `>=3.18.3`, simplejwt `>=5.5.1`, drf-spectacular `>=0.30`, psycopg `>=3.3.9`, cryptography `>=50.0.2`, nh3 `>=0.3.7`, python-dotenv `>=1.2.4`, qrcode `>=8.2`, webauthn `>=3.0.1`;
+  - extras: boto3 `>=1.44`, pillow `>=13`, openai `>=3.52`, anthropic `>=2.9`.
+- Template: Django `>=6.1.3`, gunicorn `>=27.0.1`.
+
+### Added
+- **Account registration inside a workspace.** `POST /api/auth/register/` creates a member without an invitation, for consumer products. Off by default (`REGISTRATION_ENABLED`).
+  - `REGISTRATION_PROFILES` declares the kinds of account and the user-model fields each one requires or accepts; `REGISTRATION_FIELDS` and `REGISTRATION_PROFILE_FIELD` complete it.
+  - Extra fields are validated by the project's own `User` model fields. Access fields (`role`, `is_staff`...) can never be written.
+  - New signal `user_registered` (`user`, `profile`, `extra`).
+- **`MFA_POLICY`**: `always` (default), `privileged` (staff, owners and admins) or `optional`. A user with an authenticator app is always asked.
+- **`EMAIL_VERIFICATION_REQUIRED`** (default `True`). Off, signup and registration create verified accounts and answer with a `session`.
+- Signup answers with `workspace_name`, `api_url` and `session` too.
+- `GET /api/auth/config/` (anonymous): the flags a client needs before rendering its auth screens.
+- `GET /api/auth/workspaces/<slug>/` (public schema): whether a workspace exists or the address is free. New throttle scope `auth_lookup`.
+- `tripaulx.tenants.services.domains`: `workspace_origin`, `workspace_origin_template` and `request_origin`.
+- `tripaulx.tenants.services.schemas.workspace_schemas` (it lived in `tripaulx.ai.services.retention`, where it stays importable).
+- `tripaulx.mail`:
+  - `email_available()` tells whether sent e-mail reaches anyone;
+  - `send_test_mail` management command;
+  - a DEBUG-only preview (`tripaulx.mail.urls`) and `register_sample` for the project's own e-mails.
+- Template:
+  - `APP_EMAIL_VERIFICATION_REQUIRED`, `APP_MFA_POLICY` and `APP_REGISTRATION_ENABLED`;
+  - the e-mail preview route;
+  - production no longer points at SMTP on `localhost` when `MAIL_HOST` is empty: messages are dropped until a provider is configured.
+
 ## [0.2.2] - 2026-10-07
 
 ### Added

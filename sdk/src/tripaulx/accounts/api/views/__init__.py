@@ -1,5 +1,6 @@
 """Views of the accounts API, one module per flow."""
 
+from .config import AuthConfigView
 from .devices import TrustedDeviceDetailView, TrustedDeviceListView
 from .email import EmailResendView, EmailVerifyView
 from .invitations import InvitationAcceptView, InvitationDetailView, InvitationListView
@@ -27,10 +28,13 @@ from .password import (
     PasswordResetRequestView,
     PasswordRulesView,
 )
+from .registration import RegisterView
 from .session import LogoutView, MeView, TokenRefreshView
 from .signup import SignupView
+from .workspaces import WorkspaceLookupView
 
 __all__ = [
+    "AuthConfigView",
     "EmailResendView",
     "EmailVerifyView",
     "InvitationAcceptView",
@@ -56,6 +60,7 @@ __all__ = [
     "PasswordResetRequestView",
     "PasswordRulesView",
     "RecoveryCodesView",
+    "RegisterView",
     "SignupView",
     "TokenRefreshView",
     "TotpConfirmView",
@@ -64,4 +69,5 @@ __all__ = [
     "TotpStatusView",
     "TrustedDeviceDetailView",
     "TrustedDeviceListView",
+    "WorkspaceLookupView",
 ]

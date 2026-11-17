@@ -95,10 +95,10 @@ called Acme".
 | App | Django label | Ready | Responsibility |
 |---|---|---|---|
 | `tripaulx.core` | `tpsdk_core` | ✅ | `BaseModel` (UUID, audit timestamps, soft delete), tenant middleware, log redaction, test helpers |
-| `tripaulx.tenants` | `tpsdk_tenants` | ✅ | `Workspace` and `Domain`, slug rules with reserved names, `bootstrap_workspace` |
-| `tripaulx.accounts` | `tpsdk_accounts` | ✅ | Sign-up that creates a workspace, mandatory 2FA, TOTP, passkeys, recovery codes, trusted devices, members and invitations, schema-bound JWT |
+| `tripaulx.tenants` | `tpsdk_tenants` | ✅ | `Workspace` and `Domain`, slug rules with reserved names, workspace lookup by slug, `bootstrap_workspace` |
+| `tripaulx.accounts` | `tpsdk_accounts` | ✅ | Sign-up that creates a workspace, self-service accounts inside a workspace with profiles, 2FA (mandatory by default), TOTP, passkeys, recovery codes, trusted devices, members and invitations, schema-bound JWT |
 | `tripaulx.settings` | n/a | ✅ | App lists, middleware, logging, hosts and `.env` loading for your settings |
-| `tripaulx.mail` | `tpsdk_mail` | ✅ | Mailgun backend with an encrypted key, overridable e-mail templates |
+| `tripaulx.mail` | `tpsdk_mail` | ✅ | Mailgun backend with an encrypted key, overridable e-mail templates, browser preview and test send |
 | `tripaulx.storage` | `tpsdk_storage` | ✅ | S3-compatible storage, AES-GCM envelope encryption, per-workspace keys |
 | `tripaulx.ai` | `tpsdk_ai` | ✅ | OpenAI and Anthropic, agents, skills, cost tracking and daily caps |
 | `tripaulx.legal` | `tpsdk_legal` | ✅ | Governance documents, terms and privacy, sanitized Markdown |
@@ -111,9 +111,14 @@ called Acme".
 </picture>
 
 - **Sign-up creates the workspace:** its schema, its subdomain and its owner.
-- **2-step verification is always on.** The second step uses the authenticator app (TOTP) when the user turned it on, otherwise a 6-digit e-mail code. Recovery codes are the backup.
+- **2-step verification is on for everyone by default.** `MFA_POLICY` can limit it to staff, owners and admins (`privileged`) or make it optional. The second step uses the authenticator app (TOTP) when the user turned it on, otherwise a 6-digit e-mail code. Recovery codes are the backup.
+- **One workspace can also be a whole consumer product.** With `REGISTRATION_ENABLED`, visitors create their own account inside the workspace (`POST /api/auth/register/`), choosing one of the **profiles** you declare (for example buyer, owner, broker), each with its own required fields. Selling the same product white-label is then one more workspace.
 - **Passkeys** (WebAuthn) sign in without a password. *Passkey-only* mode turns off password login while at least one passkey exists.
 - **Tokens are bound to their workspace schema.** A token issued for `acme` is rejected by every other workspace.
+- **Clients read `GET /api/auth/config/` first:** which flows are on, the profiles, the 2FA policy and whether e-mail is being delivered.
+
+Dependencies follow the latest security patches: the SDK requires Django 6.0.10+ or
+6.1.3+ and django-tenants 4, and refuses older releases at install time.
 
 ## Documentation
 

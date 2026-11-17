@@ -14,13 +14,12 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from django.utils import timezone
-from django_tenants.utils import (
-    get_public_schema_name,
-    get_tenant_model,
-    schema_context,
-)
+from django_tenants.utils import schema_context
 
 from tripaulx.ai.models import AIEvent, AISettings
+
+# Kept importable from here: it lived in this module until 0.3.
+from tripaulx.tenants.services.schemas import workspace_schemas
 
 CONTENT_FIELDS = {
     "system_prompt": "",
@@ -45,16 +44,6 @@ def purge_content(*, days: int | None = None, now: datetime | None = None) -> in
         created_at__lt=now - timedelta(days=days), content_purged_at__isnull=True
     )
     return old.update(content_purged_at=now, **CONTENT_FIELDS)
-
-
-def workspace_schemas() -> list[str]:
-    """Return the schema of every workspace (the public schema excluded)."""
-    with schema_context(get_public_schema_name()):
-        return list(
-            get_tenant_model()
-            .objects.exclude(schema_name=get_public_schema_name())
-            .values_list("schema_name", flat=True)
-        )
 
 
 def purge_all_workspaces(

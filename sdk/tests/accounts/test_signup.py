@@ -35,10 +35,13 @@ def test_signup_creates_workspace_domain_and_owner(public_client):
     assert resp.status_code == 201, resp.data
     assert resp.data == {
         "workspace_slug": "acme_ltda",
+        "workspace_name": "Acme Ltda",
         "workspace_domain": "acme-ltda.sdk.test",
         "workspace_url": "http://acme-ltda.sdk.test:8000",
+        "api_url": "http://acme-ltda.sdk.test:8000/api",
         "email": "Owner@example.com",
         "email_verification_required": True,
+        "session": None,
     }
     workspace = Workspace.objects.get(schema_name="acme_ltda")
     assert workspace.name == "Acme Ltda"

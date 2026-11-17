@@ -3,7 +3,8 @@
 The shared foundation of tripaulx-builders Django projects. It provides:
 
 - multi-tenant Django 6 with **workspaces** (django-tenants, one PostgreSQL schema each);
-- accounts with mandatory 2FA, an authenticator app (TOTP) and passkeys;
+- accounts with 2FA (mandatory by default), an authenticator app (TOTP) and passkeys;
+- self-service registration inside a workspace, with account profiles;
 - AI providers, agents and skills with cost tracking;
 - governance and legal documents;
 - encrypted object storage.

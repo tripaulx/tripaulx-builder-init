@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from django.db import connection
 from django.http import Http404
-from django.http.request import split_domain_port
 from django.utils.translation import gettext as _
-from django_tenants.utils import get_public_schema_name
+from django_tenants.utils import get_public_schema_name, schema_context
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny
@@ -14,16 +13,20 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 
+from tripaulx.tenants.services.domains import workspace_origin
+
 from ...conf import app_settings
-from ...services import signup
+from ...services import login, signup, verification
 from ..serializers import SignupSerializer
-from .base import AccountsAPIView
+from .base import AccountsAPIView, session_payload
 
 
 class SignupView(AccountsAPIView):
     """Create a workspace and its owner, then e-mail the verification code.
 
-    The owner verifies the e-mail and logs in on ``workspace_url``.
+    The owner verifies the e-mail and logs in on ``workspace_url``. With
+    ``EMAIL_VERIFICATION_REQUIRED`` off, ``session`` already holds the owner's
+    tokens (bound to the new workspace) and user.
     """
 
     permission_classes = [AllowAny]
@@ -50,15 +53,24 @@ class SignupView(AccountsAPIView):
             workspace_name=data["workspace_name"],
             slug=data["slug"],
         )
-        _host, port = split_domain_port(request.get_host())
-        authority = f"{result.domain}:{port}" if port else result.domain
+        slug = result.workspace.schema_name
+        origin = workspace_origin(request, slug)
+        session = None
+        if not verification.required():
+            # Inside the new schema, so the tokens carry its schema claim.
+            with schema_context(slug):
+                outcome = login.complete_login(result.owner, request, "signup")
+                session = session_payload(outcome)
         return Response(
             {
-                "workspace_slug": result.workspace.schema_name,
+                "workspace_slug": slug,
+                "workspace_name": result.workspace.name,
                 "workspace_domain": result.domain,
-                "workspace_url": f"{request.scheme}://{authority}",
+                "workspace_url": origin,
+                "api_url": f"{origin}/api",
                 "email": result.owner.email,
-                "email_verification_required": True,
+                "email_verification_required": session is None,
+                "session": session,
             },
             status=status.HTTP_201_CREATED,
         )

@@ -25,6 +25,7 @@ from .workspace import (
     InvitationAcceptSerializer,
     InvitationCreateSerializer,
     InvitationSerializer,
+    RegistrationSerializer,
     SignupSerializer,
 )
 
@@ -48,6 +49,7 @@ __all__ = [
     "PasswordResetConfirmSerializer",
     "RecoveryCodesSerializer",
     "RefreshSerializer",
+    "RegistrationSerializer",
     "SignupSerializer",
     "TicketSerializer",
     "TrustedDeviceSerializer",

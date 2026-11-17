@@ -7,9 +7,15 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
 
+from ..conf import app_settings
 from ..models import EmailCodePurpose
 from . import email_codes
 from .errors import CodeError
+
+
+def required() -> bool:
+    """Whether new accounts must confirm their e-mail before logging in."""
+    return bool(app_settings.EMAIL_VERIFICATION_REQUIRED)
 
 
 def verify_email(email: str, code: str) -> Any:

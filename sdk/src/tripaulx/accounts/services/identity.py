@@ -8,6 +8,7 @@ validates with it.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
 
 from django.contrib.auth import get_user_model
@@ -16,11 +17,21 @@ from django.contrib.auth.password_validation import (
     validate_password,
 )
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.utils.translation import gettext as _
 
-from .errors import PasswordError
+from .errors import PasswordError, SignupError
 
 NAME_MAX = 150
+
+
+@dataclass(frozen=True)
+class PersonInput:
+    """A new person's identity, already validated and normalized."""
+
+    email: str
+    first_name: str
+    last_name: str
 
 
 def split_full_name(full_name: str) -> tuple[str, str]:
@@ -58,3 +69,26 @@ def check_new_password(password: str, confirmation: str, user: Any = None) -> No
         validate_password(password, user=user)
     except ValidationError as exc:
         raise PasswordError(" ".join(exc.messages), field="password") from exc
+
+
+def clean_person(
+    email: str, full_name: str, password: str, confirmation: str
+) -> PersonInput:
+    """Validate a new person's name, e-mail and password (against the person).
+
+    Raises:
+        SignupError: with ``field`` set to the input that must be fixed.
+    """
+    first, last = split_full_name(full_name)
+    if not first:
+        raise SignupError(_("Enter your full name."), field="full_name")
+    try:
+        validate_email(email)
+    except ValidationError as exc:
+        raise SignupError(_("Enter a valid e-mail address."), field="email") from exc
+    email = get_user_model().objects.normalize_email(email)
+    try:
+        check_new_password(password, confirmation, candidate_user(email, first, last))
+    except PasswordError as exc:
+        raise SignupError(exc.message, **exc.extra) from exc
+    return PersonInput(email, first, last)

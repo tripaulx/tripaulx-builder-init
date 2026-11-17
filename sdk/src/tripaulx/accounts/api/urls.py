@@ -7,6 +7,10 @@ from . import views
 app_name = "tpsdk_accounts"
 
 urlpatterns = [
+    # What the client needs before rendering (flags, profiles, origins)
+    path("config/", views.AuthConfigView.as_view(), name="config"),
+    # Self-service account in this schema (REGISTRATION_ENABLED)
+    path("register/", views.RegisterView.as_view(), name="register"),
     # E-mail verification
     path("email/verify/", views.EmailVerifyView.as_view(), name="email-verify"),
     path("email/resend/", views.EmailResendView.as_view(), name="email-resend"),

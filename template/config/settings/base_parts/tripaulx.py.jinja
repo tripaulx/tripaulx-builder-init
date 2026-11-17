@@ -16,6 +16,16 @@ TRIPAULX = {
     "FIELD_ENCRYPTION_KEY": get_env("APP_FIELD_ENCRYPTION_KEY", ""),
     "EMAIL_LOGO_URL": get_env("APP_EMAIL_LOGO_URL", ""),
     "SIGNUP_ENABLED": get_env_bool("APP_SIGNUP_ENABLED", default=True),
+    # New accounts confirm their e-mail by code; off answers with a session.
+    "EMAIL_VERIFICATION_REQUIRED": get_env_bool(
+        "APP_EMAIL_VERIFICATION_REQUIRED", default=True
+    ),
+    # Second factor on login: always, privileged (staff/owner/admin) or optional.
+    "MFA_POLICY": get_env("APP_MFA_POLICY", "always"),
+    # Self-service accounts inside a workspace (POST /api/auth/register/).
+    # Kinds of account and their extra fields: REGISTRATION_PROFILES,
+    # REGISTRATION_FIELDS and REGISTRATION_PROFILE_FIELD (docs: accounts).
+    "REGISTRATION_ENABLED": get_env_bool("APP_REGISTRATION_ENABLED", default=False),
     "WEBAUTHN_RP_ID": get_env("APP_WEBAUTHN_RP_ID", ""),
     "WEBAUTHN_ORIGINS": tuple(get_env_list("APP_WEBAUTHN_ORIGINS")),
     # tripaulx.storage (APP_S3_* and APP_FILE_ENCRYPTION_KEY).

@@ -35,6 +35,13 @@ class LoginSmokeTests(TenantAPITestCase):
         resp = self.anon_api_client().post("/api/auth/signup/", {}, format="json")
         assert resp.status_code == 404
 
+    def test_registration_is_off_until_the_project_turns_it_on(self):
+        client = self.anon_api_client()
+        assert client.post("/api/auth/register/", {}, format="json").status_code == 403
+        config = client.get("/api/auth/config/").data
+        assert config["registration_enabled"] is False
+        assert config["mfa_policy"] == "always"
+
 
 @pytest.mark.django_db
 def test_signup_on_the_public_domain():

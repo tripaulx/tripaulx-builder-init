@@ -6,6 +6,7 @@ import re
 from typing import Any
 
 from django.core import mail
+from django.test import override_settings
 
 from tripaulx.accounts.models import WebAuthnCredential
 from tripaulx.core.testing import TenantAPITestCase
@@ -38,6 +39,17 @@ class AccountsTestCase(TenantAPITestCase):
     """Tenant API test case with a verified user and login helpers."""
 
     email = "jane@example.com"
+    #: ``TRIPAULX`` options for the whole class. A class-level
+    #: ``override_settings`` does not reach these tenant test cases.
+    tripaulx: dict[str, Any] | None = None
+
+    def setUp(self) -> None:
+        """Apply the class options for the length of each test."""
+        super().setUp()
+        if self.tripaulx is not None:
+            override = override_settings(TRIPAULX=self.tripaulx)
+            override.enable()
+            self.addCleanup(override.disable)
 
     def verified_user(self, email: str | None = None, **extra: Any) -> Any:
         """Create a user with a confirmed e-mail and the shared password."""

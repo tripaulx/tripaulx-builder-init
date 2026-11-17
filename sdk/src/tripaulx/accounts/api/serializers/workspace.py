@@ -1,4 +1,4 @@
-"""Serializers of signup and invitations."""
+"""Serializers of signup, registration and invitations."""
 
 from __future__ import annotations
 
@@ -18,6 +18,23 @@ class SignupSerializer(serializers.Serializer):
     workspace_name = serializers.CharField(max_length=100)
     slug = serializers.CharField(
         required=False, allow_blank=True, default="", max_length=30
+    )
+
+
+class RegistrationSerializer(serializers.Serializer):
+    """A new person's name and credentials, and the kind of account.
+
+    The extra fields of a profile (``REGISTRATION_PROFILES``) travel in the
+    same body; the service validates them with the user model's own fields.
+    """
+
+    email = serializers.EmailField()
+    # Blank passes here so the service answers with ``field: "full_name"``.
+    full_name = serializers.CharField(max_length=301, allow_blank=True)
+    password = serializers.CharField(write_only=True, trim_whitespace=False)
+    password_confirm = serializers.CharField(write_only=True, trim_whitespace=False)
+    profile = serializers.CharField(
+        required=False, allow_blank=True, default="", max_length=64
     )
 
 

@@ -8,7 +8,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 urlpatterns = [
     path(f"{settings.ADMIN_URL_PREFIX}/", admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
-    # Signup (creates a workspace) exists only here.
+    # Signup (creates a workspace) and workspace lookup exist only here.
     path("api/auth/", include("tripaulx.accounts.api.urls_public")),
     path("api/auth/", include("tripaulx.accounts.api.urls")),
     # Terms of use and privacy policy, also served on the apex domain.
@@ -20,5 +20,7 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
+    # E-mail previews with sample data (404 unless DEBUG).
+    path("__mail/", include("tripaulx.mail.urls")),
     path("", include("tripaulx.core.urls")),
 ]

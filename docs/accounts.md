@@ -1,7 +1,7 @@
 # Accounts, signup and e-mail
 
-`tripaulx.accounts` covers workspace signup, login with a mandatory second
-factor, authenticator apps (TOTP), passkeys, recovery codes, trusted devices,
+`tripaulx.accounts` covers workspace signup, self-service account registration,
+login with a second factor (mandatory by default), authenticator apps (TOTP), passkeys, recovery codes, trusted devices,
 password reset and change, workspace members and invitations.
 `tripaulx.mail` sends the e-mails through Mailgun.
 
@@ -48,14 +48,83 @@ next to the users) and `tripaulx.mail` (public schema only).
    and the `Domain` `<slug>.<BASE_DOMAIN>` in a single transaction.
 3. Inside the new schema it creates the owner (`role=owner`,
    `email_verified=False`) and e-mails the verification code.
-4. The answer is `201` with `workspace_slug`, `workspace_domain`,
-   `workspace_url`, `email` and `email_verification_required`.
+4. The answer is `201` with `workspace_slug`, `workspace_name`,
+   `workspace_domain`, `workspace_url`, `api_url`, `email`,
+   `email_verification_required` and `session` (`null` while the e-mail must
+   be verified).
 5. Signals: `tripaulx.tenants.signals.workspace_created` (after commit) and
    `tripaulx.accounts.signals.user_signed_up`.
 
 Creating a schema takes about one second with the SDK apps; it grows with the
 project's tenant migrations. Signup is guarded by `SIGNUP_ENABLED` and by the
 `auth_register` throttle.
+
+`GET /api/auth/workspaces/<slug>/` (public schema, anonymous, throttle
+`auth_lookup`) answers the "which workspace?" and "is this address free?"
+screens: `{slug, exists, available, name, reason, workspace_url, api_url}`.
+
+### Registration (inside a workspace)
+
+Signup creates a workspace. Registration adds a person to the workspace being
+visited, without an invitation: it is meant for consumer products (a portal
+whose visitors create accounts) and is **off by default**.
+
+1. `POST /api/auth/register/` with
+   `{email, full_name, password, password_confirm, profile?, ...extra fields}`.
+2. The SDK validates the person and the password, the profile and its extra
+   fields, then creates the user with `role=member` and e-mails the
+   verification code.
+3. The answer is `201` with `email`, `profile`, `email_verification_required`
+   and `session`. The person confirms the code on `email/verify/`, which logs
+   them in.
+4. An e-mail that already has an account answers `400` with `field: "email"`.
+   If that account is still unverified, a new code is sent and the answer
+   carries `email_verification_required: true`, so the client opens the code
+   screen. The first password is never replaced.
+5. Signal: `tripaulx.accounts.signals.user_registered` (`user`, `profile`,
+   `extra`).
+
+**Profiles** are the kinds of account a person chooses from. Extra fields are
+fields of the project's `User` model and are validated by the model field
+itself (type, length, validators), so the rule lives in one place:
+
+```python
+# users/models.py
+class User(AbstractTripaulxUser):
+    phone = models.CharField(max_length=20, blank=True, validators=[validate_phone])
+    account_type = models.CharField(max_length=16, blank=True)
+
+
+# config/settings/base_parts/tripaulx.py
+TRIPAULX = {
+    "REGISTRATION_ENABLED": True,
+    "REGISTRATION_PROFILES": {
+        "buyer": {},
+        "owner": {"required": ("phone",)},
+        "broker": {"required": ("phone",), "fields": ("license",)},
+    },
+    "REGISTRATION_FIELDS": ("phone",),  # optional for every profile
+    "REGISTRATION_PROFILE_FIELD": "account_type",  # where the key is stored
+}
+```
+
+With profiles configured, `profile` is required and must be one of the keys.
+Fields a profile does not list are ignored. Registration never writes `role`,
+`is_staff`, `is_superuser`, `email_verified` or the other access fields:
+naming one of them in the settings raises `ImproperlyConfigured`.
+
+Roles and profiles are different things. The role (`owner`, `admin`,
+`member`) is the permission inside the workspace; the profile is what kind of
+customer the person is. Registered people are always members.
+
+### What a client needs first
+
+`GET /api/auth/config/` (anonymous, every schema) returns the flags a client
+reads before rendering its screens: `signup_enabled`, `registration_enabled`,
+`registration_profiles` (key, required and optional fields),
+`registration_fields`, `email_verification_required`, `email_available`
+(whether sent e-mail reaches anyone), `mfa_policy`, `base_domain` and
+`workspace_origin_template` (`https://{subdomain}.example.com`).
 
 ### E-mail verification
 
@@ -64,7 +133,12 @@ verified and returns the tokens (the code is the proof of the inbox).
 `POST /api/auth/email/resend/` sends a new code; the answer is always the
 same, whether the account exists or not.
 
-### Login: the second factor is always required
+With `EMAIL_VERIFICATION_REQUIRED` off (for example while there is no e-mail
+provider), signup and registration create the account already verified, send
+no code and answer with `session` (`access`, `refresh`, `user`); login no
+longer asks unverified accounts for the code.
+
+### Login and the second factor
 
 1. `POST /api/auth/login/` with `{email, password, device_token?}`.
    - Wrong credentials: `401`.
@@ -87,6 +161,19 @@ The ticket is signed, expires after `LOGIN_TICKET_TTL_SECONDS` and is bound
 to the schema. Privileged accounts (owner, admin, staff) without an app or a
 passkey get `mfa_setup_required: true` in the user payload so clients can ask
 them for a strong factor.
+
+`MFA_POLICY` decides who gets the second step:
+
+| Value | Who must pass a second factor |
+|---|---|
+| `always` (default) | Everyone |
+| `privileged` | Staff, owners and admins; other users log in with the password |
+| `optional` | Nobody |
+
+Whatever the policy, a user who turned an authenticator app on is always
+asked for it, and an unknown value counts as `always`. When no second factor
+is due, `login/` answers with the tokens at once and the
+`user_logged_in_2fa` signal reports `method="password"`.
 
 ### Tokens bound to the workspace
 
@@ -203,7 +290,10 @@ workspace always keeps one active owner. The invitation link is
 
 | Method | Path (`/api/auth/` unless noted) | Auth |
 |---|---|---|
+| GET | `config/` | anonymous |
 | POST | `signup/` (public schema) | anonymous |
+| GET | `workspaces/<slug>/` (public schema) | anonymous |
+| POST | `register/` (`REGISTRATION_ENABLED`) | anonymous |
 | POST | `email/verify/`, `email/resend/` | anonymous |
 | POST | `login/`, `login/verify/`, `login/resend/` | anonymous |
 | POST | `token/refresh/` | refresh token |
@@ -243,12 +333,18 @@ workspace always keeps one active owner. The invitation link is
 | `WEBAUTHN_ORIGINS` | `()` | Extra accepted origins |
 | `WEBAUTHN_CHALLENGE_TTL` | `300` | Seconds a challenge stays in the cache |
 | `SIGNUP_ENABLED` | `True` | Public signup on/off |
+| `EMAIL_VERIFICATION_REQUIRED` | `True` | New accounts confirm the e-mail by code; off answers with a session |
+| `MFA_POLICY` | `"always"` | Who must pass a second factor: `always`, `privileged` or `optional` |
+| `REGISTRATION_ENABLED` | `False` | Self-service accounts inside a workspace |
+| `REGISTRATION_PROFILES` | `{}` | Kinds of account: `{key: {"required": (...), "fields": (...)}}` |
+| `REGISTRATION_FIELDS` | `()` | User-model fields accepted for every profile |
+| `REGISTRATION_PROFILE_FIELD` | `""` | User-model field that stores the profile key |
 | `INVITATION_TTL_SECONDS` | 7 days | Lifetime of an invitation |
 | `INVITATION_ACCEPT_URL` | `"{origin}/accept-invitation?token={token}"` | Link in the invitation e-mail |
 
 Throttle scopes (`rest_framework()`): `anon` 100/hour, `user` 1000/hour,
 `auth_login` 10/min, `auth_register` 5/min, `auth_otp` 10/min,
-`auth_refresh` 60/min. Override one with
+`auth_lookup` 60/min, `auth_refresh` 60/min. Override one with
 `rest_framework(DEFAULT_THROTTLE_RATES={"anon": "50/hour"})`.
 
 ## E-mail
@@ -277,6 +373,19 @@ MAILERS = {
 
 Every `OPTIONS` key is a keyword argument of the backend; Django rejects
 unknown ones.
+
+Tools to check the setup:
+
+- `tripaulx.mail.services.email_available()` tells whether sent e-mail
+  reaches anyone: Mailgun ready, an SMTP host, or a local backend (console,
+  locmem, file). `GET /api/auth/config/` exposes it as `email_available`.
+- `manage.py send_test_mail --to you@example.com [--template invite]
+  [--lang pt-br]` sends one of the e-mails with sample data.
+- `path("__mail/", include("tripaulx.mail.urls"))` in the public URLconf
+  previews an e-mail in the browser at `/__mail/<name>/?lang=pt-br&format=txt`
+  (404 unless `DEBUG`).
+- A project registers samples for its own e-mails with
+  `tripaulx.mail.services.register_sample("monthly_report", lambda: {...})`.
 
 ## Encrypted fields
 

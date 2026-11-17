@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 21:16-0500\n"
+"POT-Creation-Date: 2026-11-16 17:11-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -62,7 +62,11 @@ msgstr "Senha redefinida."
 msgid "Password changed."
 msgstr "Senha alterada."
 
-#: api/views/signup.py:39
+#: api/views/registration.py:34
+msgid "Registration is disabled."
+msgstr "O cadastro de conta está desativado."
+
+#: api/views/signup.py:42
 msgid "Signup is disabled."
 msgstr "O cadastro está desativado."
 
@@ -334,11 +338,11 @@ msgstr "usuários"
 msgid "Workspace %(schema)s does not exist."
 msgstr "O workspace %(schema)s não existe."
 
-#: services/admins.py:44 services/signup.py:58
+#: services/admins.py:44 services/identity.py:88
 msgid "Enter a valid e-mail address."
 msgstr "Informe um endereço de e-mail válido."
 
-#: services/admins.py:47 services/signup.py:54
+#: services/admins.py:47 services/identity.py:84
 msgid "Enter your full name."
 msgstr "Informe seu nome completo."
 
@@ -359,11 +363,11 @@ msgid "Too many attempts. Request a new code."
 msgstr "Muitas tentativas. Solicite um novo código."
 
 #: services/email_codes.py:76 services/email_codes.py:82
-#: services/verification.py:22
+#: services/verification.py:28
 msgid "Invalid code."
 msgstr "Código inválido."
 
-#: services/identity.py:55
+#: services/identity.py:66
 msgid "The two passwords do not match."
 msgstr "As duas senhas não conferem."
 
@@ -387,23 +391,23 @@ msgstr "Convite não encontrado."
 msgid "This invitation is invalid or has expired."
 msgstr "Este convite é inválido ou expirou."
 
-#: services/login/flow.py:53
+#: services/login/flow.py:61
 msgid "Confirm your e-mail address with the code we sent you."
 msgstr "Confirme seu e-mail com o código que enviamos."
 
-#: services/login/flow.py:67
+#: services/login/flow.py:75
 msgid "Incorrect e-mail or password."
 msgstr "E-mail ou senha incorretos."
 
-#: services/login/flow.py:72
+#: services/login/flow.py:80
 msgid "This account signs in with a passkey only."
 msgstr "Esta conta entra apenas com passkey."
 
-#: services/login/flow.py:96
+#: services/login/flow.py:106
 msgid "Your session expired. Log in again."
 msgstr "Sua sessão expirou. Faça login novamente."
 
-#: services/login/flow.py:129
+#: services/login/flow.py:139
 msgid "This account is inactive."
 msgstr "Esta conta está inativa."
 
@@ -486,11 +490,27 @@ msgstr "Código inválido ou expirado. Solicite um novo."
 msgid "The current password is incorrect."
 msgstr "A senha atual está incorreta."
 
+#: services/profiles.py:85
+msgid "Choose the kind of account."
+msgstr "Escolha o tipo de conta."
+
+#: services/profiles.py:127
+msgid "This field is required."
+msgstr "Este campo é obrigatório."
+
 #: services/recovery_codes.py:95
 msgid "Invalid or already used recovery code."
 msgstr "Código de recuperação inválido ou já utilizado."
 
-#: services/signup.py:72
+#: services/registration.py:46
+msgid "This e-mail already has an account."
+msgstr "Este e-mail já tem uma conta."
+
+#: services/registration.py:64
+msgid "This e-mail is waiting for confirmation. Enter the code we sent."
+msgstr "Este e-mail está aguardando confirmação. Digite o código que enviamos."
+
+#: services/signup.py:43
 msgid "Enter the workspace name."
 msgstr "Informe o nome do workspace."
 
