@@ -9,14 +9,14 @@ dependencies = ["tripaulx-sdk[storage,ai]"]
 
 [dependency-groups]
 dev = [
-  "copier>=9.18",
-  "factory-boy>=3.3",
-  "pytest>=9.1",
+  "copier>=9.19.1",
+  "factory-boy>=3.3.3",
+  "pytest>=9.2",
   "pytest-django>=4.14",
-  "ruff>=0.16",
+  "ruff>=0.17.5",
 ]
 # README diagrams (scripts/readme_art): font subsetting and measurement.
-docs = ["fonttools[woff]>=4.60"]
+docs = ["fonttools[woff]>=4.68"]
 
 [tool.uv]
 package = false

@@ -74,7 +74,7 @@ tripaulx-builder-init/              (monorepo público no GitHub)
 ## 3. Stack
 
 - Python ≥ 3.12 (a CI testa 3.12 e 3.13). Postgres 16/17. Redis em produção.
-- **Django 6.1.1**, com 6.0 também suportado. **django-tenants 3.14.0** já declara `django<6.2`, então não precisa de override.
+- **Django 6.1** (mínimo 6.1.3), com 6.0 também suportado (mínimo 6.0.10): sempre o último patch de segurança de cada série. **django-tenants 4** (mínimo 4.0.4).
 - **E-mail:** o Django 6.1 deprecou `EMAIL_BACKEND` em favor de `MAILERS`. Por isso o template usa `MAILERS` e exige Django ≥ 6.1.
 - DRF, simplejwt + blacklist, drf-spectacular, cors-headers, whitenoise, gunicorn e psycopg 3.
 - webauthn, qrcode, cryptography, nh3, boto3, pillow, django-simple-history e django-tasks-db (`django.tasks` nativo).
